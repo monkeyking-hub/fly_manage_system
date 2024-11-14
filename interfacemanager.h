@@ -5,7 +5,9 @@
 #include <QStackedWidget>
 #include <QMap>
 
-class InterfaceManager : public QObject
+\
+//界面调度类
+class InterfaceManager : private QObject
 {
     Q_OBJECT
 

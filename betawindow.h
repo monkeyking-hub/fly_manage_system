@@ -19,6 +19,12 @@ public:
 
 private slots:
 
+    void on_toGamabutton_clicked();
+
+    void on_toXitabutton_clicked();
+
+    void on_toYipuxilongbutton_clicked();
+
 private:
     Ui::BetaWindow *ui;
 };
