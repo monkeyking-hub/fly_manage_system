@@ -1,14 +1,28 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "InterfaceManager.h"
+#include "betawindow.h"
+#include <QStackedWidget>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)//初始化父窗口,使得有那些功能
-    , ui(new Ui::MainWindow)//Ui:MainWindow是设计师界面生成的类
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);//这个ui就是那个生成的类的指针(Ui里面的MainWindow)
+    ui->setupUi(this);
+
+    // 创建子界面,并且注册进调度器
+    BetaWindow* beta = new BetaWindow();
+    InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
+
+    // 设置堆叠控件为中央部件,仅仅在幕布类(即当前MainWindow要执行
+    setCentralWidget(InterfaceManager::instance()->m_stackedWidget);
+
 }
 
 MainWindow::~MainWindow()
 {
+    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta");
     delete ui;
 }
+

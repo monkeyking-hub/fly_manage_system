@@ -10,18 +10,32 @@ CONFIG += c++17
 
 SOURCES += \
     betawindow.cpp \
+    gamawindow.cpp \
+    interfacemanager.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    xitawindow.cpp \
+    yipuxilong.cpp
 
 HEADERS += \
     betawindow.h \
-    mainwindow.h
+    gamawindow.h \
+    interfacemanager.h \
+    mainwindow.h \
+    xitawindow.h \
+    yipuxilong.h
 
 FORMS += \
     betawindow.ui \
-    mainwindow.ui
+    gamawindow.ui \
+    mainwindow.ui \
+    xitawindow.ui \
+    yipuxilong.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    README.md

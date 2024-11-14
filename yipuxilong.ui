@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BetaWindow</class>
- <widget class="QMainWindow" name="BetaWindow">
+ <class>Yipuxilong</class>
+ <widget class="QMainWindow" name="Yipuxilong">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,43 +14,30 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="toGamabutton">
+   <widget class="QPushButton" name="toBetaButton">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>310</y>
+      <x>120</x>
+      <y>330</y>
       <width>181</width>
       <height>91</height>
      </rect>
     </property>
     <property name="text">
-     <string>当前为beta,点击跳转gama</string>
+     <string>当前为伊普西隆,跳转到beta</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="toXitabutton">
+   <widget class="QPushButton" name="toGameButton">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>310</y>
-      <width>181</width>
-      <height>91</height>
+      <x>430</x>
+      <y>330</y>
+      <width>211</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
-     <string>当前为beta,点击跳转西塔</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="toYipuxilongbutton">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>310</y>
-      <width>181</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>当前为beta,点击跳转伊普西隆</string>
+     <string>跳转到gama</string>
     </property>
    </widget>
   </widget>

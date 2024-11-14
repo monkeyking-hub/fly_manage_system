@@ -1,22 +1,32 @@
-#ifndef BETAWINDOW_H
-#define BETAWINDOW_H
+#ifndef betawindow_H
+#define betawindow_H
 
+#include <QWidget>
 #include <QMainWindow>
-
+#include "InterfaceManager.h"
 namespace Ui {
-class betawindow;
+class BetaWindow;
 }
 
-class betawindow : public QMainWindow
+
+class BetaWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit betawindow(QWidget *parent = nullptr);
-    ~betawindow();
+    explicit BetaWindow(QWidget *parent = nullptr);
+    ~BetaWindow();
+
+private slots:
+
+    void on_toGamabutton_clicked();
+
+    void on_toXitabutton_clicked();
+
+    void on_toYipuxilongbutton_clicked();
 
 private:
-    Ui::betawindow *ui;
+    Ui::BetaWindow *ui;
 };
 
-#endif // BETAWINDOW_H
+#endif // betawindow_H
