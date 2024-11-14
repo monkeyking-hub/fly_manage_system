@@ -14,14 +14,12 @@ class BetaWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit BetaWindow(const QString &parentName, const QString &name, QWidget *parent = nullptr);
+    explicit BetaWindow(QWidget *parent = nullptr);
     ~BetaWindow();
 
 private slots:
 
 private:
-    QString m_name;           // 当前界面名
-    QString m_parentName;     // 父界面名
     Ui::BetaWindow *ui;
 };
 

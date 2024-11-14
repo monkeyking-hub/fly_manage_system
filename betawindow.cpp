@@ -6,18 +6,12 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-BetaWindow::BetaWindow(const QString &parentName, const QString &name, QWidget *parent)
-    : QMainWindow(parent), m_name(name)
+BetaWindow::BetaWindow( QWidget *parent)
+    : QMainWindow(parent)
     , m_parentName(parentName)
     , ui(new Ui::BetaWindow)
 {
      ui->setupUi(this);
-
-    // 构造全路径并注册到界面调度类中
-    QString fullPath = m_parentName + "/" + m_name;
-    InterfaceManager::instance()->registerPage(fullPath, this);
-
-
 }
 
 BetaWindow::~BetaWindow()

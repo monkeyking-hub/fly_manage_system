@@ -74,12 +74,3 @@ void InterfaceManager::switchToPage(const QString &fullPath)
     }
 }
 
-QString InterfaceManager::currentPageName() const
-{
-    return m_currentPageFullPath.split('/').last();
-}
-
-QString InterfaceManager::currentPageFullPath() const
-{
-    return m_currentPageFullPath;
-}

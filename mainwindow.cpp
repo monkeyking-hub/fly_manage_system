@@ -10,28 +10,21 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_parentName = "";
-    m_name = "MainWindow";
 
-    // 创建页面并注册
-    QString fullPath = m_parentName + "/" + m_name;
 
-    page1 = new BetaWindow(fullPath, "Page1");
-    page2 = new BetaWindow(fullPath, "Page2");
-    // 设置堆叠控件为中央部件
+    // 创建子界面,并且注册进调度器
+    BetaWindow* beta = new BetaWindow();
+    InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
+
+
+    // 设置堆叠控件为中央部件,仅仅在幕布类(即当前MainWindow要执行
     setCentralWidget(InterfaceManager::instance()->m_stackedWidget);
 
-    // 默认显示 page1
-    //InterfaceManager::instance()->switchToPage(fullPath + "/Page1");
 }
 
 MainWindow::~MainWindow()
 {
+    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta");
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    // 切换到 Page2
-    InterfaceManager::instance()->switchToPage("/MainWindow/Page2");
-}

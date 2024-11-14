@@ -14,16 +14,11 @@ public:
 
     // 注册页面
     void registerPage(const QString &fullPath, QWidget *page);
+    // 解除注册
     void unregisterPage(const QString &fullPath);
 
     // 切换到指定页面
     void switchToPage(const QString &fullPath);
-
-    // 获取当前页面的名字
-    QString currentPageName() const;
-
-    // 获取当前页面的全路径
-    QString currentPageFullPath() const;
 
     QStackedWidget *m_stackedWidget;     // 堆叠控件
 private:
