@@ -1,14 +1,27 @@
 #include "betawindow.h"
+#include "InterfaceManager.h"
 #include "ui_betawindow.h"
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
 
-betawindow::betawindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::betawindow)
+BetaWindow::BetaWindow(const QString &parentName, const QString &name, QWidget *parent)
+    : QMainWindow(parent), m_name(name)
+    , m_parentName(parentName)
+    , ui(new Ui::BetaWindow)
 {
-    ui->setupUi(this);
+     ui->setupUi(this);
+
+    // 构造全路径并注册到界面调度类中
+    QString fullPath = m_parentName + "/" + m_name;
+    InterfaceManager::instance()->registerPage(fullPath, this);
+
+
 }
 
-betawindow::~betawindow()
+BetaWindow::~BetaWindow()
 {
     delete ui;
 }
+

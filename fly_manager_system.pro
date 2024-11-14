@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     betawindow.cpp \
+    interfacemanager.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     betawindow.h \
+    interfacemanager.h \
     mainwindow.h
 
 FORMS += \
@@ -25,3 +27,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    README.md

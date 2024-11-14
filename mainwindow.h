@@ -2,22 +2,30 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "betawindow.h"
 
-QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+    QString m_name;           // 当前界面名
+    QString m_parentName;     // 父界面名
+    BetaWindow *page1;
+    BetaWindow *page2;
 };
+
 #endif // MAINWINDOW_H
