@@ -51,6 +51,8 @@ void Yipuxilong::on_RequestButton_clicked()
             ui->showHelloLabel->setText(showHelloStr);
         } else {
             // 请求失败，处理错误
+            QString error = "请检查服务器是否启动";
+            ui->showHelloLabel->setText(error);
             qDebug() << "Error: " << reply->errorString();
         }
 
