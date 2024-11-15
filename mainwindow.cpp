@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta");
+
     delete ui;
 }
 

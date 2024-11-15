@@ -12,26 +12,15 @@ BetaWindow::BetaWindow( QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::BetaWindow)
 {
-     ui->setupUi(this);
-    GamaWindow * gamawindow = new GamaWindow();
-    XitaWindow * xitawindow = new XitaWindow();
-    Yipuxilong * yipuxilong = new Yipuxilong();
+    ui->setupUi(this);
 
-    //注册gama界面
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama",gamawindow);
-    //注册西塔
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Xita",xitawindow);
-    //注册伊普西隆
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong",yipuxilong);
 
 }
 
 BetaWindow::~BetaWindow()
 {
-    //析构函数内解除对Gama的注册
-    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta/Gama");
-    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta/Xita");
-    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta/Yipuxilong");
+
+
     delete ui;
 }
 
