@@ -39,4 +39,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     README.md \
-    REQUIRE.md 
+    REQUIRE.md  \
+    TechnologyStack.md
