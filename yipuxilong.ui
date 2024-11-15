@@ -44,13 +44,26 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>330</y>
+      <y>400</y>
       <width>301</width>
-      <height>71</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>向服务器发起请求,获得机票</string>
+     <string>向服务器发起请求,获得个人信息</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="showHelloLabel">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>320</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

@@ -41,6 +41,6 @@
 
 - **单元测试**：Catch2：另一个 C++ 的单元测试框架
 - **集成测试**：Postman：广泛使用的 API 测试工具
-- **UI 测试**：Qt Test：能够进行自动化测试，尤其适合 Qt 项目。。
+- **UI 测试**： QtTest：能够进行自动化测试，尤其适合 Qt 项目。。
 - **性能测试**：JMeter：Apache JMeter 是一种广泛使用的性能测试工具
 - **安全测试**：OWASP ZAP (Zed Attack Proxy)：一款免费的开源 Web 安全扫描工具
