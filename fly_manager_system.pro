@@ -38,4 +38,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    README.md
+    README.md \
+    REQUIRE.md \
+    需求分析和大概框架（大家一起修改补充）.md \
+    需求分析和大概框架（大家一起修改补充）.md \
+    需求分析和大概框架（大家一起修改补充）.md \
+    需求分析和大概框架（大家一起修改补充）.md
