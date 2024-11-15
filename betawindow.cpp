@@ -30,6 +30,8 @@ BetaWindow::~BetaWindow()
 {
     //析构函数内解除对Gama的注册
     InterfaceManager::instance()->unregisterPage("/MainWindow/Beta/Gama");
+    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta/Xita");
+    InterfaceManager::instance()->unregisterPage("/MainWindow/Beta/Yipuxilong");
     delete ui;
 }
 

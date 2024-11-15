@@ -20,6 +20,8 @@ private slots:
 
     void on_toGameButton_clicked();
 
+    void on_RequestButton_clicked();
+
 private:
     Ui::Yipuxilong *ui;
 };

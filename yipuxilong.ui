@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="toBetaButton">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>330</y>
+      <x>130</x>
+      <y>90</y>
       <width>181</width>
       <height>91</height>
      </rect>
@@ -30,14 +30,27 @@
    <widget class="QPushButton" name="toGameButton">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>330</y>
+      <x>390</x>
+      <y>100</y>
       <width>211</width>
       <height>81</height>
      </rect>
     </property>
     <property name="text">
      <string>跳转到gama</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="RequestButton">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>330</y>
+      <width>301</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>向服务器发起请求,获得机票</string>
     </property>
    </widget>
   </widget>
