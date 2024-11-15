@@ -15,6 +15,7 @@ SOURCES += \
     interfacemanager.cpp \
     main.cpp \
     mainwindow.cpp \
+    system.cpp \
     xitawindow.cpp \
     yipuxilong.cpp
 
@@ -23,6 +24,7 @@ HEADERS += \
     gamawindow.h \
     interfacemanager.h \
     mainwindow.h \
+    system.h \
     xitawindow.h \
     yipuxilong.h
 
@@ -39,6 +41,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    README.md \
     REQUIRE.md  \
-    TechnologyStack.md
+    TechnologyStack.md \
+    meeting1.md
