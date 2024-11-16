@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Userwindow</class>
+ <widget class="QMainWindow" name="Userwindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="logOutButton">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>300</y>
+      <width>61</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>退出登录</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="logOffButton">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>330</y>
+      <width>61</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>注销</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="personInfoBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>40</y>
+      <width>531</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>个人信息设置</string>
+    </property>
+    <widget class="QLabel" name="profileLabel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>160</y>
+       <width>40</width>
+       <height>12</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>头像</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="xingMingLabel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>20</y>
+       <width>40</width>
+       <height>12</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>姓名</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="mailLabel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>50</y>
+       <width>40</width>
+       <height>12</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>邮箱</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="phondeNumberLabel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>80</y>
+       <width>40</width>
+       <height>12</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>手机号</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="SexLabel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>100</y>
+       <width>40</width>
+       <height>12</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>性别</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="levelLabel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>130</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>用户等级</string>
+     </property>
+    </widget>
+    <widget class="QStackedWidget" name="userNameStackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>10</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <widget class="QLabel" name="useNameLabel">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>61</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <widget class="QLineEdit" name="userNameSetBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QStackedWidget" name="mailStackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>40</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_5">
+      <widget class="QLabel" name="mailLabel_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_6">
+      <widget class="QLineEdit" name="mailSetBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QStackedWidget" name="phoneNumberStackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>70</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_9">
+      <widget class="QLabel" name="phoneNumberLabel">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>121</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_10">
+      <widget class="QLineEdit" name="phoneNumberSetBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>71</width>
+         <height>16</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QStackedWidget" name="sexStackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>100</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_11">
+      <widget class="QLabel" name="sexLabel">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>61</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_12">
+      <widget class="QRadioButton" name="maleButton">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>72</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>男</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="famelButton">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>0</y>
+         <width>72</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>女</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="levelLbl">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>130</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+    <widget class="QStackedWidget" name="oiStackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>220</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_13">
+      <widget class="QPushButton" name="pushButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>61</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>编辑信息</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_14">
+      <widget class="QPushButton" name="saveButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>56</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>保存</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QStackedWidget" name="ProfileStackedWidget">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>150</y>
+       <width>101</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page_15">
+      <widget class="QLabel" name="profileLbl">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_16">
+      <widget class="QPushButton" name="uploadProfileButton">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>56</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>上传头像</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>18</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

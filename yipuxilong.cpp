@@ -19,7 +19,7 @@ Yipuxilong::~Yipuxilong()
 
 void Yipuxilong::on_toBetaButton_clicked()
 {
-    InterfaceManager::instance()->switchToPage("/MainWindow/Beta");
+    InterfaceManager::instance()->switchToPage("fzj_window");
 }
 
 

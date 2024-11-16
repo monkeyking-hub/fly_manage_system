@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
     //表示一开始就进入Beta界面,即幕布第一张就是Beta
     //InterfaceManager::instance()->switchToPage("/MainWindow/Beta");
-    InterfaceManager::instance()->switchToPage("/MainWindow/Beta/Gama");
+    InterfaceManager::instance()->switchToPage("fzj_window");
 
 
     return a.exec();
