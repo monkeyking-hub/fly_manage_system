@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>向服务器发起请求,获得个人信息</string>
+     <string>向服务器发起请求,新创建三个用户</string>
     </property>
    </widget>
    <widget class="QLabel" name="showHelloLabel">

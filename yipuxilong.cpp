@@ -35,7 +35,7 @@ void Yipuxilong::on_RequestButton_clicked()
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
     // 创建 GET 请求
-    QUrl url("http://127.0.0.1:5001/hello?name=alice&age=11");
+    QUrl url("http://127.0.0.1:5001/login");
     QNetworkRequest request(url);
 
     // 发送请求
