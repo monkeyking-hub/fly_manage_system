@@ -16,6 +16,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     system.cpp \
+    userwindow.cpp \
     xitawindow.cpp \
     yipuxilong.cpp
 
@@ -25,6 +26,7 @@ HEADERS += \
     interfacemanager.h \
     mainwindow.h \
     system.h \
+    userwindow.h \
     xitawindow.h \
     yipuxilong.h
 
@@ -32,6 +34,7 @@ FORMS += \
     betawindow.ui \
     gamawindow.ui \
     mainwindow.ui \
+    userwindow.ui \
     xitawindow.ui \
     yipuxilong.ui
 
