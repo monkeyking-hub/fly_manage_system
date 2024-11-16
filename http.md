@@ -7,7 +7,7 @@
 
 #### 请求
 - **方法**: `POST`
-- **URL**: `/api/users/register`
+- **URL**: `/register`
 - **请求头**:  
   - `Content-Type: application/json`
 - **请求体**:
@@ -39,7 +39,7 @@
 
 #### 请求
 - **方法**: `POST`
-- **URL**: `/api/users/login`
+- **URL**: `/login`
 - **请求头**:  
   - `Content-Type: application/json`
 - **请求体**:
