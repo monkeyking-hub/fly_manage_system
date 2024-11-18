@@ -34,12 +34,13 @@ loginWindow::loginWindow(QWidget *parent)
 
 void loginWindow::onLoginButtonClicked() //点击登录按钮触发事件
 {
-
+    InterfaceManager::instance()->switchToPage("lxt_mainInterface"); //跳转到应用主界面
 }
+
 
 void loginWindow::onSignUpButtonClicked() //点击注册按钮触发事件
 {
-    InterfaceManager::instance()->switchToPage("fzj_window");
+    InterfaceManager::instance()->switchToPage("fzj_window"); //跳转到注册界面
 }
 
 loginWindow::~loginWindow()
