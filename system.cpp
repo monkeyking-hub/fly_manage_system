@@ -24,11 +24,11 @@ void System::start()
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Xita",xitawindow);
     //注册伊普西隆
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong",yipuxilong);
-    InterfaceManager::instance()->registerPage("fzj_window",userWindow);
-    InterfaceManager::instance()->registerPage("lxt_loginWindow",login);
+    InterfaceManager::instance()->registerPage("fzj_window",userWindow); //注册界面
+    InterfaceManager::instance()->registerPage("lxt_loginWindow",login); //登录界面
 
 
-    InterfaceManager::instance()->switchToPage("fzj_window");
+    InterfaceManager::instance()->switchToPage("lxt_loginWindow");
 
 
 }

@@ -1,5 +1,6 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
+#include <interfacemanager.h>
 #include <QGraphicsDropShadowEffect>
 
 loginWindow::loginWindow(QWidget *parent)
@@ -27,11 +28,18 @@ loginWindow::loginWindow(QWidget *parent)
 
     //连接登录按钮点击事件
     connect(ui->pushButton_sign_in,&QPushButton::clicked,this,&loginWindow::onLoginButtonClicked);
+    //连接注册按钮点击事件
+    connect(ui->pushButton_sign_up,&QPushButton::clicked,this,&loginWindow::onSignUpButtonClicked);
 }
 
-void loginWindow::onLoginButtonClicked()
+void loginWindow::onLoginButtonClicked() //点击登录按钮触发事件
 {
 
+}
+
+void loginWindow::onSignUpButtonClicked() //点击注册按钮触发事件
+{
+    InterfaceManager::instance()->switchToPage("fzj_window");
 }
 
 loginWindow::~loginWindow()
