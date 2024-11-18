@@ -2,8 +2,6 @@
 #include "ui_mainwindow.h"
 #include "InterfaceManager.h"
 #include "betawindow.h"
-#include <QStackedWidget>
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
