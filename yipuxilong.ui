@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>当前为伊普西隆,跳转到beta</string>
+     <string>当前为伊普西隆,跳转到用户界面</string>
     </property>
    </widget>
    <widget class="QPushButton" name="toGameButton">
@@ -44,13 +44,26 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>330</y>
+      <y>400</y>
       <width>301</width>
-      <height>71</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>向服务器发起请求,获得机票</string>
+     <string>向服务器发起请求,新创建三个用户</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="showHelloLabel">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>320</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -60,7 +73,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>

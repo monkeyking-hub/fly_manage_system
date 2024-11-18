@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,6 +15,8 @@ SOURCES += \
     interfacemanager.cpp \
     main.cpp \
     mainwindow.cpp \
+    system.cpp \
+    userwindow.cpp \
     xitawindow.cpp \
     yipuxilong.cpp
 
@@ -22,6 +25,8 @@ HEADERS += \
     gamawindow.h \
     interfacemanager.h \
     mainwindow.h \
+    system.h \
+    userwindow.h \
     xitawindow.h \
     yipuxilong.h
 
@@ -29,6 +34,7 @@ FORMS += \
     betawindow.ui \
     gamawindow.ui \
     mainwindow.ui \
+    userwindow.ui \
     xitawindow.ui \
     yipuxilong.ui
 
@@ -40,4 +46,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     README.md \
     REQUIRE.md  \
-    TechnologyStack.md
+    TechnologyStack.md \
+    meeting1.md
