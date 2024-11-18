@@ -13,6 +13,8 @@ class maininterface : public QMainWindow
 
 public:
     explicit maininterface(QWidget *parent = nullptr);
+    void editUserInfo(); //修改个人资料
+    void switchLogin(); //切换登录
     ~maininterface();
 
 private:
