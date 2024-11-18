@@ -21,10 +21,12 @@ maininterface::maininterface(QWidget *parent)
 
     //设置主窗口
     QWidget *centralWidget = new QWidget(this);
+    centralWidget->setStyleSheet("background-color:white");
     QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
 
     //左侧菜单栏
     QListWidget *menuList = new QListWidget(this);
+    menuList->setStyleSheet("background-color:white");
     menuList->addItem("首页");
     menuList->addItem("航班动态");
     menuList->addItem("我的订单");
@@ -36,15 +38,29 @@ maininterface::maininterface(QWidget *parent)
         "    background-color: #f5f5f5;"
         "    border: none;"
         "    font: 14px 'Arial';"
+        "    outline: 0;"
         "}"
         "QListWidget::item {"
-        "    padding: 10px;"
+        "    padding: 10px 15px;"
         "    color: #333;"
+        "    background-color: transparent;"
+        "    border-left: 4px solid transparent;"
+        "    transition: all 0.3s;"
+        "}"
+        "QListWidget::item:hover {"
+        "    background-color: #e6f7ff;"
+        "    color: #1890ff;"
+        "    border-left: 4px solid #1890ff;"
         "}"
         "QListWidget::item:selected {"
-        "    background-color: #d9d9d9;"
-        "    color: #0078d7;"
-        "    border-left: 4px solid #0078d7;"
+        "    background-color: #d9f7be;"
+        "    color: #52c41a;"
+        "    border-left: 4px solid #52c41a;"
+        "}"
+        "QListWidget::item:pressed {"
+        "    background-color: #bae7ff;"
+        "    color: #096dd9;"
+        "    border-left: 4px solid #096dd9;"
         "}"
     );
 
@@ -66,45 +82,71 @@ maininterface::maininterface(QWidget *parent)
 
     //添加上方工具栏
     QToolBar *toolBar = new QToolBar(this);
+    toolBar->setStyleSheet("background-color:white");
     addToolBar(Qt::TopToolBarArea,toolBar); //将工具栏添加到顶部
 
-    //工具栏按钮：示例按钮
-    QAction *actionHome = new QAction(QIcon(":/icons/home.png"), "首页", this);
-    QAction *actionSettings = new QAction(QIcon(":/icons/settings.png"), "设置", this);
-    QAction *actionHelp = new QAction(QIcon(":/icons/help.png"), "帮助", this);
+    //在工具栏添加label，显示软件logo图片
+    QLabel *label_logo = new QLabel(this);
+    label_logo->setFixedSize(100,100);
+    label_logo->setStyleSheet("background-color: transparent;");
+    QPixmap *pix = new QPixmap(":/logo.png");
+    QSize sz=label_logo->size();
+    label_logo->setPixmap(pix->scaled(sz));
+    toolBar->addWidget(label_logo);
 
-    // 添加按钮到工具栏
-    toolBar->addAction(actionHome);
-    toolBar->addAction(actionSettings);
-    toolBar->addAction(actionHelp);
+    //在工具栏里添加label，显示软件名字
+    QLabel *label_name = new QLabel("云程",this);
+    label_name->setFixedSize(100,100);
+    label_name->setStyleSheet(
+        "font-size: 40px; color: blue; font-family: '千图笔锋手写体';"
+    );
+    toolBar->addWidget(label_name);
 
-    // 工具栏样式
-    toolBar->setStyleSheet(
-        "QToolBar {"
-        "    background-color: #ffffff;"
-        "    border: 1px solid #ddd;"
-        "}"
-        "QToolButton {"
-        "    background-color: transparent;"
-        "    margin: 5px;"
-        "    padding: 5px;"
-        "    border-radius: 5px;"
-        "}"
-        "QToolButton:hover {"
-        "    background-color: #f5f5f5;"
-        "}"
-        );
+    //在工具栏最右边添加label
+    QWidget *spacer = new QWidget(this); //添加弹性空间
+    spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+    toolBar->addWidget(spacer);
+    QLabel *rightLabel = new QLabel("用户信息",this);
+    toolBar->addWidget(rightLabel);
 
-    // 信号槽：工具栏按钮的功能实现
-    connect(actionHome, &QAction::triggered, [=]() {
-        menuList->setCurrentRow(0); // 切换到“首页”
-    });
-    connect(actionSettings, &QAction::triggered, [=]() {
-        menuList->setCurrentRow(1); // 切换到“航班动态”窗口
-    });
-    connect(actionHelp, &QAction::triggered, [=]() {
-        stackedWidget->setCurrentIndex(2); // 切换到“我的订单”窗口
-    });
+
+    // //工具栏按钮：示例按钮
+    // QAction *actionHome = new QAction(QIcon(":/icons/home.png"), "首页", this);
+    // QAction *actionSettings = new QAction(QIcon(":/icons/settings.png"), "设置", this);
+    // QAction *actionHelp = new QAction(QIcon(":/icons/help.png"), "帮助", this);
+
+    // // 添加按钮到工具栏
+    // toolBar->addAction(actionHome);
+    // toolBar->addAction(actionSettings);
+    // toolBar->addAction(actionHelp);
+
+    // // 工具栏样式
+    // toolBar->setStyleSheet(
+    //     "QToolBar {"
+    //     "    background-color: #ffffff;"
+    //     "    border: 1px solid #ddd;"
+    //     "}"
+    //     "QToolButton {"
+    //     "    background-color: transparent;"
+    //     "    margin: 5px;"
+    //     "    padding: 5px;"
+    //     "    border-radius: 5px;"
+    //     "}"
+    //     "QToolButton:hover {"
+    //     "    background-color: #f5f5f5;"
+    //     "}"
+    //     );
+
+    // // 信号槽：工具栏按钮的功能实现
+    // connect(actionHome, &QAction::triggered, [=]() {
+    //     menuList->setCurrentRow(0); // 切换到“首页”
+    // });
+    // connect(actionSettings, &QAction::triggered, [=]() {
+    //     menuList->setCurrentRow(1); // 切换到“航班动态”窗口
+    // });
+    // connect(actionHelp, &QAction::triggered, [=]() {
+    //     stackedWidget->setCurrentIndex(2); // 切换到“我的订单”窗口
+    // });
 
 }
 
