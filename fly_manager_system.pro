@@ -13,6 +13,7 @@ SOURCES += \
     betawindow.cpp \
     gamawindow.cpp \
     interfacemanager.cpp \
+    loginwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     system.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     betawindow.h \
     gamawindow.h \
     interfacemanager.h \
+    loginwindow.h \
     mainwindow.h \
     system.h \
     userwindow.h \
@@ -33,6 +35,7 @@ HEADERS += \
 FORMS += \
     betawindow.ui \
     gamawindow.ui \
+    loginwindow.ui \
     mainwindow.ui \
     userwindow.ui \
     xitawindow.ui \
@@ -48,3 +51,6 @@ DISTFILES += \
     REQUIRE.md  \
     TechnologyStack.md \
     meeting1.md
+
+RESOURCES += \
+    images.qrc
