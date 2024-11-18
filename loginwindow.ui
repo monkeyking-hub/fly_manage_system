@@ -27,18 +27,46 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: qlineargradient(spread:pad, x1:0.52, y1:1, x2:0.54, y2:0, 
-stop:0.0112994 rgba(64, 145, 252, 255), 
-stop:1 rgba(255, 255, 255, 255));
-color: rgb(255, 255, 255);
- 
-border:0px groove gray;border-radius:
-7px;padding:2px 4px;
-font: 14pt &quot;Candara&quot;;
+     <string notr="true">QPushButton {
+    background-color: qlineargradient(spread:pad, x1:0.52, y1:1, x2:0.54, y2:0, 
+        stop:0.0112994 rgba(64, 145, 252, 255), 
+        stop:1 rgba(255, 255, 255, 255));
+    color: rgb(255, 255, 255);
+    border: 0px groove gray;
+    border-radius: 7px;
+    padding: 4px 6px;
+    font: 14pt &quot;Candara&quot;;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 50);
+}
+
+/* 鼠标悬停效果 */
+QPushButton:hover {
+    background-color: qlineargradient(spread:pad, x1:0.52, y1:1, x2:0.54, y2:0, 
+        stop:0 rgba(72, 155, 255, 255), 
+        stop:1 rgba(240, 240, 240, 255));
+    color: rgb(240, 240, 240);
+    border: 1px solid rgba(64, 145, 252, 200);
+}
+
+/* 按下效果 */
+QPushButton:pressed {
+    background-color: qlineargradient(spread:pad, x1:0.52, y1:1, x2:0.54, y2:0, 
+        stop:0 rgba(50, 130, 240, 255), 
+        stop:1 rgba(220, 220, 220, 255));
+    color: rgb(220, 220, 220);
+    padding: 6px 8px; /* 模拟下沉效果 */
+    border: 1px solid rgba(50, 130, 240, 200);
+}
 </string>
     </property>
     <property name="text">
      <string>登 录</string>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_txt">
@@ -144,6 +172,56 @@ font: 10pt &quot;Candara&quot;;</string>
      <string/>
     </property>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>470</y>
+      <width>129</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">font-size:12px</string>
+       </property>
+       <property name="text">
+        <string>没有账号？</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_sign_up">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    background-color: transparent;
+    font-size: 12px;
+    color: blue; /* 默认文字颜色 */
+}
+
+/* 鼠标悬停效果 */
+QPushButton:hover {
+    color: blue; /* 鼠标悬停时文字颜色变蓝 */
+    text-decoration: underline; /* 鼠标悬停时添加下划线 */
+}
+
+/* 按下效果 */
+QPushButton:pressed {
+    color: darkblue; /* 按下时文字变为深蓝色 */
+    padding: 2px; /* 模拟按钮按下的轻微位移 */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>去注册</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -151,7 +229,7 @@ font: 10pt &quot;Candara&quot;;</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

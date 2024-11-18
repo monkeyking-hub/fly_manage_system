@@ -13,7 +13,8 @@ class loginWindow : public QMainWindow
 
 public:
     explicit loginWindow(QWidget *parent = nullptr);
-    void onLoginButtonClicked();
+    void onLoginButtonClicked(); //点击登录按钮触发事件
+    void onSignUpButtonClicked(); //点击注册按钮触发事件
     ~loginWindow();
 
 private:
