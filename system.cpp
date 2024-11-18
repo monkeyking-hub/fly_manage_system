@@ -4,6 +4,8 @@
 #include "yipuxilong.h"
 #include "gamawindow.h"
 #include "userwindow.h"
+#include "loginwindow.h"
+
 System::System() {}
 void System::start()
 {
@@ -13,6 +15,7 @@ void System::start()
     XitaWindow * xitawindow = new XitaWindow();
     Yipuxilong * yipuxilong = new Yipuxilong();
     Userwindow * userWindow = new Userwindow();
+    loginWindow *login = new loginWindow();
 
     InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面
@@ -22,6 +25,11 @@ void System::start()
     //注册伊普西隆
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong",yipuxilong);
     InterfaceManager::instance()->registerPage("fzj_window",userWindow);
+    InterfaceManager::instance()->registerPage("lxt_loginWindow",login);
+
+
+    InterfaceManager::instance()->switchToPage("fzj_window");
+
 
 }
 System::~System()
