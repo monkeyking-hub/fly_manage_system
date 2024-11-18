@@ -15,6 +15,7 @@ SOURCES += \
     interfacemanager.cpp \
     loginwindow.cpp \
     main.cpp \
+    maininterface.cpp \
     mainwindow.cpp \
     system.cpp \
     userwindow.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     gamawindow.h \
     interfacemanager.h \
     loginwindow.h \
+    maininterface.h \
     mainwindow.h \
     system.h \
     userwindow.h \
@@ -36,6 +38,7 @@ FORMS += \
     betawindow.ui \
     gamawindow.ui \
     loginwindow.ui \
+    maininterface.ui \
     mainwindow.ui \
     userwindow.ui \
     xitawindow.ui \
