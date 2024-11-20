@@ -1,10 +1,70 @@
-*.pro.user
-
-build/
-bin/
+# 编译生成的目录
+build*/
+debug/
+release/
+dist/
 out/
+
+# Qt Creator 生成的用户配置文件
+*.pro.user
+*.qbs.user
+*.pro.user.*
+*.qbs.user.*
+
+# Qt Creator 缓存文件
+*.autosave
+*.creator.*
+*.creator
+*.config
+*.files
+*.includes
+*.tags
+
+# 生成的 Makefile 和相关文件
+Makefile*
+qrc_*.cpp
+ui_*.h
+moc_*.cpp
 *.o
 *.obj
-*.so
+*.a
+*.lib
 *.dll
+*.so
+*.dylib
 *.exe
+*.app
+
+# CMake 生成的文件
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.cmake
+
+# 静态检查工具生成的文件
+.clangd
+.cppcheck
+.qrcoutput/
+.qrc~
+
+# 文件系统的临时文件
+.DS_Store
+Thumbs.db
+
+# IDE 可能生成的备份文件
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# 如果使用 Qt 的 QML
+*.qmlc
+*.jsc
+*.qml.cache
+.qmltypes
+
+# 忽略日志和临时文件
+*.log
+*.temp
+*.~*
+*.backup
