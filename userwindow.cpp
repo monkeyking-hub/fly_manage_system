@@ -68,3 +68,9 @@ void Userwindow::on_logOutButton_clicked()
     InterfaceManager::instance()->switchToPage("/MainWindow/Beta");
 }
 
+
+void Userwindow::on_returnButton_clicked()
+{
+    InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+}
+

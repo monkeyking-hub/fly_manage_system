@@ -9,5 +9,6 @@
         <file>switchLogin.png</file>
         <file>plane.png</file>
         <file>place.png</file>
+        <file>bcgrd.jpg</file>
     </qresource>
 </RCC>
