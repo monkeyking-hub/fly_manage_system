@@ -17,6 +17,7 @@ SOURCES += \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
+    registerwindow.cpp \
     system.cpp \
     userwindow.cpp \
     xitawindow.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     loginwindow.h \
     maininterface.h \
     mainwindow.h \
+    registerwindow.h \
     system.h \
     userwindow.h \
     xitawindow.h \
@@ -40,6 +42,7 @@ FORMS += \
     loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
+    registerwindow.ui \
     userwindow.ui \
     xitawindow.ui \
     yipuxilong.ui
