@@ -679,7 +679,7 @@ QPushButton:disabled {
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="images.qrc">:/profilePhoto.png</pixmap>
+        <pixmap>:/profilePhoto.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -773,8 +773,6 @@ QPushButton:disabled {
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
