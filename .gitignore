@@ -1,0 +1,10 @@
+*.pro.user
+
+build/
+bin/
+out/
+*.o
+*.obj
+*.so
+*.dll
+*.exe
