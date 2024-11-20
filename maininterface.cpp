@@ -1,6 +1,7 @@
 #include "maininterface.h"
 #include "ui_maininterface.h"
 #include "interfacemanager.h"
+#include "homewindow.h"
 #include <QStackedWidget>
 #include <QDebug>
 #include <QApplication>
@@ -35,6 +36,7 @@ maininterface::maininterface(QWidget *parent)
     menuList->addItem("航班动态");
     menuList->addItem("我的订单");
     menuList->setFixedWidth(150);
+    menuList->setCurrentRow(0); //默认在首页窗口
 
     //自定义菜单栏样式
     menuList->setStyleSheet(
@@ -70,7 +72,7 @@ maininterface::maininterface(QWidget *parent)
 
     //右侧内容区
     QStackedWidget *stackedWidget = new QStackedWidget(this);
-    stackedWidget->addWidget(new QLabel("首页窗口",this)); //仅以label为示例，实际上要实现一个首页窗口类
+    stackedWidget->addWidget(new homeWindow()); //仅以label为示例，实际上要实现一个首页窗口类
     stackedWidget->addWidget(new QLabel("航班动态窗口",this)); //仅以label为示例，实际上要实现一个航班动态窗口类
     stackedWidget->addWidget(new QLabel("我的订单窗口",this)); //仅以label为示例，实际上要实现一个我的订单窗口类
 

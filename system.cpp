@@ -6,6 +6,7 @@
 #include "userwindow.h"
 #include "loginwindow.h"
 #include "maininterface.h"
+#include "homewindow.h"
 
 System::System() {}
 void System::start()
@@ -18,12 +19,15 @@ void System::start()
     Userwindow * userWindow = new Userwindow(); //注册界面
     loginWindow *login = new loginWindow(); //登陆界面
     maininterface *mainScreen = new maininterface(); //应用主界面
+    homeWindow *homePage = new homeWindow(); //首页界面
 
     InterfaceManager::instance()->registerPage("lxt_loginWindow",login); //登录界面
 
     InterfaceManager::instance()->registerPage("fzj_window",userWindow); //注册界面
 
     InterfaceManager::instance()->registerPage("lxt_mainInterface",mainScreen); //应用主界面
+
+    InterfaceManager::instance()->registerPage("lxt_homeWindow",homePage); //首页界面
 
     InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面
