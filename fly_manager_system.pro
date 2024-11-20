@@ -12,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     betawindow.cpp \
     gamawindow.cpp \
+    homewindow.cpp \
     interfacemanager.cpp \
     loginwindow.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     betawindow.h \
     gamawindow.h \
+    homewindow.h \
     interfacemanager.h \
     loginwindow.h \
     maininterface.h \
@@ -39,6 +41,7 @@ HEADERS += \
 FORMS += \
     betawindow.ui \
     gamawindow.ui \
+    homewindow.ui \
     loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
