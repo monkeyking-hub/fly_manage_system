@@ -18,4 +18,3 @@ void GamaWindow::on_toBetaButton_clicked()
     //点击跳转beta界面
     InterfaceManager::instance()->switchToPage("/MainWindow/Beta");
 }
-

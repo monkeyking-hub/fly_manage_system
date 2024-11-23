@@ -13,7 +13,9 @@ class homeWindow : public QMainWindow
 
 public:
     explicit homeWindow(QWidget *parent = nullptr);
-    QWidget *createCategoryBlock(const QString &title, const QStringList &routes, const QStringList &prices);
+    QWidget *createCategoryBlock(const QString &title,
+                                 const QStringList &routes,
+                                 const QStringList &prices);
     ~homeWindow();
 
 private:

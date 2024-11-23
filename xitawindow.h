@@ -16,6 +16,7 @@ public:
     ~XitaWindow();
 private slots:
     void on_toBetaButton_clicked();
+
 private:
     Ui::XitaWindow *ui;
 };

@@ -1,7 +1,7 @@
 #include "loginwindow.h"
+#include <QGraphicsDropShadowEffect>
 #include "ui_loginwindow.h"
 #include <interfacemanager.h>
-#include <QGraphicsDropShadowEffect>
 
 loginWindow::loginWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,33 +10,35 @@ loginWindow::loginWindow(QWidget *parent)
     ui->setupUi(this);
 
     //设置图片1
-    QPixmap *pix1=new QPixmap(":/blue.png");
-    QSize sz1=ui->label_image->size();
+    QPixmap *pix1 = new QPixmap(":/blue.png");
+    QSize sz1 = ui->label_image->size();
     ui->label_image->setPixmap(pix1->scaled(sz1));
 
     //设置图片2
-    QPixmap *pix2=new QPixmap(":/logo.png");
-    QSize sz2=ui->label_logo->size();
+    QPixmap *pix2 = new QPixmap(":/logo.png");
+    QSize sz2 = ui->label_logo->size();
     ui->label_logo->setPixmap(pix2->scaled(sz2));
 
     //设置图片1和2的阴影效果
-    QGraphicsDropShadowEffect *shadow=new QGraphicsDropShadowEffect(this);
-    shadow->setOffset(-3,0);
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+    shadow->setOffset(-3, 0);
     shadow->setColor(QColor("#888888"));
     shadow->setBlurRadius(30);
     ui->label_image->setGraphicsEffect(shadow); //设置图片1
 
     //连接登录按钮点击事件
-    connect(ui->pushButton_sign_in,&QPushButton::clicked,this,&loginWindow::onLoginButtonClicked);
+    connect(ui->pushButton_sign_in, &QPushButton::clicked, this, &loginWindow::onLoginButtonClicked);
     //连接注册按钮点击事件
-    connect(ui->pushButton_sign_up,&QPushButton::clicked,this,&loginWindow::onSignUpButtonClicked);
+    connect(ui->pushButton_sign_up,
+            &QPushButton::clicked,
+            this,
+            &loginWindow::onSignUpButtonClicked);
 }
 
 void loginWindow::onLoginButtonClicked() //点击登录按钮触发事件
 {
     InterfaceManager::instance()->switchToPage("lxt_mainInterface"); //跳转到应用主界面
 }
-
 
 void loginWindow::onSignUpButtonClicked() //点击注册按钮触发事件
 {
