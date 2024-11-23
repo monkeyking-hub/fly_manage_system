@@ -7,27 +7,31 @@
 #include "userwindow.h"
 #include "xitawindow.h"
 #include "yipuxilong.h"
+#include "registerwindow.h"
 
 System::System() {}
 void System::start()
 {
     // 创建子界面,并且注册进调度器
-    BetaWindow *beta = new BetaWindow();
-    GamaWindow *gamawindow = new GamaWindow();
-    XitaWindow *xitawindow = new XitaWindow();
-    Yipuxilong *yipuxilong = new Yipuxilong();
-    Userwindow *userWindow = new Userwindow();       //注册界面
-    loginWindow *login = new loginWindow();          //登陆界面
+    BetaWindow * beta       = new BetaWindow();
+    GamaWindow * gamawindow = new GamaWindow();
+    XitaWindow * xitawindow = new XitaWindow();
+    Yipuxilong * yipuxilong = new Yipuxilong();
+    Userwindow * userWindow = new Userwindow(); //修改个人信息界面
+    loginWindow *login = new loginWindow(); //登陆界面
     maininterface *mainScreen = new maininterface(); //应用主界面
-    homeWindow *homePage = new homeWindow();         //首页界面
+    homeWindow *homePage = new homeWindow(); //首页界面
+    registerWindow *signUpWindow = new registerWindow(); //注册界面
 
     InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
 
-    InterfaceManager::instance()->registerPage("fzj_window", userWindow); //注册界面
+    InterfaceManager::instance()->registerPage("fzj_window",userWindow); //修改个人信息界面
 
     InterfaceManager::instance()->registerPage("lxt_mainInterface", mainScreen); //应用主界面
 
-    InterfaceManager::instance()->registerPage("lxt_homeWindow", homePage); //首页界面
+    InterfaceManager::instance()->registerPage("lxt_homeWindow",homePage); //首页界面
+
+    InterfaceManager::instance()->registerPage("lxt_registerWindow",signUpWindow); //注册界面
 
     InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面
