@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>flightstatus</class>
+ <widget class="QMainWindow" name="flightstatus">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">this-&gt;setStyleSheet(&quot;background-color: #f0f4f7; font-family: Arial, sans-serif;&quot;);
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="departureInput">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>9</y>
+      <width>161</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;departureInput-&gt;setStyleSheet(
+    &quot;border: 1px solid #dcdde1; &quot;
+    &quot;border-radius: 5px; &quot;
+    &quot;padding: 5px; &quot;
+    &quot;background-color: #ffffff; &quot;
+    &quot;font-size: 14px;&quot;
+);
+ui-&gt;destinationInput-&gt;setStyleSheet(
+    &quot;border: 1px solid #dcdde1; &quot;
+    &quot;border-radius: 5px; &quot;
+    &quot;padding: 5px; &quot;
+    &quot;background-color: #ffffff; &quot;
+    &quot;font-size: 14px;&quot;
+);
+</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="destinationInput">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>49</y>
+      <width>161</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;departureInput-&gt;setStyleSheet(
+    &quot;border: 1px solid #dcdde1; &quot;
+    &quot;border-radius: 5px; &quot;
+    &quot;padding: 5px; &quot;
+    &quot;background-color: #ffffff; &quot;
+    &quot;font-size: 14px;&quot;
+);
+ui-&gt;destinationInput-&gt;setStyleSheet(
+    &quot;border: 1px solid #dcdde1; &quot;
+    &quot;border-radius: 5px; &quot;
+    &quot;padding: 5px; &quot;
+    &quot;background-color: #ffffff; &quot;
+    &quot;font-size: 14px;&quot;
+);
+</string>
+    </property>
+   </widget>
+   <widget class="QDateTimeEdit" name="departureTimeInput">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>81</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;departureTimeInput-&gt;setStyleSheet(
+    &quot;border: 1px solid #dcdde1; &quot;
+    &quot;border-radius: 5px; &quot;
+    &quot;padding: 5px; &quot;
+    &quot;background-color: #ffffff; &quot;
+    &quot;font-size: 14px;&quot;
+);
+</string>
+    </property>
+    <property name="date">
+     <date>
+      <year>2024</year>
+      <month>11</month>
+      <day>23</day>
+     </date>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="searchButton">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>140</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;searchButton-&gt;setStyleSheet(
+    &quot;QPushButton {&quot;
+    &quot;    background-color: #3498db; &quot;
+    &quot;    color: white; &quot;
+    &quot;    font-size: 14px; &quot;
+    &quot;    font-weight: bold; &quot;
+    &quot;    border-radius: 5px; &quot;
+    &quot;    padding: 8px 16px;&quot;
+    &quot;}&quot;
+    &quot;QPushButton:hover {&quot;
+    &quot;    background-color: #2980b9;&quot;
+    &quot;}&quot;
+    &quot;QPushButton:pressed {&quot;
+    &quot;    background-color: #1c598a;&quot;
+    &quot;}&quot;
+);
+</string>
+    </property>
+    <property name="text">
+     <string>搜索</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="resultTable">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>200</y>
+      <width>901</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;resultTable-&gt;setStyleSheet(
+    &quot;QTableWidget {&quot;
+    &quot;    background-color: #ffffff;&quot;
+    &quot;    border: 1px solid #dcdde1;&quot;
+    &quot;    gridline-color: #dcdde1;&quot;
+    &quot;    font-size: 14px;&quot;
+    &quot;}&quot;
+    &quot;QHeaderView::section {&quot;
+    &quot;    background-color: #3498db;&quot;
+    &quot;    color: white;&quot;
+    &quot;    font-size: 14px;&quot;
+    &quot;    font-weight: bold;&quot;
+    &quot;    padding: 4px;&quot;
+    &quot;    border: none;&quot;
+    &quot;}&quot;
+    &quot;QTableWidget::item {&quot;
+    &quot;    padding: 5px;&quot;
+    &quot;}&quot;
+    &quot;QTableWidget::item:selected {&quot;
+    &quot;    background-color: #dcdde1;&quot;
+    &quot;    color: #2c3e50;&quot;
+    &quot;}&quot;
+    &quot;QTableWidget::alternate-background {&quot;
+    &quot;    background-color: #f9f9f9;&quot;
+    &quot;}&quot;
+);
+ui-&gt;resultTable-&gt;setAlternatingRowColors(true);  
+</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>10</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;label-&gt;setStyleSheet(&quot;color: #2c3e50; font-size: 16px; font-weight: bold;&quot;);</string>
+    </property>
+    <property name="text">
+     <string>始发地</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>50</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;labe_2-&gt;setStyleSheet(&quot;color: #2c3e50; font-size: 16px; font-weight: bold;&quot;);</string>
+    </property>
+    <property name="text">
+     <string>目的地</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>90</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">ui-&gt;label_3-&gt;setStyleSheet(&quot;color: #2c3e50; font-size: 16px; font-weight: bold;&quot;);</string>
+    </property>
+    <property name="text">
+     <string>出发时间</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>18</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
