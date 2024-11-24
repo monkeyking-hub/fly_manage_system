@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/back">
+        <file>blue.png</file>
+        <file>nature.png</file>
+    </qresource>
+</RCC>

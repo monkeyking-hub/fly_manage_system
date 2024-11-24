@@ -1,6 +1,8 @@
 QT       += core gui
 QT       += network
 
+QT += widgets
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -18,6 +20,7 @@ SOURCES += \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
+    orderwindow.cpp \
     registerwindow.cpp \
     system.cpp \
     userwindow.cpp \
@@ -32,6 +35,7 @@ HEADERS += \
     loginwindow.h \
     maininterface.h \
     mainwindow.h \
+    orderwindow.h \
     registerwindow.h \
     system.h \
     userwindow.h \
@@ -45,6 +49,7 @@ FORMS += \
     loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
+    orderwindow.ui \
     registerwindow.ui \
     userwindow.ui \
     xitawindow.ui \
