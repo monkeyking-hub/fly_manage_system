@@ -9,6 +9,7 @@
 #include "yipuxilong.h"
 #include "registerwindow.h"
 #include "newhomewindow.h"
+#include "flightstatus.h"
 
 System::System() {}
 void System::start()
@@ -24,10 +25,13 @@ void System::start()
     homeWindow *homePage = new homeWindow(); //首页界面
     registerWindow *signUpWindow = new registerWindow(); //注册界面
     newHomeWindow *newHomePage = new newHomeWindow(); //新首页界面
+    flightstatus* flightstatusWindow= new flightstatus();
 
     InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
 
     InterfaceManager::instance()->registerPage("fzj_window",userWindow); //修改个人信息界面
+
+    InterfaceManager::instance()->registerPage("fzj_flightstatus",flightstatusWindow);
 
     InterfaceManager::instance()->registerPage("lxt_mainInterface", mainScreen); //应用主界面
 
