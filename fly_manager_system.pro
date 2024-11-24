@@ -1,6 +1,6 @@
 QT       += core gui
 QT       += network
-
+QT += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     betawindow.cpp \
+    flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
     interfacemanager.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     betawindow.h \
+    flightstatus.h \
     gamawindow.h \
     homewindow.h \
     interfacemanager.h \
@@ -40,6 +42,7 @@ HEADERS += \
 
 FORMS += \
     betawindow.ui \
+    flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
     loginwindow.ui \

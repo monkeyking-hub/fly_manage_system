@@ -25,6 +25,7 @@ void Userwindow::on_pushButton_clicked()
     ui->sexStackedWidget->setCurrentIndex(1);
     ui->oiStackedWidget->setCurrentIndex(1);
     ui->ProfileStackedWidget->setCurrentIndex(1);
+    ui->ageStackedWidget->setCurrentIndex(1);
 }
 
 
@@ -33,6 +34,7 @@ void Userwindow::on_saveButton_clicked()
     ui->useNameLabel->setText(ui->userNameSetBox->text());
     ui->mailLabel_2->setText(ui->mailSetBox->text());
     ui->phoneNumberLabel->setText(ui->phoneNumberSetBox->text());
+    ui->agelabel->setText(ui->ageSetBox->text());
     if(ui->maleButton->isChecked())     ui->sexLabel->setText(ui->maleButton->text());
     else if(ui->famelButton->isChecked()) ui->sexLabel->setText(ui->famelButton->text());
     else ui->sexLabel->setText("unselected");
@@ -42,6 +44,7 @@ void Userwindow::on_saveButton_clicked()
     ui->sexStackedWidget->setCurrentIndex(0);
     ui->oiStackedWidget->setCurrentIndex(0);
     ui->ProfileStackedWidget->setCurrentIndex(0);
+    ui->ageStackedWidget->setCurrentIndex(0);
 }
 
 

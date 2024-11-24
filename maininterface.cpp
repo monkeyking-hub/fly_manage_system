@@ -2,6 +2,7 @@
 #include "ui_maininterface.h"
 #include "interfacemanager.h"
 #include "homewindow.h"
+#include "flightstatus.h"
 #include <QStackedWidget>
 #include <QDebug>
 #include <QApplication>
@@ -73,7 +74,7 @@ maininterface::maininterface(QWidget *parent)
     //右侧内容区
     QStackedWidget *stackedWidget = new QStackedWidget(this);
     stackedWidget->addWidget(new homeWindow()); //仅以label为示例，实际上要实现一个首页窗口类
-    stackedWidget->addWidget(new QLabel("航班动态窗口",this)); //仅以label为示例，实际上要实现一个航班动态窗口类
+    stackedWidget->addWidget(new flightstatus());
     stackedWidget->addWidget(new QLabel("我的订单窗口",this)); //仅以label为示例，实际上要实现一个我的订单窗口类
 
     //将左侧菜单和右侧内容添加到主布局mainLayout
@@ -198,6 +199,7 @@ maininterface::maininterface(QWidget *parent)
     )");
     QAction *editInfoAction = new QAction("个人信息编辑",this);
     QAction *switchLoginAction = new QAction("切换登录",this);
+    QAction *switchFlightStatusWindow = new QAction("航班动态",this);
     // 设置图标
     editInfoAction->setIcon(QIcon(":/usr.png"));
     switchLoginAction->setIcon(QIcon(":/switchLogin.png"));
@@ -211,6 +213,7 @@ maininterface::maininterface(QWidget *parent)
     //信号槽：连接菜单项
     connect(editInfoAction,&QAction::triggered,this,&maininterface::editUserInfo);
     connect(switchLoginAction,&QAction::triggered,this,&maininterface::switchLogin);
+    connect(switchFlightStatusWindow,&QAction::trigger,this,&maininterface::switchtoFlightStatusWindow);
 
 }
 
@@ -222,6 +225,11 @@ void maininterface::editUserInfo()
 void maininterface::switchLogin()
 {
     InterfaceManager::instance()->switchToPage("lxt_loginWindow");
+}
+
+void maininterface::switchtoFlightStatusWindow()
+{
+    InterfaceManager::instance()->switchToPage("fzj_flightststuswindow");
 }
 
 maininterface::~maininterface()
