@@ -21,10 +21,10 @@
    <widget class="QLineEdit" name="departureInput">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>50</y>
-      <width>121</width>
-      <height>20</height>
+      <x>450</x>
+      <y>9</y>
+      <width>161</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -48,10 +48,10 @@ ui-&gt;destinationInput-&gt;setStyleSheet(
    <widget class="QLineEdit" name="destinationInput">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>90</y>
-      <width>121</width>
-      <height>20</height>
+      <x>450</x>
+      <y>49</y>
+      <width>161</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -75,8 +75,8 @@ ui-&gt;destinationInput-&gt;setStyleSheet(
    <widget class="QDateTimeEdit" name="departureTimeInput">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>121</y>
+      <x>450</x>
+      <y>81</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -102,8 +102,8 @@ ui-&gt;destinationInput-&gt;setStyleSheet(
    <widget class="QPushButton" name="searchButton">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>180</y>
+      <x>470</x>
+      <y>140</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -139,9 +139,9 @@ ui-&gt;destinationInput-&gt;setStyleSheet(
    <widget class="QTableWidget" name="resultTable">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>230</y>
-      <width>771</width>
+      <x>100</x>
+      <y>200</y>
+      <width>901</width>
       <height>321</height>
      </rect>
     </property>
@@ -179,8 +179,8 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>50</y>
+      <x>380</x>
+      <y>10</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -200,8 +200,8 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>90</y>
+      <x>380</x>
+      <y>50</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -221,8 +221,8 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>130</y>
+      <x>380</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
