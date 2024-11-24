@@ -10,6 +10,7 @@
 #include "registerwindow.h"
 #include "newhomewindow.h"
 #include "flightstatus.h"
+#include "orderwindow.h"
 
 System::System() {}
 void System::start()
@@ -22,24 +23,27 @@ void System::start()
     Userwindow * userWindow = new Userwindow(); //修改个人信息界面
     loginWindow *login = new loginWindow(); //登陆界面
     maininterface *mainScreen = new maininterface(); //应用主界面
-    homeWindow *homePage = new homeWindow(); //首页界面
+    homeWindow *homePage = new homeWindow(); //homeWindow界面
     registerWindow *signUpWindow = new registerWindow(); //注册界面
     newHomeWindow *newHomePage = new newHomeWindow(); //新首页界面
-    flightstatus* flightstatusWindow= new flightstatus();
+    flightstatus* flightstatusWindow= new flightstatus(); //航班动态界面
+    orderwindow* orderPage = new orderwindow(); //订单界面
 
     InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
 
     InterfaceManager::instance()->registerPage("fzj_window",userWindow); //修改个人信息界面
 
-    InterfaceManager::instance()->registerPage("fzj_flightstatus",flightstatusWindow);
+    InterfaceManager::instance()->registerPage("fzj_flightstatus",flightstatusWindow); //航班动态界面
 
     InterfaceManager::instance()->registerPage("lxt_mainInterface", mainScreen); //应用主界面
 
-    InterfaceManager::instance()->registerPage("lxt_homeWindow",homePage); //首页界面
+    InterfaceManager::instance()->registerPage("lxt_homeWindow",homePage); //homeWindow界面
 
     InterfaceManager::instance()->registerPage("lxt_registerWindow",signUpWindow); //注册界面
 
     InterfaceManager::instance()->registerPage("lxt_newHomeWindow",newHomePage); //新首页界面
+
+    InterfaceManager::instance()->registerPage("wmc_orderWindow",orderPage); //订单界面
 
     InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面

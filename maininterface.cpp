@@ -75,9 +75,9 @@ maininterface::maininterface(QWidget *parent)
 
     //右侧内容区
     QStackedWidget *stackedWidget = new QStackedWidget(this);
-    stackedWidget->addWidget(new homeWindow()); //仅以label为示例，实际上要实现一个首页窗口类
-    stackedWidget->addWidget(new flightstatus()); //仅以label为示例，实际上要实现一个航班动态窗口类
-    stackedWidget->addWidget(new orderwindow()); //仅以label为示例，实际上要实现一个我的订单窗口类
+    stackedWidget->addWidget(new newHomeWindow()); //首页界面
+    stackedWidget->addWidget(new flightstatus()); //航班动态界面
+    stackedWidget->addWidget(new orderwindow()); //订单界面
 
     //将左侧菜单和右侧内容添加到主布局mainLayout
     mainLayout->addWidget(menuList);
