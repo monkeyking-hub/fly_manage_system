@@ -1,13 +1,12 @@
 #ifndef betawindow_H
 #define betawindow_H
 
-#include <QWidget>
 #include <QMainWindow>
+#include <QWidget>
 #include "InterfaceManager.h"
 namespace Ui {
 class BetaWindow;
 }
-
 
 class BetaWindow : public QMainWindow
 {

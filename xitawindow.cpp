@@ -17,4 +17,3 @@ void XitaWindow::on_toBetaButton_clicked()
 {
     InterfaceManager::instance()->switchToPage("/MainWindow/Beta");
 }
-

@@ -1,14 +1,14 @@
 #include "homewindow.h"
-#include "ui_homewindow.h"
 #include <QApplication>
-#include <QMainWindow>
-#include <QVBoxLayout>
+#include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QMainWindow>
 #include <QPushButton>
-#include <QFrame>
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include "ui_homewindow.h"
 
 homeWindow::homeWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,27 +28,26 @@ homeWindow::homeWindow(QWidget *parent)
     titleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     // 使用 HTML 设置主标题和副标题
-    titleLabel->setText(
-        "<html>"
-        "<head/>"
-        "<body>"
-        "<div style='text-align:center;'>"
-        "<p style='font-size:32px; font-weight:bold; color:rgba(255, 255, 234,0.9); margin:10px 0;'>机票6重服务保障</p>"
-        "<p style='font-size:16px; color:rgba(255, 255, 234,0.9); margin:0;'>保障新升级，价格放心，出行安心</p>"
-        "</div>"
-        "</body>"
-        "</html>"
-        );
+    titleLabel->setText("<html>"
+                        "<head/>"
+                        "<body>"
+                        "<div style='text-align:center;'>"
+                        "<p style='font-size:32px; font-weight:bold; color:rgba(255, 255, "
+                        "234,0.9); margin:10px 0;'>机票6重服务保障</p>"
+                        "<p style='font-size:16px; color:rgba(255, 255, 234,0.9); "
+                        "margin:0;'>保障新升级，价格放心，出行安心</p>"
+                        "</div>"
+                        "</body>"
+                        "</html>");
 
     // 设置 QLabel 样式
-    titleLabel->setStyleSheet(
-        "background-image: url(:/plane.png);"  // 设置背景图片
-        "background-position: center;"          // 背景图片居中
-        "background-repeat: no-repeat;"         // 不重复背景图片
-        "background-size: cover;"               // 背景图片自适应填充
-        "color: white;"                         // 设置文本颜色
-        "padding: 0;"                           // 移除所有内边距
-        );
+    titleLabel->setStyleSheet("background-image: url(:/plane.png);" // 设置背景图片
+                              "background-position: center;"        // 背景图片居中
+                              "background-repeat: no-repeat;"       // 不重复背景图片
+                              "background-size: cover;"             // 背景图片自适应填充
+                              "color: white;"                       // 设置文本颜色
+                              "padding: 0;"                         // 移除所有内边距
+    );
 
     // 设置对齐方式
     titleLabel->setAlignment(Qt::AlignCenter);
@@ -73,9 +72,12 @@ homeWindow::homeWindow(QWidget *parent)
     QHBoxLayout *scrollLayout = new QHBoxLayout(scrollWidget);
 
     // 分类卡片
-    scrollLayout->addWidget(createCategoryBlock("周末省心游", {"广州→北海", "广州→长沙"}, {"¥460起", "¥480起"}));
-    scrollLayout->addWidget(createCategoryBlock("爱上大草原", {"广州→鄂尔多斯", "广州→呼和浩特"}, {"¥300起", "¥300起"}));
-    scrollLayout->addWidget(createCategoryBlock("海边浪一浪", {"广州→福州", "广州→宁波"}, {"¥267起", "¥289起"}));
+    scrollLayout->addWidget(
+        createCategoryBlock("周末省心游", {"广州→北海", "广州→长沙"}, {"¥460起", "¥480起"}));
+    scrollLayout->addWidget(
+        createCategoryBlock("爱上大草原", {"广州→鄂尔多斯", "广州→呼和浩特"}, {"¥300起", "¥300起"}));
+    scrollLayout->addWidget(
+        createCategoryBlock("海边浪一浪", {"广州→福州", "广州→宁波"}, {"¥267起", "¥289起"}));
 
     scrollWidget->setLayout(scrollLayout);
     scrollArea->setWidget(scrollWidget);
@@ -85,7 +87,9 @@ homeWindow::homeWindow(QWidget *parent)
     setCentralWidget(centralWidget);
 }
 
-QWidget *homeWindow::createCategoryBlock(const QString &title, const QStringList &routes, const QStringList &prices)
+QWidget *homeWindow::createCategoryBlock(const QString &title,
+                                         const QStringList &routes,
+                                         const QStringList &prices)
 {
     // 分类卡片
     QFrame *block = new QFrame(this);
@@ -96,7 +100,8 @@ QWidget *homeWindow::createCategoryBlock(const QString &title, const QStringList
 
     // 分类标题
     QLabel *titleLabel = new QLabel(title, block);
-    titleLabel->setStyleSheet("font: bold 18px; color: white; background-color: #78a0f7; padding: 5px;");
+    titleLabel->setStyleSheet(
+        "font: bold 18px; color: white; background-color: #78a0f7; padding: 5px;");
     titleLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(titleLabel);
 
