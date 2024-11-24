@@ -3,6 +3,7 @@
 #include "interfacemanager.h"
 #include "homewindow.h"
 #include "orderwindow.h"
+#include "newhomewindow.h"
 #include <QStackedWidget>
 #include <QDebug>
 #include <QApplication>
@@ -74,7 +75,7 @@ maininterface::maininterface(QWidget *parent)
     //右侧内容区
     QStackedWidget *stackedWidget = new QStackedWidget(this);
     stackedWidget->addWidget(new homeWindow()); //仅以label为示例，实际上要实现一个首页窗口类
-    stackedWidget->addWidget(new QLabel("航班动态窗口",this)); //仅以label为示例，实际上要实现一个航班动态窗口类
+    stackedWidget->addWidget(new newHomeWindow()); //仅以label为示例，实际上要实现一个航班动态窗口类
     stackedWidget->addWidget(new orderwindow()); //仅以label为示例，实际上要实现一个我的订单窗口类
 
     //将左侧菜单和右侧内容添加到主布局mainLayout
