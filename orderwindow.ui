@@ -1,69 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Yipuxilong</class>
- <widget class="QMainWindow" name="Yipuxilong">
+ <class>order_2</class>
+ <widget class="QMainWindow" name="order_2">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>902</width>
+    <height>875</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="toBetaButton">
+   <widget class="QPushButton" name="order">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>90</y>
-      <width>181</width>
-      <height>91</height>
+      <x>410</x>
+      <y>60</y>
+      <width>249</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>当前为伊普西隆,跳转到用户界面</string>
+     <string> 所有订单</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="toGameButton">
+   <widget class="QPushButton" name="order2">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>100</y>
-      <width>211</width>
-      <height>81</height>
+      <x>410</x>
+      <y>160</y>
+      <width>249</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>跳转到gama</string>
+     <string>已取消</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="RequestButton">
+   <widget class="QPushButton" name="order3">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>400</y>
-      <width>301</width>
-      <height>61</height>
+      <x>410</x>
+      <y>270</y>
+      <width>249</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>向服务器发起请求,新创建三个用户</string>
+     <string>待支付</string>
     </property>
    </widget>
-   <widget class="QLabel" name="showHelloLabel">
+   <widget class="QPushButton" name="order4">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>320</y>
-      <width>181</width>
-      <height>31</height>
+      <x>410</x>
+      <y>370</y>
+      <width>249</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>待出行</string>
     </property>
    </widget>
   </widget>
@@ -72,8 +75,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>20</height>
+     <width>902</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>

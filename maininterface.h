@@ -16,6 +16,7 @@ public:
     void editUserInfo(); //修改个人资料
     void switchLogin(); //切换登录
     void switchtoFlightStatusWindow();//转到航班动态界面
+    void switchLogin();  //切换登录
     ~maininterface();
 
 private:

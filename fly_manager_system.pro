@@ -1,6 +1,7 @@
 QT       += core gui
 QT       += network
-QT += sql
+QT       += sql
+QT       += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -14,11 +15,13 @@ SOURCES += \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
+    inorder.cpp \
     interfacemanager.cpp \
     loginwindow.cpp \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
+    orderwindow.cpp \
     registerwindow.cpp \
     system.cpp \
     userwindow.cpp \
@@ -30,10 +33,12 @@ HEADERS += \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
+    inorder.h \
     interfacemanager.h \
     loginwindow.h \
     maininterface.h \
     mainwindow.h \
+    orderwindow.h \
     registerwindow.h \
     system.h \
     userwindow.h \
@@ -45,9 +50,11 @@ FORMS += \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
+    inorder.ui \
     loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
+    orderwindow.ui \
     registerwindow.ui \
     userwindow.ui \
     xitawindow.ui \
@@ -65,4 +72,5 @@ DISTFILES += \
     meeting1.md
 
 RESOURCES += \
+    fontstyle.qrc \
     images.qrc

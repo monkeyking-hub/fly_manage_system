@@ -10,5 +10,15 @@
         <file>plane.png</file>
         <file>place.png</file>
         <file>bcgrd.jpg</file>
+        <file>order.png</file>
+        <file>bag.png</file>
+        <file>deletedorder.png</file>
+        <file>unpayorder.png</file>
+        <file>bizhi.jpg</file>
+        <file>wallpaper.png</file>
+        <file>sky.jpg</file>
+        <file>sky1.png</file>
+        <file>sky2.png</file>
+        <file>sky3.png</file>
     </qresource>
 </RCC>

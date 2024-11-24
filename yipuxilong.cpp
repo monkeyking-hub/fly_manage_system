@@ -1,10 +1,10 @@
 #include "yipuxilong.h"
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QUrl>
 #include "ui_yipuxilong.h"
 #include <interfacemanager.h>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
 Yipuxilong::Yipuxilong(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Yipuxilong)
@@ -22,12 +22,10 @@ void Yipuxilong::on_toBetaButton_clicked()
     InterfaceManager::instance()->switchToPage("fzj_window");
 }
 
-
 void Yipuxilong::on_toGameButton_clicked()
 {
     InterfaceManager::instance()->switchToPage("/MainWindow/Beta/Gama");
 }
-
 
 void Yipuxilong::on_RequestButton_clicked()
 {
@@ -39,7 +37,7 @@ void Yipuxilong::on_RequestButton_clicked()
     QNetworkRequest request(url);
 
     // 发送请求
-     QNetworkReply *reply = manager->get(request);
+    QNetworkReply *reply = manager->get(request);
 
     // 连接信号槽以处理响应
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
@@ -60,4 +58,3 @@ void Yipuxilong::on_RequestButton_clicked()
         reply->deleteLater();
     });
 }
-

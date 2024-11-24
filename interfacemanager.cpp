@@ -1,20 +1,20 @@
 #include "InterfaceManager.h"
-#include <QStackedWidget>
 #include <QDebug>
+#include <QStackedWidget>
 
-InterfaceManager* InterfaceManager::m_instance = nullptr;
+InterfaceManager *InterfaceManager::m_instance = nullptr;
 
 InterfaceManager::InterfaceManager(QObject *parent)
-    : QObject(parent), m_stackedWidget(new QStackedWidget())
-{
-}
+    : QObject(parent)
+    , m_stackedWidget(new QStackedWidget())
+{}
 
 InterfaceManager::~InterfaceManager()
 {
     delete m_stackedWidget;
 }
 
-InterfaceManager* InterfaceManager::instance()
+InterfaceManager *InterfaceManager::instance()
 {
     if (m_instance == nullptr) {
         m_instance = new InterfaceManager();
@@ -44,7 +44,7 @@ void InterfaceManager::unregisterPage(const QString &fullPath)
         int pageIndex = m_pageIndexes[fullPath];
 
         // 从 QStackedWidget 中移除页面
-        QWidget* page = m_pages[fullPath];
+        QWidget *page = m_pages[fullPath];
         m_stackedWidget->removeWidget(page);
 
         // 删除页面的 QWidget 实例
@@ -73,4 +73,3 @@ void InterfaceManager::switchToPage(const QString &fullPath)
         qWarning() << "页面未找到：" << fullPath;
     }
 }
-

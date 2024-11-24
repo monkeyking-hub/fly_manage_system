@@ -1,14 +1,13 @@
 #include "system.h"
 #include "betawindow.h"
-#include "xitawindow.h"
-#include "yipuxilong.h"
 #include "gamawindow.h"
-#include "userwindow.h"
+#include "homewindow.h"
 #include "loginwindow.h"
 #include "maininterface.h"
-#include "homewindow.h"
+#include "userwindow.h"
+#include "xitawindow.h"
+#include "yipuxilong.h"
 #include "registerwindow.h"
-#include "flightstatus.h"
 
 System::System() {}
 void System::start()
@@ -19,19 +18,16 @@ void System::start()
     XitaWindow * xitawindow = new XitaWindow();
     Yipuxilong * yipuxilong = new Yipuxilong();
     Userwindow * userWindow = new Userwindow(); //修改个人信息界面
-    flightstatus * flightstatusWindow=new flightstatus();
     loginWindow *login = new loginWindow(); //登陆界面
     maininterface *mainScreen = new maininterface(); //应用主界面
     homeWindow *homePage = new homeWindow(); //首页界面
     registerWindow *signUpWindow = new registerWindow(); //注册界面
 
-    InterfaceManager::instance()->registerPage("lxt_loginWindow",login); //登录界面
+    InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
 
     InterfaceManager::instance()->registerPage("fzj_window",userWindow); //修改个人信息界面
 
-    InterfaceManager::instance()->registerPage("fzj_flightstatus_window",flightstatusWindow);
-
-    InterfaceManager::instance()->registerPage("lxt_mainInterface",mainScreen); //应用主界面
+    InterfaceManager::instance()->registerPage("lxt_mainInterface", mainScreen); //应用主界面
 
     InterfaceManager::instance()->registerPage("lxt_homeWindow",homePage); //首页界面
 
@@ -39,16 +35,13 @@ void System::start()
 
     InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama",gamawindow);
+    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);
     //注册西塔
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Xita",xitawindow);
+    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Xita", xitawindow);
     //注册伊普西隆
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong",yipuxilong);
-
+    InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong", yipuxilong);
 
     InterfaceManager::instance()->switchToPage("lxt_loginWindow");
-
-
 }
 System::~System()
 {
