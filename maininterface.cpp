@@ -96,7 +96,7 @@ maininterface::maininterface(QWidget *parent)
     QToolBar {
         background-color: white;       /* 白色背景 */
         border: none;                   /* 去除边框 */
-        padding: 4px;                   /* 工具栏内边距 */
+        padding: 2px;                   /* 工具栏内边距 */
         spacing: 8px;                   /* 按钮和控件之间的间距 */
     }
 

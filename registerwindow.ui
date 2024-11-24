@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1300</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
    <widget class="QLabel" name="label_image">
     <property name="geometry">
      <rect>
-      <x>8</x>
-      <y>8</y>
-      <width>371</width>
-      <height>601</height>
+      <x>-2</x>
+      <y>-12</y>
+      <width>391</width>
+      <height>671</height>
      </rect>
     </property>
     <property name="text">
@@ -33,8 +33,8 @@
    <widget class="QLabel" name="label_welcome1">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>100</y>
+      <x>640</x>
+      <y>50</y>
       <width>281</width>
       <height>41</height>
      </rect>
@@ -49,8 +49,8 @@
    <widget class="QLabel" name="label_welcome2">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>152</y>
+      <x>640</x>
+      <y>102</y>
       <width>331</width>
       <height>41</height>
      </rect>
@@ -65,8 +65,8 @@
    <widget class="QLabel" name="label_usrName">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>258</y>
+      <x>650</x>
+      <y>208</y>
       <width>151</width>
       <height>21</height>
      </rect>
@@ -81,8 +81,8 @@
    <widget class="QLineEdit" name="lineEdit_usrName">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>294</y>
+      <x>650</x>
+      <y>244</y>
       <width>281</width>
       <height>31</height>
      </rect>
@@ -91,8 +91,8 @@
    <widget class="QLineEdit" name="lineEdit_pwd">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>376</y>
+      <x>650</x>
+      <y>326</y>
       <width>281</width>
       <height>31</height>
      </rect>
@@ -101,8 +101,8 @@
    <widget class="QLabel" name="label_pwd">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>340</y>
+      <x>650</x>
+      <y>290</y>
       <width>121</width>
       <height>21</height>
      </rect>
@@ -117,8 +117,8 @@
    <widget class="QLineEdit" name="lineEdit_phone">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>466</y>
+      <x>650</x>
+      <y>416</y>
       <width>281</width>
       <height>31</height>
      </rect>
@@ -127,8 +127,8 @@
    <widget class="QLabel" name="label_phone">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>430</y>
+      <x>650</x>
+      <y>380</y>
       <width>141</width>
       <height>21</height>
      </rect>
@@ -137,14 +137,14 @@
      <string notr="true">font: 10pt &quot;Arial&quot;;</string>
     </property>
     <property name="text">
-     <string>请输入年龄</string>
+     <string>请输入邮箱</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_id">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>524</y>
+      <x>650</x>
+      <y>474</y>
       <width>141</width>
       <height>21</height>
      </rect>
@@ -159,8 +159,8 @@
    <widget class="QLineEdit" name="lineEdit_id">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>560</y>
+      <x>650</x>
+      <y>510</y>
       <width>281</width>
       <height>31</height>
      </rect>
@@ -169,9 +169,9 @@
    <widget class="QPushButton" name="pushButton_save">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>620</y>
-      <width>271</width>
+      <x>650</x>
+      <y>570</y>
+      <width>281</width>
       <height>41</height>
      </rect>
     </property>
@@ -190,8 +190,8 @@ font: 25 9pt &quot;Bahnschrift Light&quot;;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>20</height>
+     <width>1300</width>
+     <height>17</height>
     </rect>
    </property>
   </widget>
