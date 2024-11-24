@@ -3,6 +3,9 @@
 #include <QPalette>
 #include <QPixmap>
 #include <QResource>
+#include <QLabel>
+#include <QPixmap>
+#include <QDebug>
 
 orderwindow::orderwindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,33 +13,28 @@ orderwindow::orderwindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // 加载资源文件中的图片
-    QResource::registerResource("images.qrc");
-    QPixmap bgPixmap("://blue.png");
+    ui->centralwidget->setStyleSheet(
+        "QWidget {"
+        "   background-image: url(:/n6.png);"
+        "   background-repeat: no-repeat;"
+        "   background-position: center;"
+        "   background-size: cover;" // 让图片自适应填充
+        "}"
+        );
 
-    // 设置窗口背景图片
-    this->setAutoFillBackground(true);
-    QPalette palette;
-    palette.setBrush(QPalette::Window, QBrush(bgPixmap));
-    this->setPalette(palette);
 
-    // 设置窗口标题为"订单界面"
-    this->setWindowTitle("订单界面");
 
-    // 设置窗口大小
-    this->resize(471, 600); // 这里将窗口大小设置为宽800像素，高600像素，你可以根据需求调整具体数值
-
-    QPixmap iconPixmap(":/order.png"); // 替换为你实际的图标路径，这里假设图标也在资源文件中
+    // 设置按钮图标
+    QPixmap iconPixmap(":/order.png");
     ui->order->setIcon(iconPixmap);
 
-
-    QPixmap iconPixmap2(":/deletedorder.png"); // 替换为你实际的图标路径，这里假设图标也在资源文件中
+    QPixmap iconPixmap2(":/deletedorder.png");
     ui->order2->setIcon(iconPixmap2);
 
-    QPixmap iconPixmap3(":/unpayorder.png"); // 替换为你实际的图标路径，这里假设图标也在资源文件中
+    QPixmap iconPixmap3(":/unpayorder.png");
     ui->order3->setIcon(iconPixmap3);
 
-    QPixmap iconPixmap4(":/bag.png"); // 替换为你实际的图标路径，这里假设图标也在资源文件中
+    QPixmap iconPixmap4(":/bag.png");
     ui->order4->setIcon(iconPixmap4);
 
     QSize iconSize(30, 30);
@@ -44,6 +42,19 @@ orderwindow::orderwindow(QWidget *parent)
     ui->order2->setIconSize(iconSize);
     ui->order3->setIconSize(iconSize);
     ui->order4->setIconSize(iconSize);
+
+    // 调整按钮文字样式
+    QString buttonStyle = "QPushButton {"
+                          "   font-size: 16px;"  // 字体大小
+                          "   font-weight: bold;" // 字体加粗
+                          "   background-color: white;"       // 设置按钮背景为白色，突出图标
+                          "   border: 2px solid black;"       // 添加黑色边框，模拟加粗效果
+                          "   border-radius: 10px;"
+                          "}";
+    ui->order->setStyleSheet(buttonStyle);
+    ui->order2->setStyleSheet(buttonStyle);
+    ui->order3->setStyleSheet(buttonStyle);
+    ui->order4->setStyleSheet(buttonStyle);
 }
 
 orderwindow::~orderwindow()
