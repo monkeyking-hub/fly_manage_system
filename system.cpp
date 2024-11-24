@@ -8,6 +8,7 @@
 #include "xitawindow.h"
 #include "yipuxilong.h"
 #include "registerwindow.h"
+#include "newhomewindow.h"
 
 System::System() {}
 void System::start()
@@ -22,6 +23,7 @@ void System::start()
     maininterface *mainScreen = new maininterface(); //应用主界面
     homeWindow *homePage = new homeWindow(); //首页界面
     registerWindow *signUpWindow = new registerWindow(); //注册界面
+    newHomeWindow *newHomePage = new newHomeWindow(); //新首页界面
 
     InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
 
@@ -32,6 +34,8 @@ void System::start()
     InterfaceManager::instance()->registerPage("lxt_homeWindow",homePage); //首页界面
 
     InterfaceManager::instance()->registerPage("lxt_registerWindow",signUpWindow); //注册界面
+
+    InterfaceManager::instance()->registerPage("lxt_newHomeWindow",newHomePage); //新首页界面
 
     InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面
