@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>902</width>
     <height>875</height>
    </rect>
   </property>
@@ -17,45 +17,57 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <widget class="QPushButton" name="order">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>140</y>
-      <width>251</width>
-      <height>351</height>
+      <x>410</x>
+      <y>60</y>
+      <width>249</width>
+      <height>28</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="order">
-       <property name="text">
-        <string> 所有订单</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="order2">
-       <property name="text">
-        <string>已取消</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="order3">
-       <property name="text">
-        <string>待支付</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="order4">
-       <property name="text">
-        <string>待出行</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string> 所有订单</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="order2">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>160</y>
+      <width>249</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>已取消</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="order3">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>270</y>
+      <width>249</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>待支付</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="order4">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>370</y>
+      <width>249</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>待出行</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -63,7 +75,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>902</width>
      <height>24</height>
     </rect>
    </property>

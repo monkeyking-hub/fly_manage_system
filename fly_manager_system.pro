@@ -15,6 +15,7 @@ SOURCES += \
     betawindow.cpp \
     gamawindow.cpp \
     homewindow.cpp \
+    inorder.cpp \
     interfacemanager.cpp \
     loginwindow.cpp \
     main.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     betawindow.h \
     gamawindow.h \
     homewindow.h \
+    inorder.h \
     interfacemanager.h \
     loginwindow.h \
     maininterface.h \
@@ -46,6 +48,7 @@ FORMS += \
     betawindow.ui \
     gamawindow.ui \
     homewindow.ui \
+    inorder.ui \
     loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
@@ -67,4 +70,5 @@ DISTFILES += \
     meeting1.md
 
 RESOURCES += \
+    fontstyle.qrc \
     images.qrc
