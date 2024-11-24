@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QDebug>
+#include <QFontDatabase>  // 用于加载自定义字体
 
 orderwindow::orderwindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,14 +14,18 @@ orderwindow::orderwindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // 确保在 .ui 文件中设置了 centralWidget 的 objectName
+    ui->centralwidget->setObjectName("centralWidget");
+
     ui->centralwidget->setStyleSheet(
-        "QWidget {"
-        "   background-image: url(:/n6.png);"
+        "#centralWidget {" // 仅匹配 centralWidget 本身
+        "   background-image: url(:/sky3.png);"
         "   background-repeat: no-repeat;"
         "   background-position: center;"
-        "   background-size: cover;" // 让图片自适应填充
+        "   background-size: contain;"
         "}"
         );
+
 
 
 
@@ -43,18 +48,36 @@ orderwindow::orderwindow(QWidget *parent)
     ui->order3->setIconSize(iconSize);
     ui->order4->setIconSize(iconSize);
 
+
+
     // 调整按钮文字样式
-    QString buttonStyle = "QPushButton {"
-                          "   font-size: 16px;"  // 字体大小
-                          "   font-weight: bold;" // 字体加粗
-                          "   background-color: white;"       // 设置按钮背景为白色，突出图标
-                          "   border: 2px solid black;"       // 添加黑色边框，模拟加粗效果
-                          "   border-radius: 10px;"
-                          "}";
+    QString buttonStyle =
+        "QPushButton {"
+        "   min-height: 40px;" // 最小高度设置为 50px
+        "   font-size: 16px;"              // 字体大小
+        "   font-weight: bold;"            // 字体加粗
+        "   color: black;"                 // 文字颜色
+        "   background: transparent;"      // 按钮背景透明
+        "   border: 2px solid black;"      // 黑色边框
+        "   border-radius: 10px;"          // 按钮圆角
+        "   padding: 5px;"                 // 内边距
+        "   transition: all 0.2s ease;"    // 平滑过渡效果（动画）
+        "}"
+        "QPushButton:hover {"
+        "   background-color: rgba(0, 0, 255, 50);"  // 鼠标悬停时背景色为透明蓝
+        "   color: white;"                           // 悬停时文字颜色变为白色
+        "   box-shadow: 0px 4px 8px rgba(0, 0, 255, 0.5);" // 添加阴影效果
+        "}"
+        "QPushButton:pressed {"
+        "   background-color: rgba(0, 0, 255, 100);" // 按下时背景变为深蓝
+        "   border-color: darkblue;"                // 按下时边框为深蓝
+        "}";
+
     ui->order->setStyleSheet(buttonStyle);
     ui->order2->setStyleSheet(buttonStyle);
     ui->order3->setStyleSheet(buttonStyle);
     ui->order4->setStyleSheet(buttonStyle);
+
 }
 
 orderwindow::~orderwindow()
