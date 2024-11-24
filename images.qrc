@@ -20,5 +20,6 @@
         <file>sky1.png</file>
         <file>sky2.png</file>
         <file>sky3.png</file>
+        <file>homeWindowBKG.png</file>
     </qresource>
 </RCC>
