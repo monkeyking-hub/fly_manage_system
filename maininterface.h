@@ -18,6 +18,12 @@ public:
     void switchtoFlightStatusWindow();//转到航班动态界面
     ~maininterface();
 
+public slots:
+    void onCommandLinkButton3Clicked();
+    void onCommandLinkButton4Clicked();
+    void onCommandLinkButton5Clicked();
+    void onCommandLinkButton6Clicked();
+
 private:
     Ui::maininterface *ui;
 };
