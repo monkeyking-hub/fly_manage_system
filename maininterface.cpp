@@ -147,7 +147,7 @@ maininterface::maininterface(QWidget *parent)
     QLabel *label_name = new QLabel("云程",this);
     label_name->setFixedSize(100,100);
     label_name->setStyleSheet(
-        "font-size: 40px; color: blue; font-family: '千图笔锋手写体';"
+        "font-size: 40px; color: rgb(52, 127, 196); font-family: '千图笔锋手写体';"
     );
     toolBar->addWidget(label_name);
 
