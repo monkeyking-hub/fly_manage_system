@@ -38,6 +38,7 @@ maininterface::maininterface(QWidget *parent)
     menuList->addItem("首页");
     menuList->addItem("航班动态");
     menuList->addItem("我的订单");
+    menuList->addItem("特惠机票");
     menuList->setFixedWidth(150);
     menuList->setCurrentRow(0); //默认在首页窗口
 
@@ -78,6 +79,7 @@ maininterface::maininterface(QWidget *parent)
     stackedWidget->addWidget(new newHomeWindow()); //首页界面
     stackedWidget->addWidget(new flightstatus()); //航班动态界面
     stackedWidget->addWidget(new orderwindow()); //订单界面
+    stackedWidget->addWidget(new homeWindow()); //特惠机票界面
 
     //将左侧菜单和右侧内容添加到主布局mainLayout
     mainLayout->addWidget(menuList);
