@@ -20,30 +20,15 @@ newHomeWindow::newHomeWindow(QWidget *parent)
         "}"
         );
 
-    connect(ui->commandLinkButton_3,&QCommandLinkButton::clicked,this,&newHomeWindow::onCommandButton3Clicked);
-    connect(ui->commandLinkButton_4,&QCommandLinkButton::clicked,this,&newHomeWindow::onCommandButton4Clicked);
-    connect(ui->commandLinkButton_5,&QCommandLinkButton::clicked,this,&newHomeWindow::onCommandButton5Clicked);
-    connect(ui->commandLinkButton_6,&QCommandLinkButton::clicked,this,&newHomeWindow::onCommandButton6Clicked);
+    connect(ui->commandLinkButton_3,&QCommandLinkButton::clicked,this,&newHomeWindow::onCommandLinkeButton3Clicked);
+    connect(ui->commandLinkButton_4, &QCommandLinkButton::clicked, this, &newHomeWindow::commandLinkButton4Clicked);
+    connect(ui->commandLinkButton_5, &QCommandLinkButton::clicked, this, &newHomeWindow::commandLinkButton5Clicked);
+    connect(ui->commandLinkButton_6, &QCommandLinkButton::clicked, this, &newHomeWindow::commandLinkButton6Clicked);
 }
 
-void newHomeWindow::onCommandButton3Clicked() //点击按钮后跳转到编辑个人信息界面
+void newHomeWindow::onCommandLinkeButton3Clicked()
 {
     InterfaceManager::instance()->switchToPage("fzj_window");
-}
-
-void newHomeWindow::onCommandButton4Clicked() //点击按钮后跳转到航班动态界面
-{
-    InterfaceManager::instance()->switchToPage("fzj_flightstatus");
-}
-
-void newHomeWindow::onCommandButton5Clicked() //点击按钮后跳转到订单界面
-{
-    InterfaceManager::instance()->switchToPage("wmc_orderWindow");
-}
-
-void newHomeWindow::onCommandButton6Clicked() //点击按钮后跳转到homewindow界面
-{
-    InterfaceManager::instance()->switchToPage("lxt_homeWindow");
 }
 
 newHomeWindow::~newHomeWindow()
