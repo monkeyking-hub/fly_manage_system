@@ -76,7 +76,8 @@ maininterface::maininterface(QWidget *parent)
 
     //右侧内容区
     QStackedWidget *stackedWidget = new QStackedWidget(this);
-    stackedWidget->addWidget(new newHomeWindow()); //首页界面
+    newHomeWindow *w1 = new newHomeWindow();
+    stackedWidget->addWidget(w1); //首页界面
     stackedWidget->addWidget(new flightstatus()); //航班动态界面
     stackedWidget->addWidget(new orderwindow()); //订单界面
     stackedWidget->addWidget(new homeWindow()); //特惠机票界面
@@ -90,6 +91,25 @@ maininterface::maininterface(QWidget *parent)
 
     //信号槽：菜单项切换页面
     connect(menuList,&QListWidget::currentRowChanged,stackedWidget,&QStackedWidget::setCurrentIndex);
+
+    // 连接 newHomeWindow 信号到槽
+    connect(w1, &newHomeWindow::commandLinkButton4Clicked, this, [stackedWidget,menuList]() {
+        // 切换到航班动态界面
+        stackedWidget->setCurrentIndex(1);
+        menuList->setCurrentRow(1);
+    });
+
+    connect(w1, &newHomeWindow::commandLinkButton5Clicked, this, [stackedWidget,menuList]() {
+        // 切换到订单界面
+        stackedWidget->setCurrentIndex(2);
+        menuList->setCurrentRow(2);
+    });
+
+    connect(w1, &newHomeWindow::commandLinkButton6Clicked, this, [stackedWidget,menuList]() {
+        // 切换到特惠机票界面
+        stackedWidget->setCurrentIndex(3);
+        menuList->setCurrentRow(3);
+    });
 
     //添加上方工具栏
     QToolBar *toolBar = new QToolBar(this);
