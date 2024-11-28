@@ -11,7 +11,6 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    betawindow.cpp \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
@@ -30,7 +29,6 @@ SOURCES += \
     yipuxilong.cpp
 
 HEADERS += \
-    betawindow.h \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
@@ -48,7 +46,6 @@ HEADERS += \
     yipuxilong.h
 
 FORMS += \
-    betawindow.ui \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
