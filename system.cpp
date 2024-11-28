@@ -1,5 +1,4 @@
 #include "system.h"
-#include "betawindow.h"
 #include "gamawindow.h"
 #include "homewindow.h"
 #include "loginwindow.h"
@@ -21,12 +20,12 @@ System::System():m_mainInterface(nullptr) {}
 void System::start()
 {
     // 创建子界面,并且注册进调度器
-    BetaWindow * beta       = new BetaWindow();
     GamaWindow * gamawindow = new GamaWindow();
     XitaWindow * xitawindow = new XitaWindow();
     Yipuxilong * yipuxilong = new Yipuxilong();
     Userwindow * userWindow = new Userwindow(); //修改个人信息界面
     loginWindow *login = new loginWindow(); //登陆界面
+    loginHandler *loginHand = new loginHandler(); //loginHand用于登录按钮信号与槽连接
     m_mainInterface = new maininterface(); //应用主界面
     homeWindow *homePage = new homeWindow(); //homeWindow界面
     registerWindow *signUpWindow = new registerWindow(); //注册界面
@@ -59,7 +58,7 @@ void System::start()
         }
     });
 
-
+    connect(login, &loginWindow::loginRequested, loginHand, &loginHandler::handleLogin); //登录按钮信号与槽连接
 
     InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
 
@@ -77,7 +76,6 @@ void System::start()
 
     InterfaceManager::instance()->registerPage("wmc_orderWindow",orderPage); //订单界面
 
-    InterfaceManager::instance()->registerPage("/MainWindow/Beta", beta);
     //注册gama界面
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);
     //注册西塔
