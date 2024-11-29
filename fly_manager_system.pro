@@ -66,6 +66,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    API.md \
     README.md \
     REQUIRE.md  \
     TechnologyStack.md \

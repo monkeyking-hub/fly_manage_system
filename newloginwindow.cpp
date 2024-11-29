@@ -1,6 +1,12 @@
 #include "newloginwindow.h"
 #include "ui_newloginwindow.h"
 #include "interfacemanager.h"
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDebug>
 
 AnimatedInputField::AnimatedInputField(const QString &placeholderText, bool isPassword, QWidget *parent)
     : QWidget(parent), label(new QLabel(this)), input(new QLineEdit(this)), animation(new QPropertyAnimation(label, "pos", this)) {
@@ -253,7 +259,7 @@ void newLoginWindow::onSignUpButtonClicked()
 
 void newLoginWindow::onLogInButtonClicked() //点击登录按钮触发事件
 {
-    InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+
     QString usrname = usernameField->text();
     QString password = passwordField->text();
     emit loginRequested(usrname,password);
@@ -264,51 +270,77 @@ newLoginWindow::~newLoginWindow()
     delete ui;
 }
 
-void loginHandler::handleLogin(const QString& username, const QString& password)
+void loginHandler::handleLogin(const QString& email, const QString& password)
 {
-    qDebug()<<"username:"<<username;
+    qDebug()<<"email:"<<email;
     qDebug()<<"pwd:"<<password;
 
     // // 创建网络管理器
-    // QNetworkAccessManager* manager = new QNetworkAccessManager();
+     QNetworkAccessManager* manager = new QNetworkAccessManager();
 
     // // 设置请求 URL
-    // QUrl url("http://localhost:8080/api/users/login"); // 替换为你的 API 地址
-    // QNetworkRequest request(url);
+     QUrl url("http://localhost:8080/api/users/login"); // 替换为你的 API 地址
+     QNetworkRequest request(url);
 
     // // 设置请求头
-    // request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     // // 构建 JSON 请求体
-    // QJsonObject json;
-    // json["username"] = username;
-    // json["password"] = password;
-    // QJsonDocument jsonDoc(json);
-    // QByteArray requestData = jsonDoc.toJson();
+     QJsonObject json;
+    json["email"] = email;
+    json["password"] = password;
+    QJsonDocument jsonDoc(json);
+    QByteArray requestData = jsonDoc.toJson();
 
     // // 发送 POST 请求
-    // QNetworkReply* reply = manager->post(request, requestData);
+    QNetworkReply* reply = manager->post(request, requestData);
+    // 连接信号，等待响应
+    connect(reply, &QNetworkReply::finished, [reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            // 请求成功，读取响应数据
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject responseObject = jsonResponse.object();
 
-    // // 连接信号，等待响应
-    // connect(reply, &QNetworkReply::finished, [reply]() {
-    //     if (reply->error() == QNetworkReply::NoError) {
-    //         // 请求成功，读取响应数据
-    //         QByteArray responseData = reply->readAll();
-    //         QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-    //         QJsonObject responseObject = jsonResponse.object();
+            // 解析响应 JSON
+            int code = responseObject["code"].toInt();  // 获取返回的 code
+            QString message = responseObject["message"].toString();
+            QJsonObject data = responseObject["data"].toObject();
 
-    //         // 解析响应 JSON
-    //         QString message = responseObject["message"].toString();
-    //         QString token = responseObject["token"].toString();
+            if (code == 200) {
+                // 登录成功
+                int userId = data["id"].toInt();
+                QString username = data["username"].toString();
+                QString email = data["email"].toString();
+                QString role = data["role"].toString();
 
-    //         qDebug() << "Login Successful: " << message;
-    //         qDebug() << "Token: " << token;
-    //     } else {
-    //         // 请求失败
-    //         qDebug() << "Error:" << reply->errorString();
-    //     }
-    //     reply->deleteLater(); // 释放资源
-    // });
+                qDebug() << "Login Successful: " << message;
+                qDebug() << "User ID: " << userId;
+                qDebug() << "Username: " << username;
+                qDebug() << "Email: " << email;
+                qDebug() << "Role: " << role;
 
-    // 清理管理器（这里可以根据实际需求决定是否释放）
+                // 页面切换
+                InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+            } else {
+                // 登录失败，弹出错误提示框
+                qDebug() << "Login failed, code: " << code;
+                QMessageBox::critical(nullptr, "Login Error",
+                                      "Login failed: " + message,
+                                      QMessageBox::Ok, QMessageBox::Ok);
+            }
+        } else {
+            // 请求失败，弹出错误提示框
+            QString errorString = reply->errorString();
+            qDebug() << "Error:" << errorString;
+
+            // 创建 QMessageBox 来显示错误信息
+            QMessageBox::critical(nullptr, "Login Error",
+                                  "Request failed: " + errorString,
+                                  QMessageBox::Ok, QMessageBox::Ok);
+        }
+
+        reply->deleteLater(); // 释放资源
+    });
+
 }
