@@ -1,5 +1,6 @@
 #include "newloginwindow.h"
 #include "ui_newloginwindow.h"
+#include "interfacemanager.h"
 
 AnimatedInputField::AnimatedInputField(const QString &placeholderText, bool isPassword, QWidget *parent)
     : QWidget(parent), label(new QLabel(this)), input(new QLineEdit(this)), animation(new QPropertyAnimation(label, "pos", this)) {
@@ -85,7 +86,7 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     lbl_welcome->setStyleSheet("font: 45pt '千图笔锋手写体'; color: black; text-align: center;");
     lbl_welcome->setGeometry(480,600,400,300);
     QPropertyAnimation *animation = new QPropertyAnimation(lbl_welcome, "geometry");
-    animation->setDuration(2000);
+    animation->setDuration(1500);
     animation->setStartValue(QRect(480, 600, 400, 300));
     animation->setEndValue(QRect(480, -40, 400, 300));
     animation->setEasingCurve(QEasingCurve::InOutQuad);
@@ -134,7 +135,7 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     innerLayout->addItem(spacer1);
 
     // 用户名输入框
-    AnimatedInputField *usernameField = new AnimatedInputField("邮箱", false, this);
+    usernameField = new AnimatedInputField("邮箱", false, this);
     usernameField->setMinimumHeight(60);
     usernameField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     innerLayout->addWidget(usernameField);
@@ -144,7 +145,7 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     innerLayout->addItem(spacer2);
 
     // 密码输入框
-    AnimatedInputField *passwordField = new AnimatedInputField("密码", true, this);
+    passwordField = new AnimatedInputField("密码", true, this);
     passwordField->setMinimumHeight(60);
     passwordField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     innerLayout->addWidget(passwordField);
@@ -193,6 +194,7 @@ newLoginWindow::newLoginWindow(QWidget *parent)
         );
     loginBtn->setCursor(Qt::PointingHandCursor);
     loginBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    connect(loginBtn,&QPushButton::clicked,this,&newLoginWindow::onLogInButtonClicked);
     innerLayout->addWidget(loginBtn);
 
     //添加空白
@@ -200,12 +202,27 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     innerLayout->addItem(spacer5);
 
     // 注册提示
-    QLabel *signupLabel = new QLabel("没有账号? <a href='#'>去注册.</a>", this);
-    signupLabel->setStyleSheet("color: black; font-size: 14px; text-align: center;");
-    signupLabel->setAlignment(Qt::AlignCenter);
-    signupLabel->setOpenExternalLinks(true);
-    signupLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    innerLayout->addWidget(signupLabel);
+    QPushButton *signupBtn = new QPushButton("没有账号? 去注册.", this);
+    signupBtn->setStyleSheet(
+        "QPushButton {"
+        "    border: none;"
+        "    background-color: transparent;"
+        "    color: black;" /* 默认文字颜色 */
+        "}"
+
+        "QPushButton:hover {"
+        "    color: blue;" /* 鼠标悬停时文字颜色变蓝 */
+        "    text-decoration: underline;" /* 鼠标悬停时添加下划线 */
+        "}"
+
+        "QPushButton:pressed {"
+        "    color: darkblue;" /* 按下时文字变为深蓝色 */
+        "    padding: 2px;" /* 模拟按钮按下的轻微位移 */
+        "}"
+        );
+    signupBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(signupBtn);
+    connect(signupBtn,&QPushButton::clicked,this,&newLoginWindow::onSignUpButtonClicked);
 
     // 将内部布局添加到外部容器
     outerContainer->setLayout(innerLayout);
@@ -224,23 +241,74 @@ newLoginWindow::newLoginWindow(QWidget *parent)
         QMessageBox::information(this, "Forgot Password", "Please email support@example.com to request a password reset.");
     });
 
-    connect(loginBtn, &QPushButton::clicked, [usernameField, passwordField, this]() {
-        QString username = usernameField->text();
-        QString password = passwordField->text();
-
-        if (username.toLower() == "admin" && password == "password") {
-            QMessageBox::information(this, "Login", "Login successful!");
-        } else {
-            QMessageBox::warning(this, "Error", "Incorrect username or password.");
-        }
-    });
-
     // 窗口配置
     setWindowTitle("云程");
     resize(1300, 700); // 设置窗口初始大小
 }
 
+void newLoginWindow::onSignUpButtonClicked()
+{
+    InterfaceManager::instance()->switchToPage("lxt_registerWindow");
+}
+
+void newLoginWindow::onLogInButtonClicked() //点击登录按钮触发事件
+{
+    InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+    QString usrname = usernameField->text();
+    QString password = passwordField->text();
+    emit loginRequested(usrname,password);
+}
+
 newLoginWindow::~newLoginWindow()
 {
     delete ui;
+}
+
+void loginHandler::handleLogin(const QString& username, const QString& password)
+{
+    qDebug()<<"username:"<<username;
+    qDebug()<<"pwd:"<<password;
+
+    // // 创建网络管理器
+    // QNetworkAccessManager* manager = new QNetworkAccessManager();
+
+    // // 设置请求 URL
+    // QUrl url("http://localhost:8080/api/users/login"); // 替换为你的 API 地址
+    // QNetworkRequest request(url);
+
+    // // 设置请求头
+    // request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // // 构建 JSON 请求体
+    // QJsonObject json;
+    // json["username"] = username;
+    // json["password"] = password;
+    // QJsonDocument jsonDoc(json);
+    // QByteArray requestData = jsonDoc.toJson();
+
+    // // 发送 POST 请求
+    // QNetworkReply* reply = manager->post(request, requestData);
+
+    // // 连接信号，等待响应
+    // connect(reply, &QNetworkReply::finished, [reply]() {
+    //     if (reply->error() == QNetworkReply::NoError) {
+    //         // 请求成功，读取响应数据
+    //         QByteArray responseData = reply->readAll();
+    //         QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+    //         QJsonObject responseObject = jsonResponse.object();
+
+    //         // 解析响应 JSON
+    //         QString message = responseObject["message"].toString();
+    //         QString token = responseObject["token"].toString();
+
+    //         qDebug() << "Login Successful: " << message;
+    //         qDebug() << "Token: " << token;
+    //     } else {
+    //         // 请求失败
+    //         qDebug() << "Error:" << reply->errorString();
+    //     }
+    //     reply->deleteLater(); // 释放资源
+    // });
+
+    // 清理管理器（这里可以根据实际需求决定是否释放）
 }

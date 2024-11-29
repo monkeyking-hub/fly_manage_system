@@ -16,7 +16,6 @@ SOURCES += \
     homewindow.cpp \
     inorder.cpp \
     interfacemanager.cpp \
-    loginwindow.cpp \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
@@ -35,7 +34,6 @@ HEADERS += \
     homewindow.h \
     inorder.h \
     interfacemanager.h \
-    loginwindow.h \
     maininterface.h \
     mainwindow.h \
     newhomewindow.h \
@@ -52,7 +50,6 @@ FORMS += \
     gamawindow.ui \
     homewindow.ui \
     inorder.ui \
-    loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
     newhomewindow.ui \
