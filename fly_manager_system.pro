@@ -21,6 +21,7 @@ SOURCES += \
     maininterface.cpp \
     mainwindow.cpp \
     newhomewindow.cpp \
+    newloginwindow.cpp \
     orderwindow.cpp \
     registerwindow.cpp \
     system.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     maininterface.h \
     mainwindow.h \
     newhomewindow.h \
+    newloginwindow.h \
     orderwindow.h \
     registerwindow.h \
     system.h \
@@ -54,6 +56,7 @@ FORMS += \
     maininterface.ui \
     mainwindow.ui \
     newhomewindow.ui \
+    newloginwindow.ui \
     orderwindow.ui \
     registerwindow.ui \
     userwindow.ui \
