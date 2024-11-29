@@ -1,7 +1,6 @@
 #include "system.h"
 #include "gamawindow.h"
 #include "homewindow.h"
-#include "loginwindow.h"
 #include "maininterface.h"
 #include "userwindow.h"
 #include "xitawindow.h"
@@ -25,7 +24,6 @@ void System::start()
     XitaWindow * xitawindow = new XitaWindow();
     Yipuxilong * yipuxilong = new Yipuxilong();
     Userwindow * userWindow = new Userwindow(); //修改个人信息界面
-    loginWindow *login = new loginWindow(); //登陆界面
     loginHandler *loginHand = new loginHandler(); //loginHand用于登录按钮信号与槽连接
     m_mainInterface = new maininterface(); //应用主界面
     homeWindow *homePage = new homeWindow(); //homeWindow界面
@@ -60,9 +58,7 @@ void System::start()
         }
     });
 
-    connect(login, &loginWindow::loginRequested, loginHand, &loginHandler::handleLogin); //登录按钮信号与槽连接
-
-    InterfaceManager::instance()->registerPage("lxt_loginWindow", login); //登录界面
+    connect(newLogin,&newLoginWindow::loginRequested,loginHand,&loginHandler::handleLogin);//登录按钮信号与槽连接
 
     InterfaceManager::instance()->registerPage("fzj_window",userWindow); //修改个人信息界面
 
