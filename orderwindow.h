@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::order_2 *ui;
+     void openInOrder(int tabIndex);  // 打开 inorder 界面并设置初始页签
 };
 
 #endif // ORDERWINDOW_H
