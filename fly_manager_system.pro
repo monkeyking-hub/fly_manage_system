@@ -16,11 +16,11 @@ SOURCES += \
     homewindow.cpp \
     inorder.cpp \
     interfacemanager.cpp \
-    loginwindow.cpp \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
     newhomewindow.cpp \
+    newloginwindow.cpp \
     orderwindow.cpp \
     registerwindow.cpp \
     system.cpp \
@@ -34,10 +34,10 @@ HEADERS += \
     homewindow.h \
     inorder.h \
     interfacemanager.h \
-    loginwindow.h \
     maininterface.h \
     mainwindow.h \
     newhomewindow.h \
+    newloginwindow.h \
     orderwindow.h \
     registerwindow.h \
     system.h \
@@ -50,10 +50,10 @@ FORMS += \
     gamawindow.ui \
     homewindow.ui \
     inorder.ui \
-    loginwindow.ui \
     maininterface.ui \
     mainwindow.ui \
     newhomewindow.ui \
+    newloginwindow.ui \
     orderwindow.ui \
     registerwindow.ui \
     userwindow.ui \
@@ -66,6 +66,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    API.md \
     README.md \
     REQUIRE.md  \
     TechnologyStack.md \

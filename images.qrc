@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>blue.png</file>
         <file>exit.png</file>
         <file>girl1.png</file>
         <file>logo.png</file>
@@ -21,5 +20,8 @@
         <file>sky2.png</file>
         <file>sky3.png</file>
         <file>homeWindowBKG.png</file>
+        <file>plane_left.png</file>
+        <file>plane_right.png</file>
+        <file>blue.png</file>
     </qresource>
 </RCC>
