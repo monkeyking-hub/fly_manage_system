@@ -7,6 +7,8 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QFontDatabase>  // 用于加载自定义字体
+#include "inorder.h"  // 引入 inorder 界面
+
 
 orderwindow::orderwindow(QWidget *parent)
     : QMainWindow(parent)
@@ -78,9 +80,25 @@ orderwindow::orderwindow(QWidget *parent)
     ui->order3->setStyleSheet(buttonStyle);
     ui->order4->setStyleSheet(buttonStyle);
 
+    // 连接按钮点击信号到槽函数
+    connect(ui->order, &QPushButton::clicked, this, [=]() { openInOrder(0); });
+    connect(ui->order2, &QPushButton::clicked, this, [=]() { openInOrder(1); });
+    connect(ui->order3, &QPushButton::clicked, this, [=]() { openInOrder(2); });
+    connect(ui->order4, &QPushButton::clicked, this, [=]() { openInOrder(3); });
+
 }
 
 orderwindow::~orderwindow()
 {
     delete ui;
+}
+
+void orderwindow::openInOrder(int tabIndex)
+{
+    // 创建并显示 inorder 界面，同时设置初始显示页签
+    inorder *orderPage = new inorder(this);
+    orderPage->show();
+
+    // 设置目标页签
+    orderPage->setInitialTab(tabIndex);
 }
