@@ -1,0 +1,181 @@
+#include "newregisterwindow.h"
+#include "ui_newregisterwindow.h"
+
+newRegisterWindow::newRegisterWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::newRegisterWindow)
+{
+    ui->setupUi(this);
+
+    // 创建中央窗口部件
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setFixedSize(1300,700);
+    centralWidget->setObjectName("centralwidget");
+    setCentralWidget(centralWidget);
+
+
+    // 设置窗口背景颜色
+    centralWidget->setStyleSheet(
+        "#centralwidget{"
+        "background-color: #282a37; color: #fff; font-family: 'Poppins';"
+        "background-image: url(':/blue.png');"
+        "background-position: center; background-repeat: no-repeat; background-size: cover;"
+        "}"
+        );
+
+    // 创建外层容器，用于添加边框和圆角
+    QWidget *outerContainer = new QWidget(this);
+    outerContainer->setObjectName("outerContainer"); // 设置对象名称
+    outerContainer->setFixedSize(400,600);
+    outerContainer->setStyleSheet(
+        "#outerContainer {"
+        "  background-color: rgba(203, 229, 254, 0.8);" // 半透明背景
+        "  border: 5px solid #fbf6fd;"
+        "  border-radius: 20px;"
+        "  padding: 40px;"
+        "}"
+        );
+
+    // 从左向右的飞机
+    QLabel *airplaneLabel1 = new QLabel(this);
+    airplaneLabel1->setPixmap(QPixmap(":/plane_right.png").scaled(100, 50, Qt::KeepAspectRatio));  // 设置飞机图片
+    airplaneLabel1->setGeometry(-100, 300, 100, 50);  // 初始位置在屏幕外面，靠左上
+
+    QPropertyAnimation *airplaneAnimation1 = new QPropertyAnimation(airplaneLabel1, "geometry");
+    airplaneAnimation1->setLoopCount(-1);  // 无限循环
+    airplaneAnimation1->setDuration(6000);  // 动画持续时间，单位为毫秒
+    airplaneAnimation1->setEasingCurve(QEasingCurve::Linear);  // 线性过渡
+    airplaneAnimation1->setStartValue(QRect(-100, 300, 100, 50));  // 飞机起始位置（左侧）
+    airplaneAnimation1->setEndValue(QRect(centralWidget->width(), 300, 100, 50));  // 飞机结束位置（右侧）
+
+    airplaneAnimation1->start();  // 启动飞机动画
+
+    //从右向左的飞机
+    QLabel *airplaneLabel2 = new QLabel(this);
+    airplaneLabel2->setPixmap(QPixmap(":/plane_left.png").scaled(100, 50, Qt::KeepAspectRatio));  // 设置飞机图片
+    airplaneLabel2->setGeometry(centralWidget->width(), 150, 100, 50);  // 初始位置在屏幕外面，靠右
+
+    QPropertyAnimation *airplaneAnimation2 = new QPropertyAnimation(airplaneLabel2, "geometry");
+    airplaneAnimation2->setLoopCount(-1);  // 无限循环
+    airplaneAnimation2->setDuration(6000);  // 动画持续时间，单位为毫秒
+    airplaneAnimation2->setEasingCurve(QEasingCurve::Linear);  // 线性过渡
+    airplaneAnimation2->setStartValue(QRect(centralWidget->width(),150, 100, 50));  // 飞机起始位置（右侧）
+    airplaneAnimation2->setEndValue(QRect(-100, 150, 100, 50));  // 飞机结束位置（左侧）
+
+    airplaneAnimation2->start();  // 启动飞机动画
+
+    // 创建内部布局
+    QVBoxLayout *innerLayout = new QVBoxLayout();
+
+    // 注册标题
+    QLabel *titleLabel = new QLabel("注 册", this);
+    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->setStyleSheet("font-size: 24px; font-weight: bold; text-align: center;");
+    titleLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(titleLabel);
+
+    //添加空白
+    QSpacerItem *spacer1 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    innerLayout->addItem(spacer1);
+
+    // 用户名输入框
+    usernameField = new AnimatedInputField("用户名", false, this);
+    usernameField->setMinimumHeight(60);
+    usernameField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(usernameField);
+
+    //添加空白
+    QSpacerItem *spacer6 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    innerLayout->addItem(spacer6);
+
+    //邮箱输入框
+    emailField = new AnimatedInputField("邮箱", false, this);
+    emailField->setMinimumHeight(60);
+    emailField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(emailField);
+
+    //添加空白
+    QSpacerItem *spacer2 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    innerLayout->addItem(spacer2);
+
+    // 密码输入框
+    passwordField = new AnimatedInputField("密码", true, this);
+    passwordField->setMinimumHeight(60);
+    passwordField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(passwordField);
+
+    //添加空白
+    QSpacerItem *spacer3 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    innerLayout->addItem(spacer3);
+
+    // 手机号输入框
+    phoneField = new AnimatedInputField("手机号",false, this);
+    phoneField->setMinimumHeight(60);
+    phoneField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(phoneField);
+
+    //添加空白
+    QSpacerItem *spacer4 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    innerLayout->addItem(spacer4);
+
+    //身份证号输入框
+    idField = new AnimatedInputField("身份证号",false, this);
+    idField->setMinimumHeight(60);
+    idField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(idField);
+
+    // //添加空白
+    // QSpacerItem *spacer7 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    // innerLayout->addItem(spacer7);
+
+    // 注册按钮
+    QPushButton *registerBtn = new QPushButton("注册", this);
+    registerBtn->setStyleSheet(
+        "QPushButton {"
+        "    background: white;"
+        "    color: black;"
+        "    border-radius: 20px;"
+        "    font-size: 16px;"
+        "    padding: 10px;"
+        "    font-weight: bold;"
+        "    border: 2px solid #1d7bff;"  // 添加边框颜色
+        "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"  // 添加初始阴影
+        "    transition: all 0.3s ease;"  // 平滑过渡
+        "}"
+        "QPushButton:hover {"
+        "    background-color: rgb(29, 123, 255);"  // 悬浮时的背景色
+        "    color: white;"  // 悬浮时字体颜色变白
+        "    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);"  // 悬浮时的阴影效果
+        "    transform: scale(1.1);"  // 悬浮时按钮略微放大
+        "}"
+        "QPushButton:pressed {"
+        "    background-color: rgb(29, 123, 255);"  // 点击时的背景色
+        "    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"  // 点击时的阴影效果
+        "    transform: scale(0.95);"  // 点击时按钮略微缩小
+        "}"
+        );
+    registerBtn->setCursor(Qt::PointingHandCursor);
+    registerBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(registerBtn);
+
+    // 将内部布局添加到外部容器
+    outerContainer->setLayout(innerLayout);
+
+    // 设置主布局，使外部容器居中
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding)); // 顶部间距
+    mainLayout->addWidget(outerContainer, 0, Qt::AlignCenter);
+    mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding)); // 底部间距
+
+    // 将主布局设置为中央部件的布局
+    centralWidget->setLayout(mainLayout);
+
+    // 窗口配置
+    setWindowTitle("云程 注册");
+    resize(1300, 700); // 设置窗口初始大小
+}
+
+newRegisterWindow::~newRegisterWindow()
+{
+    delete ui;
+}
