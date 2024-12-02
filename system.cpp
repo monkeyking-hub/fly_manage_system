@@ -11,6 +11,7 @@
 #include "orderwindow.h"
 #include "interfacemanager.h"
 #include "newloginwindow.h"
+#include "newregisterwindow.h"
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
@@ -32,6 +33,7 @@ void System::start()
     flightstatus* flightstatusWindow= new flightstatus(); //航班动态界面
     orderwindow* orderPage = new orderwindow(); //订单界面
     newLoginWindow *newLogin = new newLoginWindow(); //新登录界面
+    newRegisterWindow *newSignUpWindow = new newRegisterWindow(); //新注册界面
 
     // 连接 newHomeWindow 的信号到 mainInterface 的槽
     connect(newHomePage, &newHomeWindow::commandLinkButton4Clicked, m_mainInterface, [this]() {
@@ -75,6 +77,8 @@ void System::start()
     InterfaceManager::instance()->registerPage("wmc_orderWindow",orderPage); //订单界面
 
     InterfaceManager::instance()->registerPage("lxt_newLoginWindow",newLogin); //新登录界面
+
+    InterfaceManager::instance()->registerPage("lxt_newRegisterWindow",newSignUpWindow); //新注册界面
 
     //注册gama界面
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);

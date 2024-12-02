@@ -8,50 +8,6 @@
 #include <QJsonObject>
 #include <QDebug>
 
-AnimatedInputField::AnimatedInputField(const QString &placeholderText, bool isPassword, QWidget *parent)
-    : QWidget(parent), label(new QLabel(this)), input(new QLineEdit(this)), animation(new QPropertyAnimation(label, "pos", this)) {
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);  // 创建主布局
-    mainLayout->setContentsMargins(0, 0, 0, 0);  // 去除边距
-    mainLayout->setSpacing(0);  // 去除间距
-
-    // 设置标签（初始位置）
-    label->setText(placeholderText);  // 设置标签文本
-    label->setStyleSheet("background:transparent; color: black; font-size: 16px;");  // 设置标签样式
-    label->move(5, 25);  // 设置标签的初始位置
-    label->resize(200, 20);  // 设置标签的大小
-
-    // 设置输入框
-    input->setStyleSheet(
-        "background: transparent; border: none; border-bottom: 2px solid white; "
-        "font-size: 16px; color: white; padding: 5px;"
-        );
-    if (isPassword) {
-        input->setEchoMode(QLineEdit::Password);  // 如果是密码框，设置为密码输入模式
-    }
-    mainLayout->addWidget(input);  // 将输入框添加到布局中
-
-    // 设置动画效果
-    animation->setDuration(300);  // 设置动画持续时间
-    animation->setEasingCurve(QEasingCurve::InOutQuad);  // 设置动画的缓动曲线
-
-    // 安装事件过滤器以捕获焦点事件
-    input->installEventFilter(this);
-}
-
-QString AnimatedInputField::text() const { return input->text(); }  // 获取输入框的文本
-
-bool AnimatedInputField::eventFilter(QObject *obj, QEvent *event){
-    if (obj == input) {
-        if (event->type() == QEvent::FocusIn) {
-            onFocusIn(); // 如果输入框获得焦点，执行动画
-        } else if (event->type() == QEvent::FocusOut) {
-            onFocusOut(); // 如果输入框失去焦点，执行动画
-        }
-    }
-    return QWidget::eventFilter(obj, event); // 调用基类的事件过滤器
-}
-
 newLoginWindow::newLoginWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::newLoginWindow)
@@ -126,7 +82,7 @@ newLoginWindow::newLoginWindow(QWidget *parent)
 
     airplaneAnimation2->start();  // 启动飞机动画
 
-    // 创建内部布局（原来的布局逻辑）
+    // 创建内部布局
     QVBoxLayout *innerLayout = new QVBoxLayout();
 
     // 登录标题
@@ -140,11 +96,11 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     QSpacerItem *spacer1 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer1);
 
-    // 用户名输入框
-    usernameField = new AnimatedInputField("邮箱", false, this);
-    usernameField->setMinimumHeight(60);
-    usernameField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    innerLayout->addWidget(usernameField);
+    // 邮箱输入框
+    emailField = new AnimatedInputField("邮箱", false, this);
+    emailField->setMinimumHeight(60);
+    emailField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(emailField);
 
     //添加空白
     QSpacerItem *spacer2 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -248,21 +204,21 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     });
 
     // 窗口配置
-    setWindowTitle("云程");
+    setWindowTitle("云程 登录");
     resize(1300, 700); // 设置窗口初始大小
 }
 
 void newLoginWindow::onSignUpButtonClicked()
 {
-    InterfaceManager::instance()->switchToPage("lxt_registerWindow");
+    InterfaceManager::instance()->switchToPage("lxt_newRegisterWindow");
 }
 
 void newLoginWindow::onLogInButtonClicked() //点击登录按钮触发事件
 {
 
-    QString usrname = usernameField->text();
+    QString email = emailField->text();
     QString password = passwordField->text();
-    emit loginRequested(usrname,password);
+    emit loginRequested(email,password);
 }
 
 newLoginWindow::~newLoginWindow()
@@ -279,7 +235,7 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
      QNetworkAccessManager* manager = new QNetworkAccessManager();
 
     // // 设置请求 URL
-     QUrl url("http://localhost:8080/api/users/login"); // 替换为你的 API 地址
+     QUrl url("http://localhost:8080/api/users/login");
      QNetworkRequest request(url);
 
     // // 设置请求头
