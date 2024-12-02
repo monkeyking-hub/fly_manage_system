@@ -1,6 +1,8 @@
 #include "newloginwindow.h"
 #include "ui_newloginwindow.h"
 #include "interfacemanager.h"
+#include "usermanager.h"
+#include "userwindow.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -275,7 +277,13 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
                 qDebug() << "Username: " << username;
                 qDebug() << "Email: " << email;
                 qDebug() << "Role: " << role;
-
+                User loginUser;
+                loginUser.username = "JohnDoe";
+                loginUser.email = "john.doe@example.com";
+                loginUser.phonenumber = "1234567890";
+                loginUser.age = 30;
+                loginUser.sex = "Male";
+                UserManager::getInstance()->setCurrentUser(loginUser);
                 // 页面切换
                 InterfaceManager::instance()->switchToPage("lxt_mainInterface");
             } else {

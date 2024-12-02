@@ -1,6 +1,6 @@
 #ifndef USERWINDOW_H
 #define USERWINDOW_H
-
+#include "user.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -25,6 +25,10 @@ private slots:
     void on_logOutButton_clicked();
 
     void on_returnButton_clicked();
+
+    void loadUserInfo();
+
+    void updateUserInfo(const User& user);
 
 private:
     Ui::Userwindow *ui;

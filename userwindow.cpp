@@ -5,13 +5,29 @@
 #include <QPixmap>
 #include "interfacemanager.h"
 #include "ui_userwindow.h"
-Userwindow::Userwindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::Userwindow)
-{
+#include "UserManager.h"
+Userwindow::Userwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Userwindow) {
     ui->setupUi(this);
+    connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, &Userwindow::updateUserInfo);
+    connect(UserManager::getInstance(), &UserManager::loginSuccess, this, &Userwindow::loadUserInfo);
 }
 
+    void Userwindow::loadUserInfo() {
+    User currentUser = UserManager::getInstance()->getCurrentUser();
+    ui->useNameLabel->setText(currentUser.username);
+    ui->mailLabel_2->setText(currentUser.email);
+    ui->phoneNumberLabel->setText(currentUser.phonenumber);
+    ui->agelabel->setText(QString::number(currentUser.age));
+    ui->sexLabel->setText(currentUser.sex);
+}
+
+void Userwindow::updateUserInfo(const User& user) {
+    ui->userNameSetBox->setText(user.username);
+    ui->mailSetBox->setText(user.email);
+    ui->phoneNumberSetBox->setText(user.phonenumber);
+    ui->ageSetBox->setText(QString::number(user.age));
+    ui->sexLabel->setText(user.sex);
+}
 Userwindow::~Userwindow()
 {
     delete ui;

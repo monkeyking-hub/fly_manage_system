@@ -28,6 +28,7 @@ newHomeWindow::newHomeWindow(QWidget *parent)
 
 void newHomeWindow::onCommandLinkeButton3Clicked()
 {
+
     InterfaceManager::instance()->switchToPage("fzj_window");
 }
 

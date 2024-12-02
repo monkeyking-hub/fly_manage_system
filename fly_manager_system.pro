@@ -26,6 +26,8 @@ SOURCES += \
     orderwindow.cpp \
     registerwindow.cpp \
     system.cpp \
+    user.cpp \
+    usermanager.cpp \
     userwindow.cpp \
     xitawindow.cpp \
     yipuxilong.cpp
@@ -45,6 +47,8 @@ HEADERS += \
     orderwindow.h \
     registerwindow.h \
     system.h \
+    user.h \
+    usermanager.h \
     userwindow.h \
     xitawindow.h \
     yipuxilong.h
