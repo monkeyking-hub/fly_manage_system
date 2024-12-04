@@ -21,6 +21,7 @@ public:
     AnimatedInputField(const QString &placeholderText, bool isPassword = false, QWidget *parent = nullptr);
 
     QString text() const;  // 获取输入框的文本
+    QLineEdit * lineEdit(); //获取输入框的指针
 protected:
     // 事件过滤器，用于处理焦点事件
     bool eventFilter(QObject *obj, QEvent *event) override;

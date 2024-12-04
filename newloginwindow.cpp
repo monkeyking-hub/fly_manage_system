@@ -217,9 +217,15 @@ void newLoginWindow::onSignUpButtonClicked()
 
 void newLoginWindow::onLogInButtonClicked() //点击登录按钮触发事件
 {
-
     QString email = emailField->text();
     QString password = passwordField->text();
+
+    //将输入框内容清空
+    QLineEdit *emailLineEdit = emailField->lineEdit();
+    QLineEdit *passwordLineEdit = passwordField->lineEdit();
+    emailLineEdit->setText("");
+    passwordLineEdit->setText("");
+
     emit loginRequested(email,password);
 }
 
@@ -284,6 +290,7 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
                 loginUser.age = 30;
                 loginUser.sex = "Male";
                 UserManager::getInstance()->setCurrentUser(loginUser);
+
                 // 页面切换
                 InterfaceManager::instance()->switchToPage("lxt_mainInterface");
             } else {
