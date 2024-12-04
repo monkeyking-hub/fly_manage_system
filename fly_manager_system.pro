@@ -12,6 +12,7 @@ CONFIG += c++17
 
 SOURCES += \
     adminloginwindow.cpp \
+    adminmaininterface.cpp \
     animatedinputfield.cpp \
     flightstatus.cpp \
     gamawindow.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
 
 HEADERS += \
     adminloginwindow.h \
+    adminmaininterface.h \
     animatedInputField.h \
     flightstatus.h \
     gamawindow.h \
@@ -57,6 +59,7 @@ HEADERS += \
 
 FORMS += \
     adminloginwindow.ui \
+    adminmaininterface.ui \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \

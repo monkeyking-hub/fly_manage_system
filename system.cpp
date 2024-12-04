@@ -13,6 +13,7 @@
 #include "newloginwindow.h"
 #include "newregisterwindow.h"
 #include "adminloginwindow.h"
+#include "adminmaininterface.h"
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
@@ -38,6 +39,7 @@ void System::start()
     registerHandler *registerHand = new registerHandler(); //registerHand用于用户注册界面的注册按钮信号与槽连接
     adminLoginWindow *adminLogin = new adminLoginWindow(); //管理员登录界面
     adminLoginHandler *adminLoginHand = new adminLoginHandler(); //adminLoginHand用于管理员登录界面的登录按钮信号与槽连接
+    adminMainInterface *adminMainWindow = new adminMainInterface(); //管理员主界面
 
     // 连接 newHomeWindow 的信号到 mainInterface 的槽
     connect(newHomePage, &newHomeWindow::commandLinkButton4Clicked, m_mainInterface, [this]() {
@@ -89,6 +91,8 @@ void System::start()
     InterfaceManager::instance()->registerPage("lxt_newRegisterWindow",newSignUpWindow); //新注册界面
 
     InterfaceManager::instance()->registerPage("lxt_adminLoginWindow",adminLogin); //管理员登录界面
+
+    InterfaceManager::instance()->registerPage("lxt_adminMainInterface",adminMainWindow); //管理员主界面
 
     //注册gama界面
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);
