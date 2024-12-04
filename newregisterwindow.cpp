@@ -1,5 +1,24 @@
 #include "newregisterwindow.h"
 #include "ui_newregisterwindow.h"
+#include "interfacemanager.h"
+
+#include <QMainWindow>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QPropertyAnimation>
+#include <QMessageBox>
+#include <QSpacerItem>
+#include <QApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDebug>
 
 newRegisterWindow::newRegisterWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -156,6 +175,7 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
         );
     registerBtn->setCursor(Qt::PointingHandCursor);
     registerBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    connect(registerBtn,&QPushButton::clicked,this,&newRegisterWindow::onRegisterButtonClicked);
     innerLayout->addWidget(registerBtn);
 
     // 将内部布局添加到外部容器
@@ -175,7 +195,113 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     resize(1300, 700); // 设置窗口初始大小
 }
 
+void newRegisterWindow::onRegisterButtonClicked() //点击注册按钮触发事件
+{
+    QString email = emailField->text();
+    QString password = passwordField->text();
+    QString usrName = usernameField->text();
+    QString phone = phoneField->text();
+    QString idNumber = idField->text();
+
+    //将输入框内容清空
+    QLineEdit *emailLineEdit = emailField->lineEdit();
+    QLineEdit *passwordLineEdit = passwordField->lineEdit();
+    QLineEdit *usrNameLineEdit = usernameField->lineEdit();
+    QLineEdit *phoneLineEdit = phoneField->lineEdit();
+    QLineEdit *idLineEdit = idField->lineEdit();
+    emailLineEdit->setText("");
+    passwordLineEdit->setText("");
+    usrNameLineEdit->setText("");
+    phoneLineEdit->setText("");
+    idLineEdit->setText("");
+
+    emit registerRequested(usrName,password,email,phone,idNumber);
+}
+
 newRegisterWindow::~newRegisterWindow()
 {
     delete ui;
+}
+
+void registerHandler::handleRegister(const QString &usrname,const QString& password,const QString& email,
+                                     const QString &phone,const QString &idNumber,const int &age,
+                                     const QString &gender,const int &usrLevel)
+{
+    qDebug()<<"email:"<<email;
+    qDebug()<<"pwd:"<<password;
+
+    // // // 创建网络管理器
+    // QNetworkAccessManager* manager = new QNetworkAccessManager();
+
+    // // // 设置请求 URL
+    // QUrl url("http://localhost:8080/api/users/login");
+    // QNetworkRequest request(url);
+
+    // // // 设置请求头
+    // request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // // // 构建 JSON 请求体
+    // QJsonObject json;
+    // json["username"]=usrname;
+    // json["password"] = password;
+    // json["email"] = email;
+    // json["phone"] = phone;
+    // json["age"] = age;
+    // json["gender"] = gender;
+    // json["idNumber"] = idNumber;
+    // json["userLevel"] = usrLevel;
+
+    // QJsonDocument jsonDoc(json);
+    // QByteArray requestData = jsonDoc.toJson();
+
+    // // // 发送 POST 请求
+    // QNetworkReply* reply = manager->post(request, requestData);
+    // // 连接信号，等待响应
+    // connect(reply, &QNetworkReply::finished, [reply]() {
+    //     if (reply->error() == QNetworkReply::NoError) {
+    //         // 请求成功，读取响应数据
+    //         QByteArray responseData = reply->readAll();
+    //         QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+    //         QJsonObject responseObject = jsonResponse.object();
+
+    //         // 解析响应 JSON
+    //         int code = responseObject["code"].toInt();  // 获取返回的 code
+    //         QString message = responseObject["message"].toString();
+    //         QJsonObject data = responseObject["data"].toObject();
+
+    //         if (code == 200) {
+    //             // 注册成功,弹出信息框
+    //             QString username = data["username"].toString();
+
+    //             QMessageBox msgBox;
+    //             msgBox.setIcon(QMessageBox::Information);  // 设置图标类型
+    //             msgBox.setWindowTitle("注册成功");         // 设置窗口标题
+    //             msgBox.setText(username+"，您已成功注册！");          // 设置提示文本
+    //             msgBox.setStandardButtons(QMessageBox::Ok); // 设置标准按钮（此处只有“确定”按钮）
+
+    //             // 显示消息框
+    //             msgBox.exec();
+
+    //             // 页面切换
+    //             InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    //         } else {
+    //             // 注册失败，弹出错误提示框
+    //             qDebug() << "Register failed, code: " << code;
+    //             QMessageBox::critical(nullptr, "Register Error",
+    //                                   "Register failed: " + message,
+    //                                   QMessageBox::Ok, QMessageBox::Ok);
+    //         }
+    //     } else {
+    //         // 请求失败，弹出错误提示框
+    //         QString errorString = reply->errorString();
+    //         qDebug() << "Error:" << errorString;
+
+    //         // 创建 QMessageBox 来显示错误信息
+    //         QMessageBox::critical(nullptr, "Register Error",
+    //                               "Request failed: " + errorString,
+    //                               QMessageBox::Ok, QMessageBox::Ok);
+    //     }
+
+    //     reply->deleteLater(); // 释放资源
+    // });
 }
