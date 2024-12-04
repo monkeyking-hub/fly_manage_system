@@ -190,7 +190,7 @@ void adminLoginHandler::handleAdminLogin(const QString& usrname, const QString& 
 {
     if(usrname=="sysu" && password=="sse")
     {
-        InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+        InterfaceManager::instance()->switchToPage("lxt_adminMainInterface");
     }
     else
     {
