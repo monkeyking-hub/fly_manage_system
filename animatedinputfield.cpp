@@ -33,6 +33,8 @@ AnimatedInputField::AnimatedInputField(const QString &placeholderText, bool isPa
 
 QString AnimatedInputField::text() const { return input->text(); }  // 获取输入框的文本
 
+QLineEdit* AnimatedInputField::lineEdit(){return this->input;}
+
 bool AnimatedInputField::eventFilter(QObject *obj, QEvent *event){
     if (obj == input) {
         if (event->type() == QEvent::FocusIn) {
