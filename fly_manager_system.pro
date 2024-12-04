@@ -17,13 +17,14 @@ SOURCES += \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
-    inorder.cpp \
     interfacemanager.cpp \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
     newhomewindow.cpp \
     newloginwindow.cpp \
+    order.cpp \
+    orderwidget.cpp \
     newregisterwindow.cpp \
     orderwindow.cpp \
     registerwindow.cpp \
@@ -41,12 +42,13 @@ HEADERS += \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
-    inorder.h \
     interfacemanager.h \
     maininterface.h \
     mainwindow.h \
     newhomewindow.h \
     newloginwindow.h \
+    order.h \
+    orderwidget.h \
     newregisterwindow.h \
     orderwindow.h \
     registerwindow.h \
@@ -63,7 +65,6 @@ FORMS += \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
-    inorder.ui \
     maininterface.ui \
     mainwindow.ui \
     newhomewindow.ui \

@@ -16,60 +16,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="order">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>60</y>
-      <width>249</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string> 所有订单</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="order2">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>160</y>
-      <width>249</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>已取消</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="order3">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>270</y>
-      <width>249</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>待支付</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="order4">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>370</y>
-      <width>249</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>待出行</string>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="cs"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
