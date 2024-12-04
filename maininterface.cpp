@@ -247,7 +247,7 @@ void maininterface::editUserInfo()
 
 void maininterface::switchLogin()
 {
-    InterfaceManager::instance()->switchToPage("lxt_loginWindow");
+    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
 }
 
 void maininterface::switchtoFlightStatusWindow()

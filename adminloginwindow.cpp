@@ -1,5 +1,6 @@
-#include "newloginwindow.h"
-#include "ui_newloginwindow.h"
+#include "adminloginwindow.h"
+#include "ui_adminloginwindow.h"
+
 #include "interfacemanager.h"
 #include "usermanager.h"
 #include "userwindow.h"
@@ -10,9 +11,9 @@
 #include <QJsonObject>
 #include <QDebug>
 
-newLoginWindow::newLoginWindow(QWidget *parent)
+adminLoginWindow::adminLoginWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::newLoginWindow)
+    , ui(new Ui::adminLoginWindow)
 {
     ui->setupUi(this);
 
@@ -88,7 +89,7 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     QVBoxLayout *innerLayout = new QVBoxLayout();
 
     // 登录标题
-    QLabel *titleLabel = new QLabel("登 录", this);
+    QLabel *titleLabel = new QLabel("管理员登录", this);
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setStyleSheet("font-size: 24px; font-weight: bold; text-align: center;");
     titleLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -98,11 +99,11 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     QSpacerItem *spacer1 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer1);
 
-    // 邮箱输入框
-    emailField = new AnimatedInputField("邮箱", false, this);
-    emailField->setMinimumHeight(60);
-    emailField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    innerLayout->addWidget(emailField);
+    // 管理员账号输入框
+    usrnameField = new AnimatedInputField("管理员账号", false, this);
+    usrnameField->setMinimumHeight(60);
+    usrnameField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(usrnameField);
 
     //添加空白
     QSpacerItem *spacer2 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -113,35 +114,6 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     passwordField->setMinimumHeight(60);
     passwordField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     innerLayout->addWidget(passwordField);
-
-    //添加空白
-    QSpacerItem *spacer3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    innerLayout->addItem(spacer3);
-
-    // 前往管理员登录界面按钮
-    QPushButton *adminLoginBtn = new QPushButton("管理员登录", this);
-    adminLoginBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    adminLoginBtn->setStyleSheet(
-        "QPushButton {"
-        "    border: none;"
-        "    background-color: transparent;"
-        "    text-align: right;"
-        "    color: black;"
-        "}"
-
-        "QPushButton:hover {"
-        "    text-align: right;"
-        "    color: blue;"
-        "    text-decoration: underline;"
-        "}"
-
-        "QPushButton:pressed {"
-        "    text-align: right;"
-        "    color: darkblue;"
-        "    padding: 2px;"
-        "}"
-        );
-    innerLayout->addWidget(adminLoginBtn);
 
     //添加空白
     QSpacerItem *spacer4 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -175,35 +147,8 @@ newLoginWindow::newLoginWindow(QWidget *parent)
         );
     loginBtn->setCursor(Qt::PointingHandCursor);
     loginBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    connect(loginBtn,&QPushButton::clicked,this,&newLoginWindow::onLogInButtonClicked);
+    connect(loginBtn,&QPushButton::clicked,this,&adminLoginWindow::onAdminLogInButtonClicked);
     innerLayout->addWidget(loginBtn);
-
-    //添加空白
-    QSpacerItem *spacer5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    innerLayout->addItem(spacer5);
-
-    // 注册提示
-    QPushButton *signupBtn = new QPushButton("没有账号? 去注册.", this);
-    signupBtn->setStyleSheet(
-        "QPushButton {"
-        "    border: none;"
-        "    background-color: transparent;"
-        "    color: black;" /* 默认文字颜色 */
-        "}"
-
-        "QPushButton:hover {"
-        "    color: blue;" /* 鼠标悬停时文字颜色变蓝 */
-        "    text-decoration: underline;" /* 鼠标悬停时添加下划线 */
-        "}"
-
-        "QPushButton:pressed {"
-        "    color: darkblue;" /* 按下时文字变为深蓝色 */
-        "    padding: 2px;" /* 模拟按钮按下的轻微位移 */
-        "}"
-        );
-    signupBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    innerLayout->addWidget(signupBtn);
-    connect(signupBtn,&QPushButton::clicked,this,&newLoginWindow::onSignUpButtonClicked);
 
     // 将内部布局添加到外部容器
     outerContainer->setLayout(innerLayout);
@@ -217,118 +162,41 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     // 将主布局设置为中央部件的布局
     centralWidget->setLayout(mainLayout);
 
-    // 连接信号与槽
-    connect(adminLoginBtn, &QPushButton::clicked, this, []() {
-        InterfaceManager::instance()->switchToPage("lxt_adminLoginWindow");
-    });
-
     // 窗口配置
     setWindowTitle("云程 登录");
     resize(1300, 700); // 设置窗口初始大小
 }
 
-void newLoginWindow::onSignUpButtonClicked()
+void adminLoginWindow::onAdminLogInButtonClicked() //点击登录按钮触发事件
 {
-    InterfaceManager::instance()->switchToPage("lxt_newRegisterWindow");
-}
-
-void newLoginWindow::onLogInButtonClicked() //点击登录按钮触发事件
-{
-    QString email = emailField->text();
+    QString usrname = usrnameField->text();
     QString password = passwordField->text();
 
     //将输入框内容清空
-    QLineEdit *emailLineEdit = emailField->lineEdit();
+    QLineEdit *usrnameLineEdit = usrnameField->lineEdit();
     QLineEdit *passwordLineEdit = passwordField->lineEdit();
-    emailLineEdit->setText("");
+    usrnameLineEdit->setText("");
     passwordLineEdit->setText("");
 
-    emit loginRequested(email,password);
+    emit adminLoginRequested(usrname,password);
 }
 
-newLoginWindow::~newLoginWindow()
+adminLoginWindow::~adminLoginWindow()
 {
     delete ui;
 }
 
-void loginHandler::handleLogin(const QString& email, const QString& password)
+void adminLoginHandler::handleAdminLogin(const QString& usrname, const QString& password)
 {
-    qDebug()<<"email:"<<email;
-    qDebug()<<"pwd:"<<password;
-
-    // // 创建网络管理器
-     QNetworkAccessManager* manager = new QNetworkAccessManager();
-
-    // // 设置请求 URL
-     QUrl url("http://localhost:8080/api/users/login");
-     QNetworkRequest request(url);
-
-    // // 设置请求头
-     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    // // 构建 JSON 请求体
-     QJsonObject json;
-    json["email"] = email;
-    json["password"] = password;
-    QJsonDocument jsonDoc(json);
-    QByteArray requestData = jsonDoc.toJson();
-
-    // // 发送 POST 请求
-    QNetworkReply* reply = manager->post(request, requestData);
-    // 连接信号，等待响应
-    connect(reply, &QNetworkReply::finished, [reply]() {
-        if (reply->error() == QNetworkReply::NoError) {
-            // 请求成功，读取响应数据
-            QByteArray responseData = reply->readAll();
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-            QJsonObject responseObject = jsonResponse.object();
-
-            // 解析响应 JSON
-            int code = responseObject["code"].toInt();  // 获取返回的 code
-            QString message = responseObject["message"].toString();
-            QJsonObject data = responseObject["data"].toObject();
-
-            if (code == 200) {
-                // 登录成功
-                int userId = data["id"].toInt();
-                QString username = data["username"].toString();
-                QString email = data["email"].toString();
-                QString role = data["role"].toString();
-
-                qDebug() << "Login Successful: " << message;
-                qDebug() << "User ID: " << userId;
-                qDebug() << "Username: " << username;
-                qDebug() << "Email: " << email;
-                qDebug() << "Role: " << role;
-                User loginUser;
-                loginUser.username = "JohnDoe";
-                loginUser.email = "john.doe@example.com";
-                loginUser.phonenumber = "1234567890";
-                loginUser.age = 30;
-                loginUser.sex = "Male";
-                UserManager::getInstance()->setCurrentUser(loginUser);
-
-                // 页面切换
-                InterfaceManager::instance()->switchToPage("lxt_mainInterface");
-            } else {
-                // 登录失败，弹出错误提示框
-                qDebug() << "Login failed, code: " << code;
-                QMessageBox::critical(nullptr, "Login Error",
-                                      "Login failed: " + message,
-                                      QMessageBox::Ok, QMessageBox::Ok);
-            }
-        } else {
-            // 请求失败，弹出错误提示框
-            QString errorString = reply->errorString();
-            qDebug() << "Error:" << errorString;
-
-            // 创建 QMessageBox 来显示错误信息
-            QMessageBox::critical(nullptr, "Login Error",
-                                  "Request failed: " + errorString,
-                                  QMessageBox::Ok, QMessageBox::Ok);
-        }
-
-        reply->deleteLater(); // 释放资源
-    });
-
+    if(usrname=="sysu" && password=="sse")
+    {
+        InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+    }
+    else
+    {
+        // 创建 QMessageBox 来显示错误信息
+        QMessageBox::critical(nullptr, "Login Error",
+                              "账号或密码输入错误",
+                              QMessageBox::Ok, QMessageBox::Ok);
+    }
 }

@@ -11,6 +11,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    adminloginwindow.cpp \
+    animatedinputfield.cpp \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
@@ -22,14 +24,19 @@ SOURCES += \
     newloginwindow.cpp \
     order.cpp \
     orderwidget.cpp \
+    newregisterwindow.cpp \
     orderwindow.cpp \
     registerwindow.cpp \
     system.cpp \
+    user.cpp \
+    usermanager.cpp \
     userwindow.cpp \
     xitawindow.cpp \
     yipuxilong.cpp
 
 HEADERS += \
+    adminloginwindow.h \
+    animatedInputField.h \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
@@ -40,14 +47,18 @@ HEADERS += \
     newloginwindow.h \
     order.h \
     orderwidget.h \
+    newregisterwindow.h \
     orderwindow.h \
     registerwindow.h \
     system.h \
+    user.h \
+    usermanager.h \
     userwindow.h \
     xitawindow.h \
     yipuxilong.h
 
 FORMS += \
+    adminloginwindow.ui \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
@@ -55,6 +66,7 @@ FORMS += \
     mainwindow.ui \
     newhomewindow.ui \
     newloginwindow.ui \
+    newregisterwindow.ui \
     orderwindow.ui \
     registerwindow.ui \
     userwindow.ui \
