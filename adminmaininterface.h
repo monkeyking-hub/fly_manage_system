@@ -2,13 +2,12 @@
 #define adminMainInterface_H
 
 #include <QMainWindow>
-#include <QTableWidget>
-#include <QPushButton>
+#include <QTreeWidget>
+#include <QWidget>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLineEdit>
-#include <QComboBox>
+#include <QTreeWidgetItem>
 #include <QLabel>
+#include <QStackedWidget>
 
 namespace Ui {
 class adminMainInterface;
@@ -17,53 +16,32 @@ class adminMainInterface;
 class adminMainInterface : public QMainWindow
 {
     Q_OBJECT
+public:
+    QTreeWidget *menuTree;
+    //一级菜单
+    QTreeWidgetItem *homeItem; //首页
+    QTreeWidgetItem *usersItem; //用户管理
+    QTreeWidgetItem *ordersItem; //订单管理
+    QTreeWidgetItem *flightsItem; //航班管理
+    //二级菜单
+    QTreeWidgetItem *userSearchItem; //查找用户信息
+    QTreeWidgetItem *userRemoveItem; //删除用户信息
+    QTreeWidgetItem *userUpdateItem; //修改用户信息
+    QTreeWidgetItem *orderSearchItem; //查找订单信息
+    QTreeWidgetItem *orderRemoveItem; //删除订单信息
+    QTreeWidgetItem *orderUpdateItem; //修改订单信息
+    QTreeWidgetItem *flightSearchItem; //查找航班信息
+    QTreeWidgetItem *flightRemoveItem; //删除航班信息
+    QTreeWidgetItem *flightUpdateItem; //修改航班信息
+    QTreeWidgetItem *flightAddItem; //添加航班信息
+    QStackedWidget *stackedWidget;
 
 public:
     explicit adminMainInterface(QWidget *parent = nullptr);
     ~adminMainInterface();
 
-private slots:
-    void addUser();
-    void editUser();
-    void deleteUser();
-    void searchUser();
-
-    void addOrder();
-    void editOrder();
-    void deleteOrder();
-    void searchOrder();
-
-    void addFlight();
-    void editFlight();
-    void deleteFlight();
-    void searchFlight();
-
-    void processRefund();
-
-private:
-    void setupUI();
-    void setupUserTab();
-    void setupOrderTab();
-    void setupFlightTab();
-    void setupRefundTab();
-
-    QTabWidget *tabWidget;
-
-    // User Management Tab
-    QTableWidget *userTable;
-    QLineEdit *userSearchBox;
-
-    // Order Management Tab
-    QTableWidget *orderTable;
-    QLineEdit *orderSearchBox;
-
-    // Flight Management Tab
-    QTableWidget *flightTable;
-    QLineEdit *flightSearchBox;
-
-    // Refund Management Tab
-    QTableWidget *refundTable;
-    QLineEdit *refundSearchBox;
+public slots:
+    void onItemClicked(QTreeWidgetItem *item, int column);
 
 private:
     Ui::adminMainInterface *ui;

@@ -23,5 +23,7 @@
         <file>plane_left.png</file>
         <file>plane_right.png</file>
         <file>blue.png</file>
+        <file>menu_hidden.png</file>
+        <file>menu_visible.png</file>
     </qresource>
 </RCC>
