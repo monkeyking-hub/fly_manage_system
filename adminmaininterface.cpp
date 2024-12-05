@@ -1,180 +1,248 @@
 #include "adminmaininterface.h"
 #include "ui_adminmaininterface.h"
+#include <QStackedWidget>
+#include<QLabel>
+#include <QToolBar>
+#include <QPushButton>
 
 adminMainInterface::adminMainInterface(QWidget *parent)
     : QMainWindow(parent)
-    , tabWidget(new QTabWidget(this))
     , ui(new Ui::adminMainInterface)
 {
     ui->setupUi(this);
 
-    setWindowTitle("航班管理系统 - 管理员界面");
-    resize(1000, 700);
+    // 设置主窗口
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setStyleSheet("background-color:white");
+    QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
 
-    // 设置选项卡
-    setupUserTab();
-    setupOrderTab();
-    setupFlightTab();
-    setupRefundTab();
+    //左侧菜单栏
+    menuTree = new QTreeWidget(this);
+    menuTree->setStyleSheet(
+        "QTreeWidget {"
+        "    background-color: #f5f5f5;"
+        "    border: none;"
+        "    font: 14px 'Arial';"
+        "    outline: 0;"
+        "}"
+        "QTreeWidget::item {"
+        "    padding: 10px 15px;"
+        "    color: #333;"
+        "    background-color: transparent;"
+        "    border-left: 4px solid transparent;"
+        "    transition: all 0.3s;"
+        "}"
+        "QTreeWidget::item:hover {"
+        "    background-color: #e6f7ff;"
+        "    color: #1890ff;"
+        "    border-left: 4px solid #1890ff;"
+        "}"
+        "QTreeWidget::item:selected {"
+        "    background-color: #d9f7be;"
+        "    color: #52c41a;"
+        "    border-left: 4px solid #52c41a;"
+        "}"
+        "QTreeWidget::item:pressed {"
+        "    background-color: #bae7ff;"
+        "    color: #096dd9;"
+        "    border-left: 4px solid #096dd9;"
+        "}"
+        );
+    menuTree->setHeaderHidden(true);  // 隐藏默认的标题
 
-    setCentralWidget(tabWidget);
+    // 一级菜单项： 首页, 用户管理, 订单管理, 航班管理
+    homeItem = new QTreeWidgetItem(menuTree, QStringList() << "首页");
+    usersItem = new QTreeWidgetItem(menuTree, QStringList() << "用户管理");
+    ordersItem = new QTreeWidgetItem(menuTree, QStringList() << "订单管理");
+    flightsItem = new QTreeWidgetItem(menuTree, QStringList() << "航班管理");
+
+    // 二级菜单项： 用户增删查改, 订单增删查改, 航班增删查改
+    userSearchItem = new QTreeWidgetItem(usersItem, QStringList() << "查询用户信息");
+    userRemoveItem = new QTreeWidgetItem(usersItem, QStringList() << "删除用户信息");
+    userUpdateItem = new QTreeWidgetItem(usersItem, QStringList() << "修改用户信息");
+    orderSearchItem = new QTreeWidgetItem(ordersItem, QStringList() << "查找订单信息");
+    orderRemoveItem = new QTreeWidgetItem(ordersItem, QStringList() << "删除订单信息");
+    orderUpdateItem = new QTreeWidgetItem(ordersItem, QStringList() << "修改订单信息");
+    flightSearchItem = new QTreeWidgetItem(flightsItem, QStringList() << "查找航班信息");
+    flightRemoveItem = new QTreeWidgetItem(flightsItem, QStringList() << "删除航班信息");
+    flightUpdateItem = new QTreeWidgetItem(flightsItem, QStringList() << "修改航班信息");
+    flightAddItem = new QTreeWidgetItem(flightsItem, QStringList() << "添加航班信息");
+
+    connect(menuTree, &QTreeWidget::itemClicked, this, &adminMainInterface::onItemClicked);
+
+    // 设置菜单宽度
+    menuTree->setFixedWidth(200);
+
+    // 默认选中首页
+    menuTree->setCurrentItem(homeItem);
+
+    // 将左侧菜单栏添加到主布局
+    mainLayout->addWidget(menuTree);
+
+    //右侧内容区
+    stackedWidget = new QStackedWidget(this);
+    stackedWidget->addWidget(new QLabel("首页界面"));
+    stackedWidget->addWidget(new QLabel("用户管理"));
+    stackedWidget->addWidget(new QLabel("航班管理"));
+    stackedWidget->addWidget(new QLabel("订单管理"));
+
+    stackedWidget->addWidget(new QLabel("查询用户信息"));
+    stackedWidget->addWidget(new QLabel("删除用户信息"));
+    stackedWidget->addWidget(new QLabel("修改用户信息"));
+
+    stackedWidget->addWidget(new QLabel("查询订单信息"));
+    stackedWidget->addWidget(new QLabel("删除订单信息"));
+    stackedWidget->addWidget(new QLabel("修改订单信息"));
+
+    stackedWidget->addWidget(new QLabel("查询航班信息"));
+    stackedWidget->addWidget(new QLabel("删除航班信息"));
+    stackedWidget->addWidget(new QLabel("修改航班信息"));
+    stackedWidget->addWidget(new QLabel("添加航班信息"));
+
+    //将右侧内容添加到主布局mainLayout
+    mainLayout->addWidget(stackedWidget);
+
+    //设置中央部件
+    setCentralWidget(centralWidget);
+
+    //添加上方工具栏
+    QToolBar *toolBar = new QToolBar(this);
+    toolBar->setIconSize(QSize(75, 75));
+    toolBar->setStyleSheet(R"(
+    /* 工具栏整体样式 */
+    QToolBar {
+        background-color: white;       /* 白色背景 */
+        border: none;                   /* 去除边框 */
+        padding: 2px;                   /* 工具栏内边距 */
+        spacing: 8px;                   /* 按钮和控件之间的间距 */
+    }
+    )");
+
+    addToolBar(Qt::TopToolBarArea,toolBar); //将工具栏添加到顶部
+
+    //在工具栏添加label，显示软件logo图片
+    QLabel *label_logo = new QLabel(this);
+    label_logo->setFixedSize(100,100);
+    label_logo->setStyleSheet("background-color: transparent;");
+    QPixmap *pix = new QPixmap(":/logo.png");
+    QSize sz=label_logo->size();
+    label_logo->setPixmap(pix->scaled(sz));
+    toolBar->addWidget(label_logo);
+
+    // 添加隐藏/显示按钮
+    QPushButton *toggleButton = new QPushButton(this);
+    toggleButton->setCheckable(true);  // 设置为可切换按钮
+    toggleButton->setChecked(true);  // 初始为选中状态
+
+    // 设置按钮初始图标
+    QIcon visibleIcon(":/menu_visible.png"); // 菜单栏显示时的图标
+    QIcon hiddenIcon(":/menu_hidden.png");   // 菜单栏隐藏时的图标
+    toggleButton->setIcon(visibleIcon);           // 初始显示状态为菜单栏可见
+    toggleButton->setIconSize(QSize(24, 24));     // 设置图标大小
+
+    toolBar->addWidget(toggleButton); // 将按钮添加到工具栏
+
+    // 连接按钮的点击信号到切换逻辑
+    connect(toggleButton, &QPushButton::clicked, [this, toggleButton, visibleIcon, hiddenIcon]() {
+        static bool isMenuVisible = menuTree->isVisible(); // 将 isMenuVisible 定义为静态局部变量
+        isMenuVisible = !isMenuVisible;                 // 切换状态
+        qDebug() << "Menu visibility toggled to:" << isMenuVisible; // 调试输出
+        menuTree->setVisible(isMenuVisible);            // 设置菜单栏可见性
+        toggleButton->setIcon(isMenuVisible ? visibleIcon : hiddenIcon); // 根据状态切换图标
+    });
+
+    //在工具栏里添加label，显示软件名字
+    QLabel *label_name = new QLabel("云程 管理员界面",this);
+    label_name->setFixedSize(300,100);
+    label_name->setStyleSheet(
+        "font-size: 40px; color: rgb(52, 127, 196); font-family: '千图笔锋手写体';"
+        );
+    toolBar->addWidget(label_name);
+
+    QWidget *spacer = new QWidget(this); //添加弹性空间
+    spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+    toolBar->addWidget(spacer);
+
+    //在工具栏添加标语
+    QLabel *slogan = new QLabel("软件定义世界，工程铸就未来",this);
+    slogan->setFixedSize(700,100);
+    slogan->setStyleSheet(
+        "font-size: 50px; color: green; font-family: '千图笔锋手写体';"
+        );
+    toolBar->addWidget(slogan);
+
 }
 
-void adminMainInterface::setupUserTab()
+void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
 {
-    QWidget *userTab = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout(userTab);
+    // 如果当前点击的节点有子节点，切换其展开/折叠状态
+    if (item->childCount() > 0) {
+        bool expanded = item->isExpanded();
+        item->setExpanded(!expanded); // 切换展开状态
+    }
 
-    userSearchBox = new QLineEdit;
-    userSearchBox->setPlaceholderText("搜索用户...");
-    QPushButton *searchButton = new QPushButton("搜索用户");
-    connect(searchButton, &QPushButton::clicked, this, &adminMainInterface::searchUser);
-
-    QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->addWidget(userSearchBox);
-    searchLayout->addWidget(searchButton);
-
-    userTable = new QTableWidget;
-    userTable->setColumnCount(4);
-    userTable->setHorizontalHeaderLabels({"用户ID", "用户名", "邮箱", "手机号"});
-
-    QPushButton *addButton = new QPushButton("添加用户");
-    QPushButton *editButton = new QPushButton("编辑用户");
-    QPushButton *deleteButton = new QPushButton("删除用户");
-
-    connect(addButton, &QPushButton::clicked, this, &adminMainInterface::addUser);
-    connect(editButton, &QPushButton::clicked, this, &adminMainInterface::editUser);
-    connect(deleteButton, &QPushButton::clicked, this, &adminMainInterface::deleteUser);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(addButton);
-    buttonLayout->addWidget(editButton);
-    buttonLayout->addWidget(deleteButton);
-
-    layout->addLayout(searchLayout);
-    layout->addWidget(userTable);
-    layout->addLayout(buttonLayout);
-
-    tabWidget->addTab(userTab, "用户管理");
+    // 判断点击的节点，并切换 QStackedWidget 的页面
+    if (item == menuTree->topLevelItem(0)) // "首页"
+    {
+        stackedWidget->setCurrentIndex(0);
+    }
+    else if (item == menuTree->topLevelItem(1)) // "用户管理"
+    {
+        stackedWidget->setCurrentIndex(1);
+    }
+    else if (item == menuTree->topLevelItem(2)) // "订单管理"
+    {
+        stackedWidget->setCurrentIndex(2);
+    }
+    else if (item == menuTree->topLevelItem(3)) // "航班管理"
+    {
+        stackedWidget->setCurrentIndex(3);
+    }
+    else if(item == usersItem->child(0)) //"查询用户信息"
+    {
+        stackedWidget->setCurrentIndex(4);
+    }
+    else if(item == usersItem->child(1)) //"删除用户信息"
+    {
+        stackedWidget->setCurrentIndex(5);
+    }
+    else if(item == usersItem->child(2)) //"修改用户信息"
+    {
+        stackedWidget->setCurrentIndex(6);
+    }
+    else if(item == usersItem->child(0)) //"查询用户信息"
+    {
+        stackedWidget->setCurrentIndex(6);
+    }
+    else if(item==ordersItem->child(0))
+    {
+        stackedWidget->setCurrentIndex(7);
+    }
+    else if(item==ordersItem->child(1))
+    {
+        stackedWidget->setCurrentIndex(8);
+    }
+    else if(item==ordersItem->child(2))
+    {
+        stackedWidget->setCurrentIndex(9);
+    }
+    else if(item==flightsItem->child(0))
+    {
+        stackedWidget->setCurrentIndex(10);
+    }
+    else if(item==flightsItem->child(1))
+    {
+        stackedWidget->setCurrentIndex(11);
+    }
+    else if(item==flightsItem->child(2))
+    {
+        stackedWidget->setCurrentIndex(12);
+    }
+    else if(item==flightsItem->child(3))
+    {
+        stackedWidget->setCurrentIndex(13);
+    }
 }
-
-void adminMainInterface::setupOrderTab()
-{
-    QWidget *orderTab = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout(orderTab);
-
-    orderSearchBox = new QLineEdit;
-    orderSearchBox->setPlaceholderText("搜索订单...");
-    QPushButton *searchButton = new QPushButton("搜索订单");
-    connect(searchButton, &QPushButton::clicked, this, &adminMainInterface::searchOrder);
-
-    QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->addWidget(orderSearchBox);
-    searchLayout->addWidget(searchButton);
-
-    orderTable = new QTableWidget;
-    orderTable->setColumnCount(4);
-    orderTable->setHorizontalHeaderLabels({"订单ID", "用户ID", "航班ID", "状态"});
-
-    QPushButton *addButton = new QPushButton("添加订单");
-    QPushButton *editButton = new QPushButton("编辑订单");
-    QPushButton *deleteButton = new QPushButton("删除订单");
-
-    connect(addButton, &QPushButton::clicked, this, &adminMainInterface::addOrder);
-    connect(editButton, &QPushButton::clicked, this, &adminMainInterface::editOrder);
-    connect(deleteButton, &QPushButton::clicked, this, &adminMainInterface::deleteOrder);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(addButton);
-    buttonLayout->addWidget(editButton);
-    buttonLayout->addWidget(deleteButton);
-
-    layout->addLayout(searchLayout);
-    layout->addWidget(orderTable);
-    layout->addLayout(buttonLayout);
-
-    tabWidget->addTab(orderTab, "订单管理");
-}
-
-void adminMainInterface::setupFlightTab()
-{
-    QWidget *flightTab = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout(flightTab);
-
-    flightSearchBox = new QLineEdit;
-    flightSearchBox->setPlaceholderText("搜索航班...");
-    QPushButton *searchButton = new QPushButton("搜索航班");
-    connect(searchButton, &QPushButton::clicked, this, &adminMainInterface::searchFlight);
-
-    QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->addWidget(flightSearchBox);
-    searchLayout->addWidget(searchButton);
-
-    flightTable = new QTableWidget;
-    flightTable->setColumnCount(5);
-    flightTable->setHorizontalHeaderLabels({"航班ID", "起点", "终点", "出发时间", "座位数"});
-
-    QPushButton *addButton = new QPushButton("添加航班");
-    QPushButton *editButton = new QPushButton("编辑航班");
-    QPushButton *deleteButton = new QPushButton("删除航班");
-
-    connect(addButton, &QPushButton::clicked, this, &adminMainInterface::addFlight);
-    connect(editButton, &QPushButton::clicked, this, &adminMainInterface::editFlight);
-    connect(deleteButton, &QPushButton::clicked, this, &adminMainInterface::deleteFlight);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(addButton);
-    buttonLayout->addWidget(editButton);
-    buttonLayout->addWidget(deleteButton);
-
-    layout->addLayout(searchLayout);
-    layout->addWidget(flightTable);
-    layout->addLayout(buttonLayout);
-
-    tabWidget->addTab(flightTab, "航班管理");
-}
-
-void adminMainInterface::setupRefundTab()
-{
-    QWidget *refundTab = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout(refundTab);
-
-    refundSearchBox = new QLineEdit;
-    refundSearchBox->setPlaceholderText("搜索退款请求...");
-    QPushButton *searchButton = new QPushButton("搜索退款请求");
-    connect(searchButton, &QPushButton::clicked, this, &adminMainInterface::processRefund);
-
-    QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->addWidget(refundSearchBox);
-    searchLayout->addWidget(searchButton);
-
-    refundTable = new QTableWidget;
-    refundTable->setColumnCount(3);
-    refundTable->setHorizontalHeaderLabels({"退款ID", "订单ID", "状态"});
-
-    layout->addLayout(searchLayout);
-    layout->addWidget(refundTable);
-
-    tabWidget->addTab(refundTab, "退款管理");
-}
-
-// 示例槽函数实现
-void adminMainInterface::addUser() {}
-void adminMainInterface::editUser() {}
-void adminMainInterface::deleteUser() {}
-void adminMainInterface::searchUser() {}
-
-void adminMainInterface::addOrder() {}
-void adminMainInterface::editOrder() {}
-void adminMainInterface::deleteOrder() {}
-void adminMainInterface::searchOrder() {}
-
-void adminMainInterface::addFlight() {}
-void adminMainInterface::editFlight() {}
-void adminMainInterface::deleteFlight() {}
-void adminMainInterface::searchFlight() {}
-
-void adminMainInterface::processRefund() {}
 
 adminMainInterface::~adminMainInterface()
 {

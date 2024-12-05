@@ -21,6 +21,11 @@
 #include <QLineEdit>
 #include <QToolButton>
 
+#include <QTreeWidget>           // 树形控件 QTreeWidget
+#include <QTreeWidgetItem>       // 树形控件的项 QTreeWidgetItem
+#include <QListWidgetItem>       // （可选）如果使用 QListWidgetItem
+#include <QStringList>           // 字符串列表，用于树节点名称
+
 maininterface::maininterface(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::maininterface)
@@ -74,6 +79,9 @@ maininterface::maininterface(QWidget *parent)
         "}"
     );
 
+    //将左侧菜单栏添加到主布局mainLayout
+    mainLayout->addWidget(menuList);
+
     //右侧内容区
     QStackedWidget *stackedWidget = new QStackedWidget(this);
     newHomeWindow *w1 = new newHomeWindow();
@@ -82,8 +90,7 @@ maininterface::maininterface(QWidget *parent)
     stackedWidget->addWidget(new orderwindow()); //订单界面
     stackedWidget->addWidget(new homeWindow()); //特惠机票界面
 
-    //将左侧菜单和右侧内容添加到主布局mainLayout
-    mainLayout->addWidget(menuList);
+    //将右侧内容添加到主布局mainLayout
     mainLayout->addWidget(stackedWidget);
 
     //设置中央部件
