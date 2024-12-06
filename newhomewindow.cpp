@@ -4,6 +4,8 @@
 #include <QCommandLinkButton>
 #include <QApplication>
 #include <QWidget>
+#include "user.h"
+#include "usermanager.h"
 
 newHomeWindow::newHomeWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,7 +21,10 @@ newHomeWindow::newHomeWindow(QWidget *parent)
         "background-size: cover;"        // 背景图片拉伸以覆盖整个窗口
         "}"
         );
-
+    QLabel* lbl=ui->label_2;
+    User currentUser = UserManager::getInstance()->getCurrentUser();
+    lbl->setText(currentUser.username);
+    connect(UserManager::getInstance(),&UserManager::currentUserChanged,this,[lbl](const User& User){lbl->setText(User.username);});
     connect(ui->commandLinkButton_3,&QCommandLinkButton::clicked,this,&newHomeWindow::onCommandLinkeButton3Clicked);
     connect(ui->commandLinkButton_4, &QCommandLinkButton::clicked, this, &newHomeWindow::commandLinkButton4Clicked);
     connect(ui->commandLinkButton_5, &QCommandLinkButton::clicked, this, &newHomeWindow::commandLinkButton5Clicked);

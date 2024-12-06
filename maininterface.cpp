@@ -184,7 +184,6 @@ maininterface::maininterface(QWidget *parent)
     QWidget *spacer = new QWidget(this); //添加弹性空间
     spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     toolBar->addWidget(spacer);
-
     // 在工具栏添加用户名label
     QLabel *usrNameLabel = new QLabel(this);
     usrNameLabel->setFixedSize(100, 50);
