@@ -9,6 +9,7 @@ public:
     QString email;
     QString phonenumber;
     int age;
+    int id;
     QString sex;
     User(){}
 };

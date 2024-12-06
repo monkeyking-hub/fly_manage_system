@@ -5,6 +5,8 @@
 #include "homewindow.h"
 #include "orderwindow.h"
 #include "newhomewindow.h"
+#include "user.h"
+#include "usermanager.h"
 #include <QStackedWidget>
 #include <QDebug>
 #include <QApplication>
@@ -183,13 +185,22 @@ maininterface::maininterface(QWidget *parent)
     spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     toolBar->addWidget(spacer);
 
-    //在工具栏添加用户名label
-    QLabel *usrNameLabel = new QLabel("0xFFFFAAA1",this);
-    usrNameLabel->setFixedSize(100,100);
+    // 在工具栏添加用户名label
+    QLabel *usrNameLabel = new QLabel(this);
+    usrNameLabel->setFixedSize(100, 50);
     usrNameLabel->setStyleSheet(
-        "font-size: 20px; color: black; font-family: '千图笔锋手写体';"
-        );
+        "font-size: 20px; color: black; font-family: '千图笔锋手写体';");
     toolBar->addWidget(usrNameLabel);
+
+    // 获取当前用户信息并显示昵称
+    User currentUser = UserManager::getInstance()->getCurrentUser();
+    usrNameLabel->setText(currentUser.username.isEmpty() ? "未登录" : currentUser.username);
+
+    // 监听用户信息更新信号，动态刷新界面上的昵称
+    connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, [usrNameLabel](const User &user) {
+        usrNameLabel->setText(user.username.isEmpty() ? "未登录" : user.username);
+    });
+
 
     //添加用户头像按钮
     QToolButton *usrButton = new QToolButton(this);
