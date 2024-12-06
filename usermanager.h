@@ -26,6 +26,16 @@ public:
         emit currentUserChanged(currentUser);
         emit loginSuccess();  // 登录成功后发出信号
     }
+    void clearCurrentUser() {
+        // 清空当前用户信息
+        currentUser.username = "";
+        currentUser.email = "";
+        currentUser.phonenumber = "";
+        currentUser.age = 0;
+        currentUser.sex = "";
+
+        emit currentUserChanged(currentUser); // 发出用户更改信号，通知界面或其他组件
+    }
 
     User getCurrentUser() const {
         return currentUser;
