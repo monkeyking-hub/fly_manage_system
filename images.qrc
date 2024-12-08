@@ -25,5 +25,10 @@
         <file>blue.png</file>
         <file>menu_hidden.png</file>
         <file>menu_visible.png</file>
+        <file>position.png</file>
+        <file>date.png</file>
+        <file>flightNumber.png</file>
+        <file>company.png</file>
+        <file>map.png</file>
     </qresource>
 </RCC>

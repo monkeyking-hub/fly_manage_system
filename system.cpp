@@ -14,6 +14,7 @@
 #include "newregisterwindow.h"
 #include "adminloginwindow.h"
 #include "adminmaininterface.h"
+#include "adminaddflightwindow.h"
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
