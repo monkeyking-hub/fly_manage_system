@@ -19,6 +19,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include <QRandomGenerator>
 
 newRegisterWindow::newRegisterWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -94,7 +95,7 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     innerLayout->addWidget(titleLabel);
 
     //添加空白
-    QSpacerItem *spacer1 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer1 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer1);
 
     // 用户名输入框
@@ -104,7 +105,7 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     innerLayout->addWidget(usernameField);
 
     //添加空白
-    QSpacerItem *spacer6 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer6 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer6);
 
     //邮箱输入框
@@ -114,7 +115,7 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     innerLayout->addWidget(emailField);
 
     //添加空白
-    QSpacerItem *spacer2 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer2 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer2);
 
     // 密码输入框
@@ -124,7 +125,7 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     innerLayout->addWidget(passwordField);
 
     //添加空白
-    QSpacerItem *spacer3 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer3);
 
     // 手机号输入框
@@ -134,7 +135,7 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     innerLayout->addWidget(phoneField);
 
     //添加空白
-    QSpacerItem *spacer4 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer4 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer4);
 
     //身份证号输入框
@@ -143,9 +144,37 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     idField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     innerLayout->addWidget(idField);
 
-    // //添加空白
-    // QSpacerItem *spacer7 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    // innerLayout->addItem(spacer7);
+    //邮箱验证码输入框
+    emailCodeField = new AnimatedInputField("邮箱验证码",false, this);
+    emailCodeField->setMinimumHeight(60);
+    emailCodeField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    innerLayout->addWidget(emailCodeField);
+
+    // 发送验证码按钮
+    QPushButton *sendEmailCodeBtn = new QPushButton("发送验证码", this);
+    sendEmailCodeBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    sendEmailCodeBtn->setStyleSheet(
+        "QPushButton {"
+        "    border: none;"
+        "    background-color: transparent;"
+        "    text-align: right;"
+        "    color: blue;"
+        "}"
+
+        "QPushButton:hover {"
+        "    text-align: right;"
+        "    color: blue;"
+        "    text-decoration: underline;"
+        "}"
+
+        "QPushButton:pressed {"
+        "    text-align: right;"
+        "    color: darkblue;"
+        "    padding: 2px;"
+        "}"
+        );
+    connect(sendEmailCodeBtn,&QPushButton::clicked,this,&newRegisterWindow::onSendEmailCodeBtnClicked);
+    innerLayout->addWidget(sendEmailCodeBtn);
 
     // 注册按钮
     QPushButton *registerBtn = new QPushButton("注册", this);
@@ -178,6 +207,37 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     connect(registerBtn,&QPushButton::clicked,this,&newRegisterWindow::onRegisterButtonClicked);
     innerLayout->addWidget(registerBtn);
 
+    //返回按钮
+    QPushButton *returnBtn = new QPushButton("返回", this);
+    returnBtn->setStyleSheet(
+        "QPushButton {"
+        "    background: white;"
+        "    color: black;"
+        "    border-radius: 20px;"
+        "    font-size: 16px;"
+        "    padding: 10px;"
+        "    font-weight: bold;"
+        "    border: 2px solid #1d7bff;"  // 添加边框颜色
+        "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"  // 添加初始阴影
+        "    transition: all 0.3s ease;"  // 平滑过渡
+        "}"
+        "QPushButton:hover {"
+        "    background-color: rgb(29, 123, 255);"  // 悬浮时的背景色
+        "    color: white;"  // 悬浮时字体颜色变白
+        "    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);"  // 悬浮时的阴影效果
+        "    transform: scale(1.1);"  // 悬浮时按钮略微放大
+        "}"
+        "QPushButton:pressed {"
+        "    background-color: rgb(29, 123, 255);"  // 点击时的背景色
+        "    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"  // 点击时的阴影效果
+        "    transform: scale(0.95);"  // 点击时按钮略微缩小
+        "}"
+        );
+    returnBtn->setCursor(Qt::PointingHandCursor);
+    returnBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    connect(returnBtn,&QPushButton::clicked,this,&newRegisterWindow::onReturnButtonClicked);
+    innerLayout->addWidget(returnBtn);
+
     // 将内部布局添加到外部容器
     outerContainer->setLayout(innerLayout);
 
@@ -202,6 +262,23 @@ void newRegisterWindow::onRegisterButtonClicked() //点击注册按钮触发事�
     QString usrName = usernameField->text();
     QString phone = phoneField->text();
     QString idNumber = idField->text();
+    QString emailCodeInput = emailCodeField->text();
+
+    if(email=="" || password=="" || usrName=="" || phone=="" || idNumber=="" || emailCodeInput=="")
+    {
+        QMessageBox::critical(nullptr, "注册失败",
+                              "必须要填写全部信息才能注册！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    if(emailCodeInput!=emailCode)
+    {
+        QMessageBox::critical(nullptr, "注册失败",
+                              "验证码不正确！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
 
     //将输入框内容清空
     QLineEdit *emailLineEdit = emailField->lineEdit();
@@ -209,13 +286,98 @@ void newRegisterWindow::onRegisterButtonClicked() //点击注册按钮触发事�
     QLineEdit *usrNameLineEdit = usernameField->lineEdit();
     QLineEdit *phoneLineEdit = phoneField->lineEdit();
     QLineEdit *idLineEdit = idField->lineEdit();
+    QLineEdit *emailCodeLineEdit = emailCodeField->lineEdit();
     emailLineEdit->setText("");
     passwordLineEdit->setText("");
     usrNameLineEdit->setText("");
     phoneLineEdit->setText("");
     idLineEdit->setText("");
+    emailCodeLineEdit->setText("");
 
-    emit registerRequested(usrName,password,email,phone,idNumber);
+    emit registerRequested(usrName,password,email,phone,idNumber,emailCodeInput);
+}
+
+void newRegisterWindow::onReturnButtonClicked()
+{
+    //将输入框内容清空
+    QLineEdit *emailLineEdit = emailField->lineEdit();
+    QLineEdit *passwordLineEdit = passwordField->lineEdit();
+    QLineEdit *usrNameLineEdit = usernameField->lineEdit();
+    QLineEdit *phoneLineEdit = phoneField->lineEdit();
+    QLineEdit *idLineEdit = idField->lineEdit();
+    QLineEdit *emailCodeLineEdit = emailCodeField->lineEdit();
+    emailLineEdit->setText("");
+    passwordLineEdit->setText("");
+    usrNameLineEdit->setText("");
+    phoneLineEdit->setText("");
+    idLineEdit->setText("");
+    emailCodeLineEdit->setText("");
+    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+}
+
+void newRegisterWindow::onSendEmailCodeBtnClicked()
+{
+    // // 创建网络管理器
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+
+    // // 设置请求 URL
+    QUrl url("http://localhost:8080/api/send");
+    QNetworkRequest request(url);
+
+    // // 设置请求头
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    //生成随机6位数字作为验证码
+    int randNum = QRandomGenerator::global()->bounded(100000,1000000);
+    QString randomString = QString::number(randNum);
+    emailCode=randomString;
+
+    // // 构建 JSON 请求体
+    QJsonObject json;
+    json["to"]=emailField->text();
+    json["subject"]="云程账号注册验证码";
+    json["body"]="您的邮箱验证码是："+randomString;
+
+    QJsonDocument jsonDoc(json);
+    QByteArray requestData = jsonDoc.toJson();
+
+    // // 发送 POST 请求
+    QNetworkReply* reply = manager->post(request, requestData);
+    // 连接信号，等待响应
+    connect(reply, &QNetworkReply::finished, [reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            // 请求成功，读取响应数据
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject responseObject = jsonResponse.object();
+
+            // 解析响应 JSON
+            int code = responseObject["code"].toInt();  // 获取返回的 code
+            QString message = responseObject["message"].toString();
+            QJsonObject data = responseObject["data"].toObject();
+
+            if (code == 200) {
+                //发送成功
+            } else {
+                // 发送失败，弹出错误提示框
+                qDebug() << "Sending failed, code: " << code;
+                QMessageBox::critical(nullptr, "Sending Error",
+                                      "Sending failed: " + message,
+                                      QMessageBox::Ok, QMessageBox::Ok);
+            }
+        } else {
+            // 请求失败，弹出错误提示框
+            QString errorString = reply->errorString();
+            qDebug() << "Error:" << errorString;
+
+            // 创建 QMessageBox 来显示错误信息
+            QMessageBox::critical(nullptr, "Sending Error",
+                                  "Sending failed: " + errorString,
+                                  QMessageBox::Ok, QMessageBox::Ok);
+        }
+
+        reply->deleteLater(); // 释放资源
+    });
 }
 
 newRegisterWindow::~newRegisterWindow()
@@ -224,11 +386,9 @@ newRegisterWindow::~newRegisterWindow()
 }
 
 void registerHandler::handleRegister(const QString &usrname,const QString& password,const QString& email,
-                                     const QString &phone,const QString &idNumber,const int &age,
-                                     const QString &gender,const int &usrLevel)
+                                    const QString &phone,const QString &idNumber,const QString &emailCodeInput,
+                                    const int &age,const QString &gender,const int &usrLevel)
 {
-    qDebug()<<"email:"<<email;
-    qDebug()<<"pwd:"<<password;
 
     // // 创建网络管理器
     QNetworkAccessManager* manager = new QNetworkAccessManager();
