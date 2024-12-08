@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>adminAddFlightWindow</class>
+ <widget class="QMainWindow" name="adminAddFlightWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>591</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>69</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>航班编号</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_flightNumber">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_flightNumber">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>30</y>
+       <width>31</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>30</y>
+       <width>69</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>航班机型</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_aircraftModel">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>20</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_aircraftModel">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>30</y>
+       <width>31</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>69</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>起点</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_departure">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>70</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_departure">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>80</y>
+       <width>31</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>80</y>
+       <width>69</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>终点</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_destination">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>70</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_destination">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>80</y>
+       <width>31</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>141</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>出发日期及时间</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_date1">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>160</y>
+       <width>31</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_date1">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>150</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_selectDate1">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>150</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>选择日期</string>
+     </property>
+    </widget>
+    <widget class="QDateTimeEdit" name="dateTimeEdit1">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>150</y>
+       <width>194</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="displayFormat">
+      <string> H:mm</string>
+     </property>
+    </widget>
+    <widget class="QDateTimeEdit" name="dateTimeEdit2">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>190</y>
+       <width>194</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="displayFormat">
+      <string> H:mm</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_selectDate2">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>190</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>选择日期</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>141</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>到达日期及时间</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_date2">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>190</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_date2">
+     <property name="geometry">
+      <rect>
+       <x>128</x>
+       <y>200</y>
+       <width>31</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_firstClassSeat">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>250</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>20000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_14">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>260</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>头等舱数量</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_economyClassSeat">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>250</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>20000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>260</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>经济舱数量</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_16">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>320</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>经济舱价格</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_firstClassPrice">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>310</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
+     </property>
+     <property name="maximum">
+      <number>20000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_17">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>320</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>头等舱价格</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_economyClassPrice">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>310</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>20000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_18">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>390</y>
+       <width>69</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>航空公司</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_airlineCompany">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>380</y>
+       <width>381</width>
+       <height>41</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_airlineCompany">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>390</y>
+       <width>31</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>图片</string>
+     </property>
+    </widget>
+    <zorder>lineEdit_date2</zorder>
+    <zorder>lineEdit_date1</zorder>
+    <zorder>label_2</zorder>
+    <zorder>lineEdit_flightNumber</zorder>
+    <zorder>img_flightNumber</zorder>
+    <zorder>label_4</zorder>
+    <zorder>lineEdit_aircraftModel</zorder>
+    <zorder>img_aircraftModel</zorder>
+    <zorder>label_6</zorder>
+    <zorder>lineEdit_departure</zorder>
+    <zorder>img_departure</zorder>
+    <zorder>label_8</zorder>
+    <zorder>lineEdit_destination</zorder>
+    <zorder>img_destination</zorder>
+    <zorder>label_10</zorder>
+    <zorder>img_date1</zorder>
+    <zorder>btn_selectDate1</zorder>
+    <zorder>dateTimeEdit1</zorder>
+    <zorder>dateTimeEdit2</zorder>
+    <zorder>btn_selectDate2</zorder>
+    <zorder>label_13</zorder>
+    <zorder>img_date2</zorder>
+    <zorder>label_14</zorder>
+    <zorder>label_15</zorder>
+    <zorder>label_16</zorder>
+    <zorder>label_17</zorder>
+    <zorder>label_18</zorder>
+    <zorder>lineEdit_airlineCompany</zorder>
+    <zorder>img_airlineCompany</zorder>
+    <zorder>spinBox_firstClassSeat</zorder>
+    <zorder>spinBox_firstClassPrice</zorder>
+    <zorder>spinBox_economyClassSeat</zorder>
+    <zorder>spinBox_economyClassPrice</zorder>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>10</y>
+      <width>321</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 30pt &quot;千图笔锋手写体&quot;;</string>
+    </property>
+    <property name="text">
+     <string>航班信息添加</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="img_map">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>40</y>
+      <width>431</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_add">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>450</y>
+      <width>361</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background: white;
+    color: black;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 10px;
+    font-weight: bold;
+    border: 2px solid #1d7bff; /* 添加边框颜色 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加初始阴影 */
+    transition: all 0.3s ease; /* 平滑过渡 */
+}
+
+QPushButton:hover {
+    background-color: rgb(29, 123, 255); /* 悬浮时的背景色 */
+    color: white; /* 悬浮时字体颜色变白 */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* 悬浮时的阴影效果 */
+    transform: scale(1.1); /* 悬浮时按钮略微放大 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(29, 123, 255); /* 点击时的背景色 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 点击时的阴影效果 */
+    transform: scale(0.95); /* 点击时按钮略微缩小 */
+}
+</string>
+    </property>
+    <property name="text">
+     <string>添加</string>
+    </property>
+   </widget>
+   <widget class="QCalendarWidget" name="calendarWidget">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>240</y>
+      <width>291</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+QCalendarWidget QToolButton {
+    min-width: 100px; /* 修改按钮宽度 */
+    min-height: 40px; /* 修改按钮高度 */
+}</string>
+    </property>
+    <property name="gridVisible">
+     <bool>true</bool>
+    </property>
+    <property name="horizontalHeaderFormat">
+     <enum>QCalendarWidget::HorizontalHeaderFormat::SingleLetterDayNames</enum>
+    </property>
+    <property name="verticalHeaderFormat">
+     <enum>QCalendarWidget::VerticalHeaderFormat::NoVerticalHeader</enum>
+    </property>
+    <property name="navigationBarVisible">
+     <bool>true</bool>
+    </property>
+    <property name="dateEditEnabled">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1600</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
