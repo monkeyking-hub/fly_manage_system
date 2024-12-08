@@ -35,6 +35,7 @@ signals:
 
 public slots:
     void onAdminLogInButtonClicked(); //登录按钮点击的槽函数
+    void onAdminReturnButtonClicked(); //返回按钮点击的槽函数
 private:
     Ui::adminLoginWindow *ui;
 };
