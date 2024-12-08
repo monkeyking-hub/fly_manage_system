@@ -4,6 +4,7 @@
 #include<QLabel>
 #include <QToolBar>
 #include <QPushButton>
+#include "adminaddflightwindow.h"
 
 adminMainInterface::adminMainInterface(QWidget *parent)
     : QMainWindow(parent)
@@ -97,8 +98,11 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     stackedWidget->addWidget(new QLabel("查询航班信息"));
     stackedWidget->addWidget(new QLabel("删除航班信息"));
     stackedWidget->addWidget(new QLabel("修改航班信息"));
-    stackedWidget->addWidget(new QLabel("添加航班信息"));
 
+    adminAddFlightWindow *adminAddflight = new adminAddFlightWindow();
+    addFlightHandler *addFlightHand = new addFlightHandler();
+    stackedWidget->addWidget(adminAddflight); //添加航班界面
+    connect(adminAddflight,&adminAddFlightWindow::addFlightRequested,addFlightHand,&addFlightHandler::handleAddFlight);
     //将右侧内容添加到主布局mainLayout
     mainLayout->addWidget(stackedWidget);
 
