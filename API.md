@@ -663,3 +663,143 @@
 ```
 
 ---
+
+好的，下面是基于 Flask 实现的文件上传 API 的文档，文档内容详细说明了上传头像图片以及下载头像图片的接口。
+
+---
+
+### **头像上传与下载 API 文档**
+
+#### **1. 上传头像图片**
+
+- **接口描述**：
+  用于接收客户端上传的用户头像图片。客户端需通过 `POST` 请求上传头像，并使用用户的 `email` 作为文件名保存头像。
+
+- **请求 URL**：
+  ```
+  POST /upload-avatar
+  ```
+
+- **请求参数**：
+  | 参数       | 类型   | 必须 | 说明                         |
+  |------------|--------|------|------------------------------|
+  | `email`    | string | 是   | 用户的邮箱，作为文件名保存   |
+  | `avatar`   | file   | 是   | 用户上传的头像图片，支持 JPEG 格式 |
+
+- **请求示例**：
+
+  - **请求 Body**：使用 `multipart/form-data` 格式
+  ```bash
+  curl -X POST -F "email=user@example.com" -F "avatar=@profile_pic.jpg" http://127.0.0.1:5000/upload-avatar
+  ```
+
+- **响应格式**：
+  - 成功上传：
+    ```json
+    {
+      "message": "Avatar uploaded successfully",
+      "file_path": "./resource/user@example.com.jpg"
+    }
+    ```
+
+  - 错误响应：
+    ```json
+    {
+      "error": "No file part"
+    }
+    ```
+
+    ```json
+    {
+      "error": "No selected file"
+    }
+    ```
+
+    ```json
+    {
+      "error": "Email or file missing"
+    }
+    ```
+
+- **说明**：
+  上传成功后，服务器会将头像保存为 `resource/<email>.jpg`，并返回成功消息和文件路径。如果出现错误，返回错误提示信息。
+
+---
+
+#### **2. 下载头像图片**
+
+- **接口描述**：
+  用于根据用户的 `email` 下载对应的头像图片。客户端可以通过指定 `email` 来获取用户头像。
+
+- **请求 URL**：
+  ```
+  GET /download-avatar/<email>
+  ```
+
+- **请求参数**：
+  | 参数   | 类型   | 必须 | 说明                       |
+  |--------|--------|------|----------------------------|
+  | `email`| string | 是   | 用户的邮箱，用于匹配头像图片 |
+
+- **请求示例**：
+  ```bash
+  curl -O http://127.0.0.1:5000/download-avatar/user@example.com
+  ```
+
+- **响应格式**：
+  - 成功响应：头像图片文件（如果图片存在）
+  - 错误响应：
+    ```json
+    {
+      "error": "Avatar not found"
+    }
+    ```
+
+- **说明**：
+  如果提供的 `email` 对应的头像文件存在，服务器将直接返回该文件。如果文件不存在，返回 404 错误并提供提示信息。
+
+---
+
+### **错误处理**
+
+- **没有文件部分**：如果客户端没有上传文件，返回 400 错误，错误信息为 `"No file part"`。
+- **没有选择文件**：如果上传的文件为空，返回 400 错误，错误信息为 `"No selected file"`。
+- **缺少 `email` 或 `avatar`**：如果请求体中缺少 `email` 或 `avatar` 参数，返回 400 错误，错误信息为 `"Email or file missing"`。
+- **文件未找到**：如果请求下载的头像文件不存在，返回 404 错误，错误信息为 `"Avatar not found"`。
+
+---
+
+### **API 使用示例**
+
+#### **上传头像图片**
+
+```bash
+curl -X POST -F "email=user@example.com" -F "avatar=@profile_pic.jpg" http://127.0.0.1:5000/upload-avatar
+```
+
+响应：
+```json
+{
+  "message": "Avatar uploaded successfully",
+  "file_path": "./resource/user@example.com.jpg"
+}
+```
+
+#### **下载头像图片**
+
+```bash
+curl -O http://127.0.0.1:5000/download-avatar/user@example.com
+```
+
+如果头像存在，则会下载头像图片。如果头像不存在，返回：
+
+```json
+{
+  "error": "Avatar not found"
+}
+```
+
+---
+
+
+
