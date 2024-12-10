@@ -42,6 +42,7 @@ public:
 
 public slots:
     void onItemClicked(QTreeWidgetItem *item, int column);
+    void onReturnButtonClicked();
 
 private:
     Ui::adminMainInterface *ui;

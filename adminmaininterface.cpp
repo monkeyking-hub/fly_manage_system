@@ -5,6 +5,7 @@
 #include <QToolBar>
 #include <QPushButton>
 #include "adminaddflightwindow.h"
+#include "interfacemanager.h"
 
 adminMainInterface::adminMainInterface(QWidget *parent)
     : QMainWindow(parent)
@@ -157,23 +158,48 @@ adminMainInterface::adminMainInterface(QWidget *parent)
 
     //在工具栏里添加label，显示软件名字
     QLabel *label_name = new QLabel("云程 管理员界面",this);
-    label_name->setFixedSize(300,100);
+    label_name->setFixedSize(350,100);
     label_name->setStyleSheet(
         "font-size: 40px; color: rgb(52, 127, 196); font-family: '千图笔锋手写体';"
         );
     toolBar->addWidget(label_name);
 
-    QWidget *spacer = new QWidget(this); //添加弹性空间
-    spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
-    toolBar->addWidget(spacer);
-
     //在工具栏添加标语
     QLabel *slogan = new QLabel("软件定义世界，工程铸就未来",this);
-    slogan->setFixedSize(700,100);
+    slogan->setFixedSize(630,100);
     slogan->setStyleSheet(
-        "font-size: 50px; color: green; font-family: '千图笔锋手写体';"
+        "font-size: 45px; color: green; font-family: '千图笔锋手写体';"
         );
     toolBar->addWidget(slogan);
+
+    //在工具栏里添加返回用户登录界面按钮
+    QPushButton *returnButton = new QPushButton("返回用户登录",this);
+    returnButton->setStyleSheet(
+        "QPushButton {"
+        "    background: white;"
+        "    color: black;"
+        "    border-radius: 20px;"
+        "    font-size: 10px;"
+        "    padding: 10px;"
+        "    font-weight: bold;"
+        "    border: 2px solid #1d7bff;"  // 添加边框颜色
+        "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"  // 添加初始阴影
+        "    transition: all 0.3s ease;"  // 平滑过渡
+        "}"
+        "QPushButton:hover {"
+        "    background-color: rgb(29, 123, 255);"  // 悬浮时的背景色
+        "    color: white;"  // 悬浮时字体颜色变白
+        "    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);"  // 悬浮时的阴影效果
+        "    transform: scale(1.1);"  // 悬浮时按钮略微放大
+        "}"
+        "QPushButton:pressed {"
+        "    background-color: rgb(29, 123, 255);"  // 点击时的背景色
+        "    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"  // 点击时的阴影效果
+        "    transform: scale(0.95);"  // 点击时按钮略微缩小
+        "}"
+        );
+    connect(returnButton,&QPushButton::clicked,this,&adminMainInterface::onReturnButtonClicked);
+    toolBar->addWidget(returnButton);
 
 }
 
@@ -246,6 +272,11 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
     {
         stackedWidget->setCurrentIndex(13);
     }
+}
+
+void adminMainInterface::onReturnButtonClicked()
+{
+    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
 }
 
 adminMainInterface::~adminMainInterface()
