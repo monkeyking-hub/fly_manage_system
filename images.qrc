@@ -36,5 +36,9 @@
         <file>homewindow1.png</file>
         <file>homewindow2.png</file>
         <file>homewindow3.png</file>
+        <file>newHomeWindow1.png</file>
+        <file>newHomeWindow2.png</file>
+        <file>newHomeWindow3.png</file>
+        <file>newHomeWindow4.png</file>
     </qresource>
 </RCC>
