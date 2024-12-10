@@ -21,6 +21,23 @@ newHomeWindow::newHomeWindow(QWidget *parent)
         "background-size: cover;"        // 背景图片拉伸以覆盖整个窗口
         "}"
         );
+
+    QPixmap pixmap1(":/newHomeWindow1.png");
+    QPixmap scaledPixmap1=pixmap1.scaled(ui->label_12->size(),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->label_12->setPixmap(scaledPixmap1);
+
+    QPixmap pixmap2(":/newHomeWindow2.png");
+    QPixmap scaledPixmap2=pixmap2.scaled(ui->label_15->size(),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->label_15->setPixmap(scaledPixmap2);
+
+    QPixmap pixmap3(":/newHomeWindow3.png");
+    QPixmap scaledPixmap3=pixmap3.scaled(ui->label_11->size(),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->label_11->setPixmap(scaledPixmap3);
+
+    QPixmap pixmap4(":/newHomeWindow4.png");
+    QPixmap scaledPixmap4=pixmap4.scaled(ui->label_5->size(),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->label_5->setPixmap(scaledPixmap4);
+
     QLabel* lbl=ui->label_2;
     User currentUser = UserManager::getInstance()->getCurrentUser();
     lbl->setText(currentUser.username);

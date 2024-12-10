@@ -113,7 +113,7 @@ background:transparent;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(67, 125, 125);
 color: rgb(255, 255, 255);
-border: 1px solid #000000;
+border: none;
 border-radius: 9px;</string>
     </property>
     <property name="readOnly">
@@ -167,7 +167,7 @@ background:transparent;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid #000000;
+     <string notr="true">border: none;
 border-radius: 9px;</string>
     </property>
     <property name="text">
@@ -252,7 +252,7 @@ background:transparent;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-color: rgb(0, 0, 127);
-border: 1px solid #2F4F4F;
+border: none;
 border-radius: 9px;</string>
     </property>
     <property name="text">
@@ -282,7 +282,7 @@ border-radius: 9px;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(37, 75, 58);
 color: rgb(255, 255, 255);
-border: 1px solid #2F4F4F;
+border: none;
 border-radius: 9px;</string>
     </property>
     <property name="readOnly">
@@ -395,7 +395,7 @@ font-size:10pt;
     <property name="styleSheet">
      <string notr="true">background-color: rgb(52, 127, 196);
 color: rgb(255, 255, 255);
-border: 1px solid #191970;
+border: none;
 border-radius: 9px;</string>
     </property>
     <property name="readOnly">
@@ -425,7 +425,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid #000000;
+     <string notr="true">border: none;
 border-radius: 9px;</string>
     </property>
     <property name="text">
@@ -516,7 +516,7 @@ background:transparent;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(141, 115, 75);
 color: rgb(255, 255, 255);
-border: 1px solid #2F4F4F;
+border:none;
 border-radius: 9px;</string>
     </property>
     <property name="readOnly">
@@ -546,7 +546,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid #000000;
+     <string notr="true">border: none;
 border-radius: 9px;</string>
     </property>
     <property name="text">
