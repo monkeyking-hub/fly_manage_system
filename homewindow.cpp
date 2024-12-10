@@ -98,14 +98,14 @@ homeWindow::homeWindow(QWidget *parent)
 
     // 添加分类卡片
     scrollLayout->addWidget(new CategoryBlock("周末省心游",
-                                              {"广州→北海", "广州→长沙"},
-                                              {"¥460起", "¥480起"}, this));
+                                              {"广州→北海", "广州→长沙","广州->乌鲁木齐"},
+                                              {"¥460起", "¥480起","¥2000起"}, this));
     scrollLayout->addWidget(new CategoryBlock("爱上大草原",
-                                              {"广州→鄂尔多斯", "广州→呼和浩特"},
-                                              {"¥300起", "¥300起"}, this));
+                                              {"广州→鄂尔多斯", "广州→呼和浩特","广州->乌鲁木齐"},
+                                              {"¥300起", "¥300起","¥1800起"}, this));
     scrollLayout->addWidget(new CategoryBlock("海边浪一浪",
-                                              {"广州→福州", "广州→宁波"},
-                                              {"¥267起", "¥289起"}, this));
+                                              {"广州→福州", "广州→宁波","广州->三亚"},
+                                              {"¥267起", "¥289起","¥1000起"}, this));
 
     scrollWidget->setLayout(scrollLayout);
     scrollArea->setWidget(scrollWidget);
