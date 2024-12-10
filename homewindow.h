@@ -61,10 +61,26 @@ public:
         QVBoxLayout *layout = new QVBoxLayout(this);
 
         // 分类标题
-        QLabel *titleLabel = new QLabel(title, this);
-        titleLabel->setStyleSheet(
-            "font: bold 18px; color: white; background-color: #78a0f7; padding: 5px;");
-        titleLabel->setAlignment(Qt::AlignCenter);
+        QLabel *titleLabel = new QLabel(this);
+        titleLabel->setFixedSize(250,40);
+        if(title=="周末省心游")
+        {
+            QPixmap pixmap(":/homewindow1.png");
+            QPixmap scaledPixmap=pixmap.scaled(titleLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            titleLabel->setPixmap(scaledPixmap);
+        }
+        if(title=="爱上大草原")
+        {
+            QPixmap pixmap(":/homewindow2.png");
+            QPixmap scaledPixmap=pixmap.scaled(titleLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            titleLabel->setPixmap(scaledPixmap);
+        }
+        if(title=="海边浪一浪")
+        {
+            QPixmap pixmap(":/homewindow3.png");
+            QPixmap scaledPixmap=pixmap.scaled(titleLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            titleLabel->setPixmap(scaledPixmap);
+        }
         layout->addWidget(titleLabel);
 
         QVector<QLabel *> labelsToHighlight;
@@ -75,7 +91,8 @@ public:
 
             // 创建图片标签
             QLabel *imageLabel = new QLabel(this);
-            QPixmap imagePixmap(":/place.png");
+            QString imgPath=":/place"+QString::number(i+1)+".jpg";
+            QPixmap imagePixmap(imgPath);
             imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
             imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
 
