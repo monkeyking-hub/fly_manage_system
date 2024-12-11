@@ -1,14 +1,16 @@
 #ifndef FLIGHTSTATUS_H
 #define FLIGHTSTATUS_H
 
-#include <QMainWindow>
-#include <QLineEdit>
 #include <QCompleter>
-#include <QStringListModel>
+#include <QLineEdit>
 #include <QListView>
+#include <QMainWindow>
+#include <QStringListModel>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class flightstatus; }
+namespace Ui {
+class flightstatus;
+}
 QT_END_NAMESPACE
 
 // 主窗口类
@@ -26,12 +28,12 @@ private slots:
 
 private:
     Ui::flightstatus *ui;
-    QStringList cityList;  // 存储所有城市数据
-    QStringListModel *cityListModel; // 用于设置给Completer
-    QCompleter *departureCompleter;  // 出发地补全器
-    QCompleter *destinationCompleter;  // 目的地补全器
+    QStringList cityList;             // 存储所有城市数据
+    QStringListModel *cityListModel;  // 用于设置给Completer
+    QCompleter *departureCompleter;   // 出发地补全器
+    QCompleter *destinationCompleter; // 目的地补全器
 
-    void setupCompleter();  // 设置补全器
+    void setupCompleter(); // 设置补全器
 };
 
 #endif // FLIGHTSTATUS_H

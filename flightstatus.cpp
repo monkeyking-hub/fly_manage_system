@@ -1,40 +1,107 @@
 #include "flightstatus.h"
-#include "ui_flightstatus.h"
-#include <QStringList>
 #include <QCompleter>
-#include <QListView>
-#include <QKeyEvent>
 #include <QDebug>
+#include <QKeyEvent>
+#include <QListView>
+#include <QStringList>
+#include "ui_flightstatus.h"
 
 flightstatus::flightstatus(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::flightstatus)
+    : QMainWindow(parent)
+    , ui(new Ui::flightstatus)
 {
     ui->setupUi(this);
-
     // 初始化城市列表
-    cityList << "A:安庆:anqing" << "A:安阳:anyang"
-             << "B:北京:beijing" << "B:包头:baotou" << "B:北平:beipin" << ""
-             << "C:成都:chengdu" << "C:重庆:chongqing" << "C:长沙:changsha" << "C:长春:changchun" << "C:常州:changzhou"
-             << "D:大连:dalian" << "D:东莞:dongguan" << "D:丹东:dandong" << "D:敦煌:dunhuang" << "D:大理:dali"
-             << "E:鄂尔多斯:eerduosi" << "E:恩施:enshi"
-             << "F:福州:fuzhou" << "F:阜阳:fuyang" << "F:佛山:foshan"
-             << "G:广州:guangzhou" << "G:桂林:guilin" << "G:贵阳:guiyang" << "G:赣州:ganzhou"
-             << "H:杭州:hangzhou" << "H:合肥:hefei" << "H:哈尔滨:haerbin" << "H:呼和浩特:huhehaote" << "H:海口:haikou"
-             << "H:邯郸:handan" << "H:惠州:huizhou" << "H:黄山:huangshan"
-             << "J:济南:jinan" << "J:吉林:jilin" << "J:锦州:jianzhou" << "J:嘉峪关:jiayuguan" << "J:景德镇:jingdezhen"
-             << "K:昆明:kunming" << "K:喀什:kashi" << "K:克拉玛依:kelamayi"
-             << "L:兰州:lanzhou" << "L:洛阳:luoyang" << "L:丽江:lijian" << "L:柳州:liuzhou" << "L:临沂:linyi"
-             << "M:绵阳:mianyang" << "M:梅州:meizhou"
-             << "N:南京:nanjing" << "N:南昌:nanchang" << "N:南宁:nanning" << "N:宁波:ningbo" << "N:南阳:nanyang"
-             << "P:攀枝花:panzhihua"
-             << "Q:青岛:qingdao" << "Q:秦皇岛:qinhaungdao" << "Q:齐齐哈尔:qiqihaer" << "Q:衢州:quzhou"
-             << "S:上海:shanghai" << "S:深圳:shenzhen" << "S:石家庄:shijiazhuang" << "S:汕头:shantou" << "S:三亚:sanya"
-             << "S:苏州:suzhou" << "S:绍兴:shaoxing"
-             << "T:天津:tianjin" << "T:太原:taiyuan" << "T:通辽:tongliao" << "T:台州:taizhou"
-             << "W:武汉:wuhan" << "W:无锡:wuxi" << "W:温州:wenzhou" << "W:威海:weihai" << "W:乌鲁木齐:wulumuqi"
-             << "X:西安:xian" << "X:厦门:xiamen" << "X:西宁:xining" << "X:徐州:xuzhou" << "X:襄阳:xiangyang"
-             << "Y:延吉:yanji" << "Y:银川:yinchuan" << "Y:宜昌:yichang" << "Y:烟台:yantai" << "Y:运城:yuncheng"
-             << "Z:郑州:zhengzhou" << "Z:珠海:zhuhai" << "Z:张家界:zhangjiajie" << "Z:中山:zhongshan" << "Z:遵义:zunyi";
+    cityList << "安庆" << "anqing"
+             << "安阳" << "anyang"
+             << "北京" << "beijing"
+             << "包头" << "baotou"
+             << "北平" << "beipin"
+             << ""
+             << "成都" << "chengdu"
+             << "重庆" << "chongqing"
+             << "长沙" << "changsha"
+             << "长春" << "changchun"
+             << "常州" << "changzhou"
+             << "大连" << "dalian"
+             << "东莞" << "dongguan"
+             << "丹东" << "dandong"
+             << "敦煌" << "dunhuang"
+             << "大理" << "dali"
+             << "鄂尔多斯" << "eerduosi"
+             << "恩施" << "enshi"
+             << "福州" << "fuzhou"
+             << "阜阳" << "fuyang"
+             << "佛山" << "foshan"
+             << "广州" << "guangzhou"
+             << "桂林" << "guilin"
+             << "贵阳" << "guiyang"
+             << "赣州" << "ganzhou"
+             << "杭州" << "hangzhou"
+             << "合肥" << "hefei"
+             << "哈尔滨" << "haerbin"
+             << "呼和浩特" << "huhehaote"
+             << "海口" << "haikou"
+             << "邯郸" << "handan"
+             << "惠州" << "huizhou"
+             << "黄山" << "huangshan"
+             << "济南" << "jinan"
+             << "吉林" << "jilin"
+             << "锦州" << "jianzhou"
+             << "嘉峪关" << "jiayuguan"
+             << "景德镇" << "jingdezhen"
+             << "昆明" << "kunming"
+             << "喀什" << "kashi"
+             << "克拉玛依" << "kelamayi"
+             << "兰州" << "lanzhou"
+             << "洛阳" << "luoyang"
+             << "丽江" << "lijian"
+             << "柳州" << "liuzhou"
+             << "临沂" << "linyi"
+             << "绵阳" << "mianyang"
+             << "梅州" << "meizhou"
+             << "南京" << "nanjing"
+             << "南昌" << "nanchang"
+             << "南宁" << "nanning"
+             << "宁波" << "ningbo"
+             << "南阳" << "nanyang"
+             << "攀枝花" << "panzhihua"
+             << "青岛" << "qingdao"
+             << "秦皇岛" << "qinhaungdao"
+             << "齐齐哈尔" << "qiqihaer"
+             << "衢州" << "quzhou"
+             << "上海" << "shanghai"
+             << "深圳" << "shenzhen"
+             << "石家庄" << "shijiazhuang"
+             << "汕头" << "shantou"
+             << "三亚" << "sanya"
+             << "苏州" << "suzhou"
+             << "绍兴" << "shaoxing"
+             << "天津" << "tianjin"
+             << "太原" << "taiyuan"
+             << "通辽" << "tongliao"
+             << "台州" << "taizhou"
+             << "武汉" << "wuhan"
+             << "无锡" << "wuxi"
+             << "温州" << "wenzhou"
+             << "威海" << "weihai"
+             << "乌鲁木齐" << "wulumuqi"
+             << "西安" << "xian"
+             << "厦门" << "xiamen"
+             << "西宁" << "xining"
+             << "徐州" << "xuzhou"
+             << "襄阳" << "xiangyang"
+             << "延吉" << "yanji"
+             << "银川" << "yinchuan"
+             << "宜昌" << "yichang"
+             << "烟台" << "yantai"
+             << "运城" << "yuncheng"
+             << "郑州" << "zhengzhou"
+             << "珠海" << "zhuhai"
+             << "张家界" << "zhangjiajie"
+             << "中山" << "zhongshan"
+             << "遵义" << "zunyi";
+
 
     // 设置补全器
     setupCompleter();
@@ -65,51 +132,18 @@ void flightstatus::setupCompleter()
     ui->destinationInput->setCompleter(destinationCompleter);
 }
 
-// // 出发地输入框文本变化时触发
-// void flightstatus::on_departureInput_textChanged(const QString &text)
-// {
-//     // 使用拼音或中文进行匹配
-//     QStringList filteredCities;
-//     for (const QString &city : cityList) {
-//         if (city.contains(text, Qt::CaseInsensitive)) {
-//             filteredCities << city;
-//         }
-//     }
-//     cityListModel->setStringList(filteredCities);
-// }
-
-// // 目的地输入框文本变化时触发
-// void flightstatus::on_destinationInput_textChanged(const QString &text)
-// {
-//     // 使用拼音或中文进行匹配
-//     QStringList filteredCities;
-//     for (const QString &city : cityList) {
-//         if (city.contains(text, Qt::CaseInsensitive)) {
-//             filteredCities << city;
-//         }
-//     }
-//     cityListModel->setStringList(filteredCities);
-// }
-
 // 出发地输入框文本变化时触发
 void flightstatus::on_departureInput_textChanged(const QString &text)
 {
     // 使用拼音或中文进行匹配
     QStringList filteredCities;
-    for (const QString &entry : cityList) {
-        QStringList parts = entry.split(":");  // 格式: "字母:城市名:拼音"
-        QString cityName = parts[1];           // 获取中文城市名
-        QString cityPinyin = parts[2];         // 获取拼音
+    for (const QString &city : cityList) {
+        if (city.contains(text, Qt::CaseInsensitive)) {
 
-        // 检查中文名或拼音是否包含输入的文本
-        if (cityName.contains(text, Qt::CaseInsensitive) || cityPinyin.startsWith(text, Qt::CaseInsensitive)) {
-            qDebug()<<"cityName:"+cityName;
-            qDebug()<<"pinNyin:"+cityPinyin;
-            qDebug()<<"test:"+text;
-            filteredCities << cityName;  // 只添加中文城市名
+            filteredCities << city;
         }
     }
-    cityListModel->setStringList(filteredCities);  // 更新匹配的城市名
+    cityListModel->setStringList(filteredCities);
 }
 
 // 目的地输入框文本变化时触发
@@ -117,15 +151,12 @@ void flightstatus::on_destinationInput_textChanged(const QString &text)
 {
     // 使用拼音或中文进行匹配
     QStringList filteredCities;
-    for (const QString &entry : cityList) {
-        QStringList parts = entry.split(":");  // 格式: "字母:城市名:拼音"
-        QString cityName = parts[1];           // 获取中文城市名
-        QString cityPinyin = parts[2];         // 获取拼音
+    for (const QString &city : cityList) {
+        if (city.contains(text, Qt::CaseInsensitive)) {
 
-        // 检查中文名或拼音是否包含输入的文本
-        if (cityName.contains(text, Qt::CaseInsensitive) || cityPinyin.contains(text, Qt::CaseInsensitive)) {
-            filteredCities << cityName;  // 只添加中文城市名
+            filteredCities << city;
         }
     }
-    cityListModel->setStringList(filteredCities);  // 更新匹配的城市名
+    cityListModel->setStringList(filteredCities);
 }
+
