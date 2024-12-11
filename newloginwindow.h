@@ -36,6 +36,7 @@ signals:
 public slots:
     void onSignUpButtonClicked(); //注册按钮点击的槽函数
     void onLogInButtonClicked(); //登录按钮点击的槽函数
+
 private:
     Ui::newLoginWindow *ui;
 };
