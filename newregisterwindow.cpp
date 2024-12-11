@@ -20,6 +20,7 @@
 #include <QJsonObject>
 #include <QDebug>
 #include <QRandomGenerator>
+#include <QCheckBox>
 
 newRegisterWindow::newRegisterWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -123,6 +124,12 @@ newRegisterWindow::newRegisterWindow(QWidget *parent)
     passwordField->setMinimumHeight(60);
     passwordField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     innerLayout->addWidget(passwordField);
+
+    QCheckBox *toggleCheckBox = new QCheckBox("显示密码");
+    connect(toggleCheckBox, &QCheckBox::toggled, passwordField, [this](bool checked) {
+        passwordField->lineEdit()->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
+    });
+    innerLayout->addWidget(toggleCheckBox);
 
     //添加空白
     QSpacerItem *spacer3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -264,6 +271,16 @@ void newRegisterWindow::onRegisterButtonClicked() //点击注册按钮触发事�
     QString idNumber = idField->text();
     QString emailCodeInput = emailCodeField->text();
 
+    //检查是否有空格
+    if(email.contains(" ") || password.contains(" ") || usrName.contains(" ") || phone.contains(" ") || idNumber.contains(" ") || emailCodeInput.contains(" "))
+    {
+        QMessageBox::critical(nullptr, "注册失败",
+                              "注册失败: 输入内容不能含有空格！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    //检查是否有全部填写
     if(email=="" || password=="" || usrName=="" || phone=="" || idNumber=="" || emailCodeInput=="")
     {
         QMessageBox::critical(nullptr, "注册失败",
@@ -272,6 +289,15 @@ void newRegisterWindow::onRegisterButtonClicked() //点击注册按钮触发事�
         return;
     }
 
+    if(!email.contains("@") || !email.contains(".com"))
+    {
+        QMessageBox::critical(nullptr, "注册失败",
+                              "邮箱格式不正确！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    //检查验证码是否正确
     if(emailCodeInput!=emailCode)
     {
         QMessageBox::critical(nullptr, "注册失败",

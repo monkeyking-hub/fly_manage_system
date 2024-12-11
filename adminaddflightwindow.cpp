@@ -91,12 +91,71 @@ void adminAddFlightWindow::onAddFlightBtnClicked()
     QDateTime combinedDateTime2=QDateTime::fromString(dateTimeString2,"yyyy-MM-dd HH:mm");
     qint64 unixTimeStamp2 = combinedDateTime2.toSecsSinceEpoch();
 
-
     int firstClassSeats = ui->spinBox_firstClassSeat->value();
     int economyClassSeats = ui->spinBox_economyClassSeat->value();
     int firstClassPrice = ui->spinBox_firstClassPrice->value();
     int economyClassPrice = ui->spinBox_economyClassPrice->value();
     QString company = ui->lineEdit_airlineCompany->text();
+
+    //检查是否填了全部内容
+    if(flightNumber.contains(" ") || aircraftModel.contains(" ") || departure.contains(" ") || destination.contains(" ") || departure_date.contains(" ") || arrival_date.contains(" ") ||company.contains(" "))
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 输入的内容不能含有空格！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    //检查是否填了全部内容
+    if(flightNumber=="" || aircraftModel=="" || departure=="" || destination=="" || departure_date=="" || arrival_date=="" ||company=="")
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 您需要填写全部信息！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    //检查出发时间是否在到达时间之前
+    if(unixTimeStamp1>=unixTimeStamp2)
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 出发时间必须在到达时间之前",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    //检查座舱价格和数量是否为0
+    if(firstClassSeats==0)
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 头等舱数量不能为0！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    if(firstClassPrice==0)
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 头等舱价格不能为0！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    if(economyClassSeats==0)
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 经济舱数量不能为0！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    if(economyClassPrice==0)
+    {
+        QMessageBox::critical(nullptr, "添加失败",
+                              "添加失败: 经济舱价格不能为0！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
 
     emit addFlightRequested(flightNumber,aircraftModel,departure,destination,unixTimeStamp1,unixTimeStamp2,firstClassSeats,economyClassSeats,firstClassPrice,economyClassPrice,company);
 }
@@ -161,7 +220,6 @@ void addFlightHandler::handleAddFlight(const QString &flightNumber,const QString
                 msgBox.setWindowTitle("添加成功");         // 设置窗口标题
                 msgBox.setText("您已成功添加航班信息！");          // 设置提示文本
                 msgBox.setStandardButtons(QMessageBox::Ok); // 设置标准按钮（此处只有“确定”按钮）
-
                 // 显示消息框
                 msgBox.exec();
             } else {
