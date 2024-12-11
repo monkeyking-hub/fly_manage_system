@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include <QCheckBox>
 
 newLoginWindow::newLoginWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -118,6 +119,14 @@ newLoginWindow::newLoginWindow(QWidget *parent)
     QSpacerItem *spacer3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer3);
 
+    QHBoxLayout *checkboxAndadminbtn = new QHBoxLayout();
+    QCheckBox *toggleCheckBox = new QCheckBox("显示密码");
+    connect(toggleCheckBox, &QCheckBox::toggled, passwordField, [this](bool checked) {
+        passwordField->lineEdit()->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
+    });
+
+    checkboxAndadminbtn->addWidget(toggleCheckBox);
+
     // 前往管理员登录界面按钮
     QPushButton *adminLoginBtn = new QPushButton("管理员登录", this);
     adminLoginBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -141,7 +150,10 @@ newLoginWindow::newLoginWindow(QWidget *parent)
         "    padding: 2px;"
         "}"
         );
-    innerLayout->addWidget(adminLoginBtn);
+
+    checkboxAndadminbtn->addWidget(adminLoginBtn);
+
+    innerLayout->addLayout(checkboxAndadminbtn);
 
     //添加空白
     QSpacerItem *spacer4 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -237,6 +249,24 @@ void newLoginWindow::onLogInButtonClicked() //点击登录按钮触发事件
     QString email = emailField->text();
     QString password = passwordField->text();
 
+    //检查是否有空格
+    if(email.contains(" ") || password.contains(" "))
+    {
+        QMessageBox::critical(nullptr, "登录失败",
+                              "登录失败: 邮箱或密码含有空格！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    //检查是否为空
+    if(email=="" || password=="")
+    {
+        QMessageBox::critical(nullptr, "登录失败",
+                              "登录失败: 邮箱或密码为空！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
     //将输入框内容清空
     QLineEdit *emailLineEdit = emailField->lineEdit();
     QLineEdit *passwordLineEdit = passwordField->lineEdit();
@@ -253,9 +283,6 @@ newLoginWindow::~newLoginWindow()
 
 void loginHandler::handleLogin(const QString& email, const QString& password)
 {
-    qDebug() << "email:" << email;
-    qDebug() << "password:" << password;
-
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
 
     QUrl url("http://localhost:8080/api/users/login");
@@ -317,12 +344,12 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
             } else {
                 // 登录失败
                 qDebug() << "Login failed, code: " << responseObject["code"].toInt();
-                QMessageBox::critical(nullptr, "Login Error", responseObject["message"].toString());
+                QMessageBox::critical(nullptr, "登录失败", responseObject["message"].toString());
             }
         } else {
             // 登录请求失败
             qDebug() << "Error logging in:" << reply->errorString();
-            QMessageBox::critical(nullptr, "Login Error", "Request failed: " + reply->errorString());
+            QMessageBox::critical(nullptr, "登录失败", "Request failed: " + reply->errorString());
         }
         reply->deleteLater();
     });

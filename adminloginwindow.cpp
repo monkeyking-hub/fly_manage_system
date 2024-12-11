@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include<QCheckBox>
 
 adminLoginWindow::adminLoginWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -115,6 +116,12 @@ adminLoginWindow::adminLoginWindow(QWidget *parent)
     passwordField->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     innerLayout->addWidget(passwordField);
 
+    QCheckBox *toggleCheckBox = new QCheckBox("显示密码");
+    connect(toggleCheckBox, &QCheckBox::toggled, passwordField, [this](bool checked) {
+        passwordField->lineEdit()->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
+    });
+    innerLayout->addWidget(toggleCheckBox);
+
     //添加空白
     QSpacerItem *spacer4 = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Expanding);
     innerLayout->addItem(spacer4);
@@ -202,6 +209,22 @@ void adminLoginWindow::onAdminLogInButtonClicked() //点击登录按钮触发事
 {
     QString usrname = usrnameField->text();
     QString password = passwordField->text();
+
+    if(usrname.contains(" ") || password.contains(" "))
+    {
+        QMessageBox::critical(nullptr, "登录失败",
+                              "登录失败: 用户名或密码含有空格！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    if(usrname=="" || password=="")
+    {
+        QMessageBox::critical(nullptr, "登录失败",
+                              "登录失败: 用户名或密码为空！",
+                              QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
 
     //将输入框内容清空
     QLineEdit *usrnameLineEdit = usrnameField->lineEdit();
