@@ -2,14 +2,16 @@
 #define FLIGHTSTATUS_H
 
 #include <QMainWindow>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QTableWidget>
+#include <QLineEdit>
+#include <QCompleter>
+#include <QStringListModel>
+#include <QListView>
 
-namespace Ui {
-class flightstatus;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class flightstatus; }
+QT_END_NAMESPACE
 
+// 主窗口类
 class flightstatus : public QMainWindow
 {
     Q_OBJECT
@@ -19,12 +21,17 @@ public:
     ~flightstatus();
 
 private slots:
-    void searchFlights();  // 搜索航班信息
-    void handleSearchReply();  // 处理服务器返回的数据
+    void on_departureInput_textChanged(const QString &text);
+    void on_destinationInput_textChanged(const QString &text);
 
 private:
-    Ui::flightstatus *ui;  // UI 类名保持一致
-    QNetworkAccessManager *networkManager;  // 用于发送 HTTP 请求
+    Ui::flightstatus *ui;
+    QStringList cityList;  // 存储所有城市数据
+    QStringListModel *cityListModel; // 用于设置给Completer
+    QCompleter *departureCompleter;  // 出发地补全器
+    QCompleter *destinationCompleter;  // 目的地补全器
+
+    void setupCompleter();  // 设置补全器
 };
 
 #endif // FLIGHTSTATUS_H
