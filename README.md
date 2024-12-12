@@ -1,3 +1,75 @@
+```cpp
+
+void FlightSearchHandler::handleFlightSearch(const QString& departure, const QString& destination)
+{
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+
+    // 设置请求 URL
+    QUrl url("http://localhost:8080/api/flights/search");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // 创建请求体 JSON
+    QJsonObject json;
+    json["departure"] = departure;
+    json["destination"] = destination;
+
+    // 发送 POST 请求
+    QNetworkReply* reply = manager->post(request, QJsonDocument(json).toJson());
+
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject responseObject = jsonResponse.object();
+
+            // 检查请求是否成功
+            if (responseObject["code"].toInt() == 200) {
+                // 获取航班数据
+                QJsonArray flightsArray = responseObject["data"].toArray();
+
+                for (int i = 0; i < flightsArray.size(); ++i) {
+                    QJsonObject flight = flightsArray[i].toObject();
+
+                    // 获取航班信息
+                    QString airlineCompany = flight["airlineCompany"].toString();
+                    QString flightNumber = flight["flightNumber"].toString();
+                    QString departureTime = QDateTime::fromSecsSinceEpoch(flight["departureTime"].toInt()).toString();
+                    QString arrivalTime = QDateTime::fromSecsSinceEpoch(flight["arrivalTime"].toInt()).toString();
+                    double economyClassPrice = flight["economyClassPrice"].toDouble();
+                    int economyClassSeats = flight["economyClassSeats"].toInt();
+                    double firstClassPrice = flight["firstClassPrice"].toDouble();
+                    int firstClassSeats = flight["firstClassSeats"].toInt();
+
+                    // 打印或显示航班信息
+                    qDebug() << "Airline: " << airlineCompany;
+                    qDebug() << "Flight Number: " << flightNumber;
+                    qDebug() << "Departure: " << departureTime;
+                    qDebug() << "Arrival: " << arrivalTime;
+                    qDebug() << "Economy Price: " << economyClassPrice;
+                    qDebug() << "Economy Seats: " << economyClassSeats;
+                    qDebug() << "First Class Price: " << firstClassPrice;
+                    qDebug() << "First Class Seats: " << firstClassSeats;
+                    qDebug() << "------------------------------";
+                }
+
+            } else {
+                // 请求失败
+                QMessageBox::critical(nullptr, "搜索失败", responseObject["message"].toString());
+            }
+        } else {
+            // 请求错误
+            qDebug() << "Error searching flights:" << reply->errorString();
+            QMessageBox::critical(nullptr, "请求失败", "Request failed: " + reply->errorString());
+        }
+
+        // 清理
+        reply->deleteLater();
+    });
+}
+```
+
+
 # 重新修改了一下调度类
 
 ## 写了一个system类
