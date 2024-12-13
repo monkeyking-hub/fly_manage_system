@@ -56,7 +56,7 @@ orderwindow::orderwindow(QWidget *parent)
     QString tabStyle = R"(
         QTabBar::tab {
             min-height: 50px;                /* 按钮高度 */
-            min-width: 253px;               /* 按钮宽度 */
+            min-width: 266px;               /* 按钮宽度 */
             font-size: 24px;                /* 字体大小 */
             font-weight: bold;              /* 字体加粗 */
             color: black;                   /* 文字颜色 */
@@ -102,6 +102,7 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     QVBoxLayout *containerLayout = new QVBoxLayout(container);
 
     // 模拟一些订单数据（实际应该从数据库加载）
+<<<<<<< Updated upstream
     QList<Order> allOrders;
     allOrders.append(Order("33533359121", "冯泽加, 王沐臣", "2024-05-30", "¥1240", "珠海", "合肥", Order::Upcoming));
     allOrders.append(Order("33533359122", "李阳, 陈珂", "2024-05-31", "¥300", "广州", "上海", Order::Pending));
@@ -117,6 +118,23 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     allOrders.append(Order("33533359132", "徐阳, 邓雪", "2024-06-10", "¥780", "南昌", "乌鲁木齐", Order::Upcoming));
     allOrders.append(Order("33533359133", "邵东, 郑玉", "2024-06-11", "¥900", "拉萨", "香港", Order::Pending));
     allOrders.append(Order("33533359134", "韩军, 张晓", "2024-06-12", "¥1100", "兰州", "海口", Order::Upcoming));
+=======
+
+    QList<Order> orders;
+
+    // 添加一些待出行的订单
+    orders.append(Order("33533359121", "冯泽加, 王沐臣", "2024-05-30", "¥1240", "珠海", "合肥", Order::Upcoming));
+    orders.append(Order("33533359122", "李阳, 陈珂", "2024-05-31", "¥300", "广州", "上海", Order::Upcoming));
+
+    // 添加一些待支付的订单
+    orders.append(Order("33533359123", "刘鑫, 张浩", "2024-06-01", "¥800", "北京", "深圳", Order::Pending));
+    orders.append(Order("33533359124", "王颖, 刘敏", "2024-06-02", "¥150", "成都", "武汉", Order::Pending));
+
+    // 添加一些已取消的订单
+    orders.append(Order("33533359125", "张伟, 王敏", "2024-06-03", "¥500", "天津", "南京", Order::Canceled));
+    orders.append(Order("33533359126", "陈宇, 张婷", "2024-06-04", "¥200", "西安", "成都", Order::Canceled));
+
+>>>>>>> Stashed changes
 
     // 根据类型筛选订单
     QList<Order> filteredOrders;

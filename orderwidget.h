@@ -30,8 +30,12 @@ private:
     QLabel *m_bookingDateLabel;
     QLabel *m_amountLabel;
     QLabel *m_routeLabel;
+<<<<<<< Updated upstream
     Order m_order;
     bool m_isHovered;  // 标识是否悬停
+=======
+    QLabel *m_statusLabel;      // 显示状态
+>>>>>>> Stashed changes
 };
 
 #endif // ORDERWIDGET_H
