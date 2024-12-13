@@ -40,5 +40,9 @@
         <file>newHomeWindow2.png</file>
         <file>newHomeWindow3.png</file>
         <file>newHomeWindow4.png</file>
+        <file>newicon/bad.png</file>
+        <file>newicon/good.png</file>
+        <file>newicon/nor.png</file>
+        <file>newicon/star.png</file>
     </qresource>
 </RCC>
