@@ -2,7 +2,6 @@
 #define ORDER_H
 
 #include <QString>
-#include <QDate>
 
 class Order
 {
@@ -14,7 +13,10 @@ public:
         Canceled  // 已取消
     };
 
-    // 构造函数
+    // 默认构造函数
+    Order();
+
+    // 带参数构造函数
     Order(const QString &orderNumber, const QString &passenger, const QString &bookingDate,
           const QString &amount, const QString &departure, const QString &destination, Status status);
 

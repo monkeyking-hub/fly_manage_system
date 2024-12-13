@@ -259,6 +259,7 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
 
     QUrl url("http://localhost:8080/api/users/login");
+    //QUrl url("http://192.168.238.11:8080/api/users/login");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -279,7 +280,8 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
 
                 // 查询用户完整信息
                 QNetworkAccessManager* luManager = new QNetworkAccessManager(this);
-                QUrl luUrl("http://localhost:8080/api/users/get");
+                QUrl url("http://localhost:8080/api/users/login");
+                //QUrl luUrl("http://192.168.238.11:8080/api/users/get");
                 QNetworkRequest luRequest(luUrl);
                 luRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 

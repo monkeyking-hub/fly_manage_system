@@ -16,6 +16,7 @@
 #include <QScrollArea>
 
 
+
 // orderwindow 构造函数
 orderwindow::orderwindow(QWidget *parent)
     : QMainWindow(parent)
@@ -85,7 +86,6 @@ orderwindow::~orderwindow()
 
 
 
-// 创建每个订单页面的函数
 QWidget* orderwindow::createOrderPage(const QString &type)
 {
     QWidget *page = new QWidget(this);
@@ -102,20 +102,77 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     QVBoxLayout *containerLayout = new QVBoxLayout(container);
 
     // 模拟一些订单数据（实际应该从数据库加载）
-    QList<Order> orders;
-    orders.append(Order("33533359121", "冯泽加, 王沐臣", "2024-05-30", "¥1240", "珠海", "合肥", Order::Upcoming));
-    orders.append(Order("33533359122", "李阳, 陈珂", "2024-05-31", "¥300", "广州", "上海", Order::Pending));
-    orders.append(Order("33533359123", "刘鑫, 张浩", "2024-06-01", "¥800", "北京", "深圳", Order::Canceled));
+    QList<Order> allOrders;
+    allOrders.append(Order("33533359121", "冯泽加, 王沐臣", "2024-05-30", "¥1240", "珠海", "合肥", Order::Upcoming));
+    allOrders.append(Order("33533359122", "李阳, 陈珂", "2024-05-31", "¥300", "广州", "上海", Order::Pending));
+    allOrders.append(Order("33533359123", "刘鑫, 张浩", "2024-06-01", "¥800", "北京", "深圳", Order::Canceled));
+    allOrders.append(Order("33533359124", "王强, 周婷", "2024-06-02", "¥450", "杭州", "武汉", Order::Upcoming));
+    allOrders.append(Order("33533359125", "张丽, 李超", "2024-06-03", "¥980", "南京", "成都", Order::Pending));
+    allOrders.append(Order("33533359126", "陈华, 杨洋", "2024-06-04", "¥1200", "深圳", "西安", Order::Upcoming));
+    allOrders.append(Order("33533359127", "赵敏, 何峰", "2024-06-05", "¥600", "重庆", "长沙", Order::Canceled));
+    allOrders.append(Order("33533359128", "黄磊, 孙悦", "2024-06-06", "¥500", "昆明", "厦门", Order::Pending));
+    allOrders.append(Order("33533359129", "周杰, 方媛", "2024-06-07", "¥720", "青岛", "福州", Order::Upcoming));
+    allOrders.append(Order("33533359130", "李敏, 张辉", "2024-06-08", "¥850", "天津", "贵阳", Order::Pending));
+    allOrders.append(Order("33533359131", "杨涛, 王梅", "2024-06-09", "¥650", "哈尔滨", "济南", Order::Canceled));
+    allOrders.append(Order("33533359132", "徐阳, 邓雪", "2024-06-10", "¥780", "南昌", "乌鲁木齐", Order::Upcoming));
+    allOrders.append(Order("33533359133", "邵东, 郑玉", "2024-06-11", "¥900", "拉萨", "香港", Order::Pending));
+    allOrders.append(Order("33533359134", "韩军, 张晓", "2024-06-12", "¥1100", "兰州", "海口", Order::Upcoming));
 
-    // 为每个订单创建 OrderWidget
-    for (const Order &order : orders) {
-        OrderWidget *orderWidget = new OrderWidget(order, container);
-        containerLayout->addWidget(orderWidget);  // 将订单加入布局
+    // 根据类型筛选订单
+    QList<Order> filteredOrders;
+    for (const Order &order : allOrders) {
+        if (type == "全部订单" ||
+            (type == "待支付" && order.status() == Order::Pending) ||
+            (type == "待出行" && order.status() == Order::Upcoming) ||
+            (type == "已取消" && order.status() == Order::Canceled)) {
+            filteredOrders.append(order);
+        }
+    }
+
+    // 动态生成订单组件
+    for (int i = 0; i < filteredOrders.size(); ++i) {
+        OrderWidget *orderWidget = new OrderWidget(filteredOrders[i], container);
+        // 连接点击信号到槽函数
+         connect(orderWidget, &OrderWidget::orderClicked, this, &orderwindow::showOrderDetails); // 连接点击信号到槽函数
+
+        // 为 OrderWidget 添加样式
+        orderWidget->setStyleSheet(
+            "#OrderWidget {"
+            "   background-color: rgba(255, 255, 255, 200);"
+            "   border: 2px solid #cccccc;"
+            "   border-radius: 8px;"
+            "   margin: 10px;"
+            "   padding: 8px;"
+            "}"
+            );
+
+        containerLayout->addWidget(orderWidget);
+
+        // 如果不是最后一个订单，添加分割线
+        if (i < filteredOrders.size() - 1) {
+            QWidget *line = new QWidget(container);
+            line->setFixedHeight(2);
+            line->setStyleSheet("background-color: black;");
+            line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+            containerLayout->addWidget(line);
+        }
     }
 
     // 设置滚动区域
     scrollArea->setWidget(container);
-    pageLayout->addWidget(scrollArea);  // 将 QScrollArea 加入页面布局
+    pageLayout->addWidget(scrollArea);
 
     return page;
 }
+
+void orderwindow::showOrderDetails(const Order &order)
+{
+    OrderDetailWindow *detailWindow = new OrderDetailWindow(order, nullptr); // 父窗口改为 nullptr
+    detailWindow->setAttribute(Qt::WA_DeleteOnClose);
+    detailWindow->show();
+    detailWindow->raise(); // 提升到最前
+    detailWindow->activateWindow(); // 激活窗口
+    qDebug() << "Creating detail window for order:" << order.orderNumber();
+}
+

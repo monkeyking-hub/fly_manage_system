@@ -14,7 +14,6 @@
 #include "newregisterwindow.h"
 #include "adminloginwindow.h"
 #include "adminmaininterface.h"
-#include "adminaddflightwindow.h"
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
@@ -102,7 +101,7 @@ void System::start()
     //注册伊普西隆
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong", yipuxilong);
 
-    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    InterfaceManager::instance()->switchToPage("lxt_mainInterface");
 }
 System::~System()
 {
