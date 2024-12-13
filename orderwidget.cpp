@@ -1,13 +1,11 @@
 #include "orderwidget.h"
 #include <QLabel>
 #include <QVBoxLayout>
-<<<<<<< Updated upstream
 #include <QMouseEvent>
-=======
 #include <QSpacerItem>
 #include <QWidget>
 #include <QFrame>  // 用于横线分隔符
->>>>>>> Stashed changes
+
 
 // OrderWidget 构造函数
 OrderWidget::OrderWidget(const Order &order, QWidget *parent)
@@ -21,21 +19,12 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     this->setStyleSheet(
         "#OrderWidget {"
         "   background-color: rgba(255, 255, 255, 200);"
-<<<<<<< Updated upstream
+
         "   border: 2px solid #cccccc;"  // 添加灰色边框
         "   border-radius: 8px;"         // 圆角边框
         "   margin: 10px;"               // 外边距，控制组件间间隔
         "   padding: 8px;"               // 内边距，内容和边框的距离
         "}"
-        "#OrderWidget:hover {"
-        "   background-color: rgba(173, 216, 230, 200);"  // 淡蓝色背景
-        "}"
-=======
-        "   border-radius: 8px;"
-        "   margin: 5px;"
-        "   padding: 8px;"
-        "} "
->>>>>>> Stashed changes
         );
 
     // 创建垂直布局
@@ -79,17 +68,11 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
         statusString = "已取消";
         break;
     }
-<<<<<<< Updated upstream
+
     QLabel *statusLabel = new QLabel(QString("状态: %1").arg(statusString), this);
     statusLabel->setStyleSheet("font-size: 16px; color: red;");
     layout->addWidget(statusLabel);
 
-    // 设置布局
-    setLayout(layout);
-=======
-    m_statusLabel = new QLabel(QString("状态: %1").arg(statusString), this);
-    m_statusLabel->setStyleSheet("font-size: 12px; color: red;");
-    layout->addWidget(m_statusLabel);
 
     // 分隔符（横线）
     QFrame *line = new QFrame(this);
@@ -97,10 +80,7 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     line->setFrameShadow(QFrame::Sunken);
     layout->addWidget(line);
 
-    // 为了确保订单块之间有间隔，我们加入一个 spacer
-    QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    layout->addItem(spacer);
->>>>>>> Stashed changes
+
 }
 
 const Order& OrderWidget::getOrder() const

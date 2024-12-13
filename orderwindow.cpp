@@ -102,7 +102,7 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     QVBoxLayout *containerLayout = new QVBoxLayout(container);
 
     // 模拟一些订单数据（实际应该从数据库加载）
-<<<<<<< Updated upstream
+
     QList<Order> allOrders;
     allOrders.append(Order("33533359121", "冯泽加, 王沐臣", "2024-05-30", "¥1240", "珠海", "合肥", Order::Upcoming));
     allOrders.append(Order("33533359122", "李阳, 陈珂", "2024-05-31", "¥300", "广州", "上海", Order::Pending));
@@ -118,7 +118,7 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     allOrders.append(Order("33533359132", "徐阳, 邓雪", "2024-06-10", "¥780", "南昌", "乌鲁木齐", Order::Upcoming));
     allOrders.append(Order("33533359133", "邵东, 郑玉", "2024-06-11", "¥900", "拉萨", "香港", Order::Pending));
     allOrders.append(Order("33533359134", "韩军, 张晓", "2024-06-12", "¥1100", "兰州", "海口", Order::Upcoming));
-=======
+
 
     QList<Order> orders;
 
@@ -134,7 +134,6 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     orders.append(Order("33533359125", "张伟, 王敏", "2024-06-03", "¥500", "天津", "南京", Order::Canceled));
     orders.append(Order("33533359126", "陈宇, 张婷", "2024-06-04", "¥200", "西安", "成都", Order::Canceled));
 
->>>>>>> Stashed changes
 
     // 根据类型筛选订单
     QList<Order> filteredOrders;
