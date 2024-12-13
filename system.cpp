@@ -14,6 +14,8 @@
 #include "newregisterwindow.h"
 #include "adminloginwindow.h"
 #include "adminmaininterface.h"
+#include "adminaddflightwindow.h"
+#include "chatwindow.h"
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
@@ -40,7 +42,7 @@ void System::start()
     adminLoginWindow *adminLogin = new adminLoginWindow(); //管理员登录界面
     adminLoginHandler *adminLoginHand = new adminLoginHandler(); //adminLoginHand用于管理员登录界面的登录按钮信号与槽连接
     adminMainInterface *adminMainWindow = new adminMainInterface(); //管理员主界面
-
+    ChatWindow * chat = new ChatWindow();
     // 连接 newHomeWindow 的信号到 mainInterface 的槽
     connect(newHomePage, &newHomeWindow::commandLinkButton4Clicked, m_mainInterface, [this]() {
         // 切换到航班动态界面
@@ -94,6 +96,8 @@ void System::start()
 
     InterfaceManager::instance()->registerPage("lxt_adminMainInterface",adminMainWindow); //管理员主界面
 
+    InterfaceManager::instance()->registerPage("chatWindow",chat); //管理员主界面
+
     //注册gama界面
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);
     //注册西塔
@@ -101,7 +105,8 @@ void System::start()
     //注册伊普西隆
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong", yipuxilong);
 
-    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    // InterfaceManager::instance()->switchToPage("lxt_adminMainInterface");
+    InterfaceManager::instance()->switchToPage("chatWindow");
 }
 System::~System()
 {

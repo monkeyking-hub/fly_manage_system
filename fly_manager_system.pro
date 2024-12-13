@@ -15,6 +15,7 @@ SOURCES += \
     adminloginwindow.cpp \
     adminmaininterface.cpp \
     animatedinputfield.cpp \
+    chatwindow.cpp \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     adminloginwindow.h \
     adminmaininterface.h \
     animatedInputField.h \
+    chatwindow.h \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \

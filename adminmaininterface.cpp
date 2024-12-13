@@ -63,7 +63,6 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     userRemoveItem = new QTreeWidgetItem(usersItem, QStringList() << "删除用户信息");
     userUpdateItem = new QTreeWidgetItem(usersItem, QStringList() << "修改用户信息");
     orderSearchItem = new QTreeWidgetItem(ordersItem, QStringList() << "查找订单信息");
-    orderRemoveItem = new QTreeWidgetItem(ordersItem, QStringList() << "删除订单信息");
     orderUpdateItem = new QTreeWidgetItem(ordersItem, QStringList() << "修改订单信息");
     flightSearchItem = new QTreeWidgetItem(flightsItem, QStringList() << "查找航班信息");
     flightRemoveItem = new QTreeWidgetItem(flightsItem, QStringList() << "删除航班信息");
@@ -93,7 +92,6 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     stackedWidget->addWidget(new QLabel("修改用户信息"));
 
     stackedWidget->addWidget(new QLabel("查询订单信息"));
-    stackedWidget->addWidget(new QLabel("删除订单信息"));
     stackedWidget->addWidget(new QLabel("修改订单信息"));
 
     stackedWidget->addWidget(new QLabel("查询航班信息"));
@@ -252,31 +250,30 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
     {
         stackedWidget->setCurrentIndex(8);
     }
-    else if(item==ordersItem->child(2))
+    else if(item==flightsItem->child(0))
     {
         stackedWidget->setCurrentIndex(9);
     }
-    else if(item==flightsItem->child(0))
+    else if(item==flightsItem->child(1))
     {
         stackedWidget->setCurrentIndex(10);
     }
-    else if(item==flightsItem->child(1))
+    else if(item==flightsItem->child(2))
     {
         stackedWidget->setCurrentIndex(11);
     }
-    else if(item==flightsItem->child(2))
-    {
-        stackedWidget->setCurrentIndex(12);
-    }
     else if(item==flightsItem->child(3))
     {
-        stackedWidget->setCurrentIndex(13);
+        stackedWidget->setCurrentIndex(12);
     }
 }
 
 void adminMainInterface::onReturnButtonClicked()
 {
     InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    stackedWidget->setCurrentIndex(0);
+    //选中首页
+    menuTree->setCurrentItem(homeItem);
 }
 
 adminMainInterface::~adminMainInterface()
