@@ -22,11 +22,12 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QToolButton>
-
-#include <QTreeWidget>           // 树形控件 QTreeWidget
-#include <QTreeWidgetItem>       // 树形控件的项 QTreeWidgetItem
-#include <QListWidgetItem>       // （可选）如果使用 QListWidgetItem
-#include <QStringList>           // 字符串列表，用于树节点名称
+#include<QSpacerItem>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QListWidgetItem>
+#include <QStringList>
+#include "chatwindow.h"
 
 maininterface::maininterface(QWidget *parent)
     : QMainWindow(parent)
@@ -40,12 +41,13 @@ maininterface::maininterface(QWidget *parent)
     QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
 
     //左侧菜单栏
-    QListWidget *menuList = new QListWidget(this);
+    menuList = new QListWidget(this);
     menuList->setStyleSheet("background-color:white");
     menuList->addItem("首页");
     menuList->addItem("航班动态");
     menuList->addItem("我的订单");
     menuList->addItem("特惠机票");
+    menuList->addItem("客服中心");
     menuList->setFixedWidth(150);
     menuList->setCurrentRow(0); //默认在首页窗口
 
@@ -85,12 +87,13 @@ maininterface::maininterface(QWidget *parent)
     mainLayout->addWidget(menuList);
 
     //右侧内容区
-    QStackedWidget *stackedWidget = new QStackedWidget(this);
+    stackedWidget = new QStackedWidget(this);
     newHomeWindow *w1 = new newHomeWindow();
     stackedWidget->addWidget(w1); //首页界面
     stackedWidget->addWidget(new flightstatus()); //航班动态界面
     stackedWidget->addWidget(new orderwindow()); //订单界面
     stackedWidget->addWidget(new homeWindow()); //特惠机票界面
+    stackedWidget->addWidget(new ChatWindow(true)); //客服中心
 
     //将右侧内容添加到主布局mainLayout
     mainLayout->addWidget(stackedWidget);
@@ -102,19 +105,19 @@ maininterface::maininterface(QWidget *parent)
     connect(menuList,&QListWidget::currentRowChanged,stackedWidget,&QStackedWidget::setCurrentIndex);
 
     // 连接 newHomeWindow 信号到槽
-    connect(w1, &newHomeWindow::commandLinkButton4Clicked, this, [stackedWidget,menuList]() {
+    connect(w1, &newHomeWindow::commandLinkButton4Clicked, this, [this]() {
         // 切换到航班动态界面
         stackedWidget->setCurrentIndex(1);
         menuList->setCurrentRow(1);
     });
 
-    connect(w1, &newHomeWindow::commandLinkButton5Clicked, this, [stackedWidget,menuList]() {
+    connect(w1, &newHomeWindow::commandLinkButton5Clicked, this, [this]() {
         // 切换到订单界面
         stackedWidget->setCurrentIndex(2);
         menuList->setCurrentRow(2);
     });
 
-    connect(w1, &newHomeWindow::commandLinkButton6Clicked, this, [stackedWidget,menuList]() {
+    connect(w1, &newHomeWindow::commandLinkButton6Clicked, this, [this]() {
         // 切换到特惠机票界面
         stackedWidget->setCurrentIndex(3);
         menuList->setCurrentRow(3);
@@ -181,9 +184,29 @@ maininterface::maininterface(QWidget *parent)
     toolBar->addWidget(label_name);
 
 
-    QWidget *spacer = new QWidget(this); //添加弹性空间
-    spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
-    toolBar->addWidget(spacer);
+    // 创建一个QWidget作为间隔
+    QWidget *spacerWidget1 = new QWidget();
+    spacerWidget1->setFixedWidth(550);
+    toolBar->addWidget(spacerWidget1);
+
+    QLabel *kefuLabel = new QLabel("客服中心",this);
+    kefuLabel->setFixedSize(75, 50);
+    kefuLabel->setStyleSheet(
+        "font-size: 20px; color: black; font-family: '千图笔锋手写体';");
+    toolBar->addWidget(kefuLabel);
+
+    QToolButton *kefuButton = new QToolButton();
+    kefuButton->setIcon(QIcon(":/kefu.png"));
+    kefuButton->setToolTip("客服");
+    kefuButton->setIconSize(QSize(70,70));
+    connect(kefuButton,&QToolButton::clicked,this,&maininterface::onKefuButtonClicked);
+    toolBar->addWidget(kefuButton);
+
+    // 创建一个QWidget作为间隔
+    QWidget *spacerWidget2 = new QWidget();
+    spacerWidget2->setFixedWidth(100);
+    toolBar->addWidget(spacerWidget2);
+
     // 在工具栏添加用户名label
     QLabel *usrNameLabel = new QLabel(this);
     usrNameLabel->setFixedSize(100, 50);
@@ -270,6 +293,12 @@ void maininterface::switchLogin()
 void maininterface::switchtoFlightStatusWindow()
 {
     InterfaceManager::instance()->switchToPage("fzj_flightstatus");
+}
+
+void maininterface::onKefuButtonClicked()
+{
+    menuList->setCurrentRow(4);
+    stackedWidget->setCurrentIndex(4);
 }
 
 maininterface::~maininterface()
