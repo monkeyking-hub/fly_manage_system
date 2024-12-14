@@ -94,7 +94,7 @@ homeWindow::homeWindow(QWidget *parent)
     scrollArea->setWidgetResizable(true);
 
     QWidget *scrollWidget = new QWidget(scrollArea);
-    QHBoxLayout *scrollLayout = new QHBoxLayout(scrollWidget);
+    scrollLayout = new QHBoxLayout(scrollWidget);
 
     // 添加分类卡片
     scrollLayout->addWidget(new CategoryBlock("周末省心游",
@@ -113,6 +113,20 @@ homeWindow::homeWindow(QWidget *parent)
 
     // 设置主控件
     setCentralWidget(centralWidget);
+}
+
+void homeWindow::clearCategoryBlocks()
+{
+    while (scrollLayout->count() > 0) {
+        QLayoutItem *item = scrollLayout->takeAt(0); // 从布局中移除第一个控件
+        if (item) {
+            QWidget *widget = item->widget();
+            if (widget) {
+                delete widget; // 销毁控件
+            }
+            delete item; // 销毁布局项
+        }
+    }
 }
 
 homeWindow::~homeWindow()

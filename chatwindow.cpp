@@ -72,7 +72,7 @@ ChatWindow::ChatWindow(QWidget *parent) :
     // 定时器每秒钟检查新消息
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
-    timer->start(3000); // 每1000毫秒（1秒）调用一次
+    // timer->start(3000); // 每1000毫秒（1秒）调用一次
 
     // 发送消息按钮点击事件
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::onSendMessage);
@@ -86,7 +86,7 @@ ChatWindow::~ChatWindow()
 void ChatWindow::fetchChatHistory()
 {
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-    QUrl url("http://127.0.0.1:8080/api/chat/history");  // 后端接口URL
+    QUrl url("http://localhost:8080/api/chat/history");  // 后端接口URL
     QNetworkRequest request(url);
 
     QNetworkReply* reply = manager->get(request);
@@ -149,7 +149,7 @@ void ChatWindow::fetchChatHistory()
 void ChatWindow::sendMessage(int userId, const QString& message)
 {
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-    QUrl url("http://127.0.0.1:8080/api/chat/send");  // 后端接口URL
+    QUrl url("http://localhost:8080/api/chat/send");  // 后端接口URL
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
