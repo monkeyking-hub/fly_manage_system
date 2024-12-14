@@ -33,7 +33,7 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     if (isClient) {
         friendNameLabel = new QLabel("人工客服", this);
     } else {
-        friendNameLabel = new QLabel("刁难客户", this);
+        friendNameLabel = new QLabel("事情很多的刁难客户", this);
     }
     friendNameLabel->setAlignment(Qt::AlignCenter);
     friendNameLabel->setStyleSheet("font-size: 22px; font-weight: bold; padding: 15px; color: #ffffff;");
@@ -139,21 +139,21 @@ void ChatWindow::fetchChatHistory()
                     {
                         if (userId == 1)//客户的人工消息
                         {
-                            userPrefix =  "-人工客服:" ;
+                            userPrefix =  "-🤖人工客服🤖:" ;
                         }
                         else
                         {
-                            userPrefix =  "-客户2:" ;
+                            userPrefix =  "-用户2👨‍💼:" ;
                         }
                     }
                     else//如果是客服
                     {
                         if (userId == 1) {
-                            userPrefix = "-人工客服:" ;
+                            userPrefix = "-🤖人工客服🤖:" ;
                         }//客服自己的
                         else
                         {
-                            userPrefix = "-客户2:" ;
+                            userPrefix = "-用户2👨‍💼:" ;
                         }
                     }
                     // 拼接显示的消息内容，使用 HTML 格式化
@@ -192,21 +192,21 @@ void ChatWindow::sendMessage(int userId, const QString& message)
     {
         if (userId == 1)//客户的人工消息
         {
-            userPrefix =  "-人工客服:" ;
+            userPrefix =  "-🤖人工客服🤖:" ;
         }
         else
         {
-            userPrefix =  "-客户2:" ;
+            userPrefix =  "-用户2👨‍💼:" ;
         }
     }
     else//如果是客服
     {
         if (userId == 1) {
-            userPrefix = "-人工客服:" ;
+            userPrefix = "-🤖人工客服🤖:" ;
         }//客服自己的
         else
         {
-            userPrefix = "-客户2:" ;
+            userPrefix = "-用户2👨‍💼:" ;
         }
     }
 
