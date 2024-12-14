@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QDebug>
 #include <QTimer>  // 引入 QTimer
+#include <QKeyEvent>  // 引入 QKeyEvent
 
 ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     isClient(isclient),
@@ -29,7 +30,7 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     mainLayout = new QVBoxLayout(centralWidget);
 
     // 显示对方名字
-    if (isclient) {
+    if (isClient) {
         friendNameLabel = new QLabel("人工客服", this);
     } else {
         friendNameLabel = new QLabel("刁难客户", this);
@@ -78,7 +79,7 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     // 设置定时器每3秒刷新一次
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
-    // timer->start(3000); // 每1000毫秒（1秒）调用一次
+    timer->start(3000);  // 每3秒刷新一次
 
     // 发送消息按钮点击事件
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::onSendMessage);
@@ -87,6 +88,17 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
 ChatWindow::~ChatWindow()
 {
     // 析构时无需手动删除 ui，因为是通过指针创建的
+}
+
+// 重载 keyPressEvent 处理回车键事件
+void ChatWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        // 调用发送消息的函数
+        onSendMessage();
+    }
+    // 确保事件继续传递给父类
+    event->ignore();
 }
 
 void ChatWindow::fetchChatHistory()
@@ -119,21 +131,39 @@ void ChatWindow::fetchChatHistory()
                     qint64 timestamp = message["timestamp"].toInt();
                     QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
 
-                    // 拼接显示的消息内容
-                    QString msgContent = "<b>" + time + "</b>: " + messageText + "\n";
-
-                    // 根据用户ID调整对齐方式
-                    if (isClient == false) {  // 表示当前为客服
-                        if (userId == 1)
-                            chatArea->setAlignment(Qt::AlignRight);
+                    // 这里判断消息是由谁发送的来调整对齐方式
+                    QString alignStyle="left";
+                    QString userPrefix;
+                    QString space=  QString(100,' ');
+                    if(isClient)//如果是客户
+                    {
+                        if (userId == 1)//客户的人工消息
+                        {
+                            userPrefix =  "-人工客服:" ;
+                        }
                         else
-                            chatArea->setAlignment(Qt::AlignLeft);
-                    } else {  // 其他用户
-                        if (userId == 1)
-                            chatArea->setAlignment(Qt::AlignLeft);
-                        else
-                            chatArea->setAlignment(Qt::AlignRight);
+                        {
+                            userPrefix =  "-客户2:" ;
+                        }
                     }
+                    else//如果是客服
+                    {
+                        if (userId == 1) {
+                            userPrefix = "-人工客服:" ;
+                        }//客服自己的
+                        else
+                        {
+                            userPrefix = "-客户2:" ;
+                        }
+                    }
+                    // 拼接显示的消息内容，使用 HTML 格式化
+                    QString msgContent = "<div style='border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px; background-color: rgba(255, 255, 255, 0.8);'>";
+                    msgContent += "<b style='font-size: 12px; color: #888;'>[" + time + "]</b><br>";
+                    msgContent += "<span style='font-size: 14px;'>" + userPrefix + " " + messageText + "</span>";
+                    msgContent += "</div>";
+
+                    // 使用 inline-style 的 align 属性来调整每条消息的对齐方式
+                    msgContent = "<div style='text-align: " + alignStyle + ";'>" + msgContent + "</div>";
 
                     // 将消息内容添加到聊天区域
                     chatArea->append(msgContent);
@@ -149,9 +179,49 @@ void ChatWindow::fetchChatHistory()
         reply->deleteLater();
     });
 }
+
 void ChatWindow::sendMessage(int userId, const QString& message)
 {
-    // 发送消息
+    // 先将消息添加到聊天区域（假设消息最终会成功发送）
+    qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+    QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
+
+    QString alignStyle="left";
+    QString userPrefix;
+    if(isClient)//如果是客户
+    {
+        if (userId == 1)//客户的人工消息
+        {
+            userPrefix =  "-人工客服:" ;
+        }
+        else
+        {
+            userPrefix =  "-客户2:" ;
+        }
+    }
+    else//如果是客服
+    {
+        if (userId == 1) {
+            userPrefix = "-人工客服:" ;
+        }//客服自己的
+        else
+        {
+            userPrefix = "-客户2:" ;
+        }
+    }
+
+    QString msgContent = "<div style='border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px; background-color: rgba(255, 255, 255, 0.8);'>";
+    msgContent += "<b style='font-size: 12px; color: #888;'>[" + time + "]</b><br>";
+    msgContent += "<span style='font-size: 14px;'>" + userPrefix + " " + message + "</span>";
+    msgContent += "</div>";
+
+    // 使用 inline-style 的 align 属性来调整每条消息的对齐方式
+    msgContent = "<div style='text-align: " + alignStyle + ";'>" + msgContent + "</div>";
+
+    // 先显示消息，不管服务器是否成功接收
+    chatArea->append(msgContent);
+
+    // 发送消息到服务器
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url("http://127.0.0.1:8080/api/chat/send");  // 后端接口URL
     QNetworkRequest request(url);
@@ -160,81 +230,53 @@ void ChatWindow::sendMessage(int userId, const QString& message)
     QJsonObject json;
     json["userId"] = userId;
     json["message"] = message;
-    json["timestamp"] = QDateTime::currentSecsSinceEpoch();
+    json["timestamp"] = timestamp;
 
     QNetworkReply *reply = manager->post(request, QJsonDocument(json).toJson());
 
-    connect(reply, &QNetworkReply::finished, [this, reply]() {
+    connect(reply, &QNetworkReply::finished, [this, reply, msgContent]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject responseObject = jsonResponse.object();
 
             if (responseObject["code"].toInt() == 200) {
+                // 服务器成功返回消息
                 qDebug() << "Message sent successfully";
-
-                // 处理返回的数据（例如更新聊天窗口）
-                QJsonObject message = responseObject["data"].toObject();
-                int userId = message["userId"].toInt();
-                QString messageText = message["message"].toString();
-                qint64 timestamp = message["timestamp"].toInt();
-                QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
-
-                // 拼接显示的消息内容
-                QString msgContent = "<b>" + time + "</b>: " + messageText + "\n";
-                // 根据用户ID调整对齐方式
-                if (isClient==false)
-                {  //表示当前为客服
-                    // 根据用户ID调整对齐方式
-                    if (userId == 1) {  // 假设1是当前用户的ID
-                        msgContent.prepend("<div style='text-align:right;'>");
-                        msgContent.append("</div>");
-                    } else {
-                        msgContent.prepend("<div style='text-align:left;'>");
-                        msgContent.append("</div>");
-                    }
-                } else {  // 其他用户
-                    // 根据用户ID调整对齐方式
-                    if (userId == 1) {  // 假设1是当前用户的ID
-                        msgContent.prepend("<div style='text-align:left;'>");
-                        msgContent.append("</div>");
-                    } else {
-                        msgContent.prepend("<div style='text-align:right;'>");
-                        msgContent.append("</div>");
-                    }
-                }
-
-                // // 根据用户ID调整对齐方式
-                // if (userId == 1) {  // 假设1是当前用户的ID
-                //     msgContent.prepend("<div style='text-align:right;'>");
-                //     msgContent.append("</div>");
-                // } else {
-                //     msgContent.prepend("<div style='text-align:left;'>");
-                //     msgContent.append("</div>");
-                // }
-
-                // 将消息内容添加到聊天区域
-                chatArea->append(msgContent);
             } else {
-                qDebug() << "Message sending failed:" << responseObject["message"].toString();
-                QMessageBox::critical(nullptr, "发送失败", responseObject["message"].toString());
+                // 服务器返回失败
+                qDebug() << "Failed to send message:" << responseObject["message"].toString();
+                QMessageBox::critical(nullptr, "发送消息失败", responseObject["message"].toString());
+
+                // 可选：你可以修改显示的消息状态，表示发送失败
+                // 比如：修改消息内容为 "发送失败"
+                chatArea->append("<div style='color: red;'>" + msgContent + " <b>发送失败</b></div>");
             }
         } else {
+            // 网络错误或其他请求错误
             qDebug() << "Error sending message:" << reply->errorString();
-            QMessageBox::critical(nullptr, "发送失败", "请求失败: " + reply->errorString());
+            QMessageBox::critical(nullptr, "发送消息失败", "请求失败: " + reply->errorString());
+
+            // 可选：修改显示的消息状态
+            chatArea->append("<div style='color: red;'>" + msgContent + " <b>发送失败</b></div>");
         }
+        reply->deleteLater();
     });
 }
+
 
 
 void ChatWindow::onSendMessage()
 {
     QString message = messageInput->text();
     if (message.isEmpty()) {
-        QMessageBox::warning(this, "发送失败", "消息不能为空！");
+        QMessageBox::warning(this, "输入为空", "请输入要发送的消息");
         return;
     }
-    int userId = isClient ? 2 : 1;
-    sendMessage(userId, message);  // 假设1是当前用户ID
+
+    // 清空输入框
     messageInput->clear();
+
+    // 发送消息
+    sendMessage(isClient ? 2 : 1, message);
 }

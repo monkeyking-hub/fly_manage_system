@@ -21,7 +21,7 @@ public:
 private:
     QWidget *centralWidget;            // 中央控件
     QVBoxLayout *mainLayout;           // 主布局
-    //void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     QLabel *friendNameLabel;           // 显示对方名字
     QTextBrowser *chatArea;            // 聊天记录显示区域
     QLineEdit *messageInput;           // 消息输入框

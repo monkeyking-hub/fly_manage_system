@@ -109,8 +109,8 @@ void System::start()
     InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
 
      //InterfaceManager::instance()->switchToPage("lxt_adminMainInterface");
-    //InterfaceManager::instance()->switchToPage("clientchatWindow");
-   // InterfaceManager::instance()->switchToPage("managerchatWindow");
+    InterfaceManager::instance()->switchToPage("clientchatWindow");
+    InterfaceManager::instance()->switchToPage("managerchatWindow");
 }
 System::~System()
 {
