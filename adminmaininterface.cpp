@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include "adminaddflightwindow.h"
 #include "interfacemanager.h"
+#include "chatwindow.h"
 
 adminMainInterface::adminMainInterface(QWidget *parent)
     : QMainWindow(parent)
@@ -54,6 +55,7 @@ adminMainInterface::adminMainInterface(QWidget *parent)
 
     // 一级菜单项： 首页, 用户管理, 订单管理, 航班管理
     homeItem = new QTreeWidgetItem(menuTree, QStringList() << "首页");
+    kefuItem = new QTreeWidgetItem(menuTree,QStringList()<<"客服中心");
     usersItem = new QTreeWidgetItem(menuTree, QStringList() << "用户管理");
     ordersItem = new QTreeWidgetItem(menuTree, QStringList() << "订单管理");
     flightsItem = new QTreeWidgetItem(menuTree, QStringList() << "航班管理");
@@ -102,6 +104,10 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     addFlightHandler *addFlightHand = new addFlightHandler();
     stackedWidget->addWidget(adminAddflight); //添加航班界面
     connect(adminAddflight,&adminAddFlightWindow::addFlightRequested,addFlightHand,&addFlightHandler::handleAddFlight);
+
+    ChatWindow *chat = new ChatWindow(false);
+    stackedWidget->addWidget(chat);
+
     //将右侧内容添加到主布局mainLayout
     mainLayout->addWidget(stackedWidget);
 
@@ -181,19 +187,13 @@ adminMainInterface::adminMainInterface(QWidget *parent)
         "    padding: 10px;"
         "    font-weight: bold;"
         "    border: 2px solid #1d7bff;"  // 添加边框颜色
-        "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"  // 添加初始阴影
-        "    transition: all 0.3s ease;"  // 平滑过渡
         "}"
         "QPushButton:hover {"
         "    background-color: rgb(29, 123, 255);"  // 悬浮时的背景色
         "    color: white;"  // 悬浮时字体颜色变白
-        "    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);"  // 悬浮时的阴影效果
-        "    transform: scale(1.1);"  // 悬浮时按钮略微放大
         "}"
         "QPushButton:pressed {"
         "    background-color: rgb(29, 123, 255);"  // 点击时的背景色
-        "    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"  // 点击时的阴影效果
-        "    transform: scale(0.95);"  // 点击时按钮略微缩小
         "}"
         );
     connect(returnButton,&QPushButton::clicked,this,&adminMainInterface::onReturnButtonClicked);
@@ -214,15 +214,19 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
     {
         stackedWidget->setCurrentIndex(0);
     }
-    else if (item == menuTree->topLevelItem(1)) // "用户管理"
+    else if(item == menuTree->topLevelItem(1)) //客服中心
+    {
+        stackedWidget->setCurrentIndex(13);
+    }
+    else if (item == menuTree->topLevelItem(2)) // "用户管理"
     {
         stackedWidget->setCurrentIndex(1);
     }
-    else if (item == menuTree->topLevelItem(2)) // "订单管理"
+    else if (item == menuTree->topLevelItem(3)) // "订单管理"
     {
         stackedWidget->setCurrentIndex(2);
     }
-    else if (item == menuTree->topLevelItem(3)) // "航班管理"
+    else if (item == menuTree->topLevelItem(4)) // "航班管理"
     {
         stackedWidget->setCurrentIndex(3);
     }

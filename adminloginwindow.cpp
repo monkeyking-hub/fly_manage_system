@@ -137,19 +137,13 @@ adminLoginWindow::adminLoginWindow(QWidget *parent)
         "    padding: 10px;"
         "    font-weight: bold;"
         "    border: 2px solid #1d7bff;"  // 添加边框颜色
-        "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"  // 添加初始阴影
-        "    transition: all 0.3s ease;"  // 平滑过渡
         "}"
         "QPushButton:hover {"
         "    background-color: rgb(29, 123, 255);"  // 悬浮时的背景色
         "    color: white;"  // 悬浮时字体颜色变白
-        "    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);"  // 悬浮时的阴影效果
-        "    transform: scale(1.1);"  // 悬浮时按钮略微放大
         "}"
         "QPushButton:pressed {"
         "    background-color: rgb(29, 123, 255);"  // 点击时的背景色
-        "    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"  // 点击时的阴影效果
-        "    transform: scale(0.95);"  // 点击时按钮略微缩小
         "}"
         );
     loginBtn->setCursor(Qt::PointingHandCursor);
@@ -168,19 +162,13 @@ adminLoginWindow::adminLoginWindow(QWidget *parent)
         "    padding: 10px;"
         "    font-weight: bold;"
         "    border: 2px solid #1d7bff;"  // 添加边框颜色
-        "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"  // 添加初始阴影
-        "    transition: all 0.3s ease;"  // 平滑过渡
         "}"
         "QPushButton:hover {"
         "    background-color: rgb(29, 123, 255);"  // 悬浮时的背景色
         "    color: white;"  // 悬浮时字体颜色变白
-        "    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);"  // 悬浮时的阴影效果
-        "    transform: scale(1.1);"  // 悬浮时按钮略微放大
         "}"
         "QPushButton:pressed {"
         "    background-color: rgb(29, 123, 255);"  // 点击时的背景色
-        "    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"  // 点击时的阴影效果
-        "    transform: scale(0.95);"  // 点击时按钮略微缩小
         "}"
         );
     returnBtn->setCursor(Qt::PointingHandCursor);
