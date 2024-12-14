@@ -285,7 +285,8 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
 {
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
 
-    QUrl url("http://localhost:8080/api/users/login");
+    QUrl url("http://127.0.0.1:8080/api/users/login");
+    //QUrl luUrl("http://192.168.238.11:8080/api/users/get");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -295,12 +296,14 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
 
     QNetworkReply* reply = manager->post(request, QJsonDocument(json).toJson());
     connect(reply, &QNetworkReply::finished, [this, reply, email]() {
-        if (reply->error() == QNetworkReply::NoError) {
+        if (reply->error() == QNetworkReply::NoError)
+        {
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject responseObject = jsonResponse.object();
 
-            if (responseObject["code"].toInt() == 200) {
+            if (responseObject["code"].toInt() == 200)
+            {
                 // 登录成功
                 QJsonObject data = responseObject["data"].toObject();
 
@@ -320,7 +323,10 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
                         QJsonDocument lujsonResponse = QJsonDocument::fromJson(resdata);
                         QJsonObject luresponseObject = lujsonResponse.object();
 
-                        if (luresponseObject["code"].toInt() == 200) {
+                        qDebug()<<luresponseObject["code"].toInt();
+
+                        if (luresponseObject["code"].toInt() == 200)
+                        {
                             // 完整用户信息获取成功
                             QJsonObject luData = luresponseObject["data"].toObject();
                             User loginUser;
@@ -334,6 +340,10 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
                             // 页面切换到主界面
                             InterfaceManager::instance()->switchToPage("lxt_mainInterface");
                         }
+                        else
+                        {
+                            QMessageBox::critical(nullptr, "Error", "Failed to fetch user details: " + luReply->errorString());
+                        }
                     } else {
                         // 请求失败
                         qDebug() << "Error fetching user details:" << luReply->errorString();
@@ -346,7 +356,9 @@ void loginHandler::handleLogin(const QString& email, const QString& password)
                 qDebug() << "Login failed, code: " << responseObject["code"].toInt();
                 QMessageBox::critical(nullptr, "登录失败", responseObject["message"].toString());
             }
-        } else {
+        }
+        else
+        {
             // 登录请求失败
             qDebug() << "Error logging in:" << reply->errorString();
             QMessageBox::critical(nullptr, "登录失败", "Request failed: " + reply->errorString());
