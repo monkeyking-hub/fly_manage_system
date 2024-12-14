@@ -15,6 +15,7 @@ SOURCES += \
     adminloginwindow.cpp \
     adminmaininterface.cpp \
     animatedinputfield.cpp \
+    chatwindow.cpp \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
     newhomewindow.cpp \
     newloginwindow.cpp \
     order.cpp \
+    orderdetailwindow.cpp \
     orderwidget.cpp \
     newregisterwindow.cpp \
     orderwindow.cpp \
@@ -41,6 +43,7 @@ HEADERS += \
     adminloginwindow.h \
     adminmaininterface.h \
     animatedInputField.h \
+    chatwindow.h \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
@@ -50,6 +53,7 @@ HEADERS += \
     newhomewindow.h \
     newloginwindow.h \
     order.h \
+    orderdetailwindow.h \
     orderwidget.h \
     newregisterwindow.h \
     orderwindow.h \
@@ -73,6 +77,7 @@ FORMS += \
     newhomewindow.ui \
     newloginwindow.ui \
     newregisterwindow.ui \
+    orderdetailwindow.ui \
     orderwindow.ui \
     registerwindow.ui \
     userwindow.ui \

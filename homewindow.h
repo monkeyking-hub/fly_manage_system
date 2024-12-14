@@ -21,9 +21,13 @@ class homeWindow;
 class homeWindow : public QMainWindow
 {
     Q_OBJECT
+public:
+    QHBoxLayout *scrollLayout;
 
 public:
     explicit homeWindow(QWidget *parent = nullptr);
+    void clearCategoryBlocks();
+    void onSearchButtonClicked();
     ~homeWindow();
 
 private:

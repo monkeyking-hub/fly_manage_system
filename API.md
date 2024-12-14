@@ -801,5 +801,78 @@ curl -O http://127.0.0.1:5000/download-avatar/user@example.com
 
 ---
 
+### **接口描述**
+
+#### **1. 发送消息接口**
+- **请求 URL**: `/api/chat/send`
+- **请求方式**: `POST`
+- **请求体**:
+  ```json
+  {
+    "userId": 1,               // 用户ID（必填）
+    "message": "Hello, World!", // 消息内容（必填）
+    "timestamp": 1674532500     // 消息时间戳（必填）
+  }
+  ```
+
+- **成功响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "Message sent successfully",
+    "data": {
+      "id": 1,
+      "userId": 1,
+      "message": "Hello, World!",
+      "timestamp": 1674532500
+    }
+  }
+  ```
+
+- **失败响应**:
+  ```json
+  {
+    "code": 500,
+    "message": "Message sending failed: Missing required fields",
+    "data": null
+  }
+  ```
+
+#### **2. 获取所有聊天记录接口**
+- **请求 URL**: `/api/chat/history`
+- **请求方式**: `GET`
+
+- **成功响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "Chat history retrieved successfully",
+    "data": [
+      {
+        "id": 1,
+        "userId": 1,
+        "message": "Hello, World!",
+        "timestamp": 1674532500
+      },
+      {
+        "id": 2,
+        "userId": 2,
+        "message": "Hi there!",
+        "timestamp": 1674532800
+      }
+    ]
+  }
+  ```
+
+- **失败响应**:
+  ```json
+  {
+    "code": 500,
+    "message": "Failed to retrieve chat history",
+    "data": null
+  }
+  ```
+
+
 
 
