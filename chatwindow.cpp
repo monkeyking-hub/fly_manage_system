@@ -2,77 +2,83 @@
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QScrollArea>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QDebug>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QTimer>
+#include <QTimer>  // 引入 QTimer
 
-ChatWindow::ChatWindow(QWidget *parent) :
+ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
+    isClient(isclient),
     QMainWindow(parent)
 {
     // 设置窗口标题和尺寸
     setWindowTitle("ChatWindow");
-    setFixedSize(500, 600); // 增加窗口宽度
+    setWindowState(Qt::WindowMaximized);  // 窗口最大化
+
+    // 设置主窗口的背景图片
+    setStyleSheet("QMainWindow { background-image: url(:/blue.png); background-position: center; }");
 
     // 创建一个 QWidget 作为主窗口的中心控件
-    QWidget *centralWidget = new QWidget(this);
+    centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
-    // 创建一个垂直布局，用于存放聊天记录
-    chatLayout = new QVBoxLayout();
-    chatLayout->setSpacing(10);  // 设置垂直布局中的间距
+    // 主布局
+    mainLayout = new QVBoxLayout(centralWidget);
 
-    // 创建一个滚动区域，用于展示聊天记录
-    chatScrollArea = new QScrollArea(this);
-    chatScrollArea->setWidgetResizable(true);
+    // 显示对方名字
+    if (isclient) {
+        friendNameLabel = new QLabel("人工客服", this);
+    } else {
+        friendNameLabel = new QLabel("刁难客户", this);
+    }
+    friendNameLabel->setAlignment(Qt::AlignCenter);
+    friendNameLabel->setStyleSheet("font-size: 22px; font-weight: bold; padding: 15px; color: #ffffff;");
 
-    // 创建一个 widget，用于在滚动区域中显示聊天记录
-    QWidget *chatContentWidget = new QWidget(chatScrollArea);
-    chatScrollArea->setWidget(chatContentWidget);
+    // 创建聊天记录区域（使用 QTextBrowser 来显示消息）
+    chatArea = new QTextBrowser(this);
+    chatArea->setReadOnly(true);
+    chatArea->setStyleSheet("background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; padding: 15px; font-size: 14px; color: #333; border: 1px solid #ddd;");
 
-    // 将垂直布局设置为聊天内容的布局
-    chatContentWidget->setLayout(chatLayout);
-
-    // 创建输入框和发送按钮
+    // 输入框和发送按钮
     messageInput = new QLineEdit(this);
     messageInput->setPlaceholderText("请输入消息...");
     messageInput->setFixedHeight(40);
+    messageInput->setStyleSheet("padding: 5px; font-size: 14px; border: 1px solid #ddd; border-radius: 5px;");
 
     sendButton = new QPushButton("发送", this);
     sendButton->setFixedHeight(40);
+    sendButton->setStyleSheet("background-color: #007bff; color: white; border-radius: 5px; font-size: 14px; transition: background-color 0.3s;");
 
-    // 创建一个布局，包含文本框和按钮
+    // 添加按钮悬浮效果
+    sendButton->setStyleSheet(
+        "QPushButton { background-color: #007bff; color: white; border-radius: 5px; font-size: 14px; }"
+        "QPushButton:hover { background-color: #0056b3; }"
+        );
+
+    // 创建输入区域布局
     QHBoxLayout *inputLayout = new QHBoxLayout;
     inputLayout->addWidget(messageInput);
     inputLayout->addWidget(sendButton);
 
-    // 创建主布局
-    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
-    mainLayout->addWidget(chatScrollArea);
+    // 添加控件到主布局
+    mainLayout->addWidget(friendNameLabel);
+    mainLayout->addWidget(chatArea);
     mainLayout->addLayout(inputLayout);
 
-    // 设置主布局间距
-    mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(0, 0, 0, 0); // 移除外部边距
-
-    // 设置布局
-    centralWidget->setLayout(mainLayout);
+    // 设置主布局间距和边距
+    mainLayout->setSpacing(10);
+    mainLayout->setContentsMargins(20, 20, 20, 20);  // 给外围添加一些空隙
 
     // 加载历史聊天记录
     fetchChatHistory();
 
-    // 定时器每秒钟检查新消息
+    // 设置定时器每3秒刷新一次
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
-    timer->start(3000); // 每1000毫秒（1秒）调用一次
+    timer->start(3000);  // 每3秒刷新一次
 
     // 发送消息按钮点击事件
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::onSendMessage);
@@ -85,11 +91,12 @@ ChatWindow::~ChatWindow()
 
 void ChatWindow::fetchChatHistory()
 {
-    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    // 模拟获取历史消息
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url("http://127.0.0.1:8080/api/chat/history");  // 后端接口URL
     QNetworkRequest request(url);
 
-    QNetworkReply* reply = manager->get(request);
+    QNetworkReply *reply = manager->get(request);
 
     connect(reply, &QNetworkReply::finished, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
@@ -102,7 +109,7 @@ void ChatWindow::fetchChatHistory()
                 QJsonArray chatHistory = responseObject["data"].toArray();
 
                 // 清空聊天区域
-                qDeleteAll(chatLayout->children());
+                chatArea->clear();
 
                 // 处理返回的聊天记录数据
                 for (const QJsonValue& value : chatHistory) {
@@ -112,28 +119,25 @@ void ChatWindow::fetchChatHistory()
                     qint64 timestamp = message["timestamp"].toInt();
                     QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
 
-                    // 创建消息标签
-                    QLabel* msgLabel = new QLabel;
-                    msgLabel->setText(time + " - " + messageText);
-                    msgLabel->setWordWrap(true);  // 启用自动换行
-                    msgLabel->setAlignment(Qt::AlignTop);
+                    // 拼接显示的消息内容
+                    QString msgContent = "<b>" + time + "</b>: " + messageText + "\n";
 
-                    // 设置消息对齐方式和样式
-                    if (userId == 1) { // 假设1是当前用户的ID
-                        msgLabel->setAlignment(Qt::AlignRight);
-                        msgLabel->setStyleSheet("background-color: #d3f8e2; padding: 15px; border-radius: 10px; max-width: 95%; width: 100%; margin-bottom: 15px;");
-                    } else {
-                        msgLabel->setAlignment(Qt::AlignLeft);
-                        msgLabel->setStyleSheet("background-color: #f0f0f0; padding: 15px; border-radius: 10px; max-width: 95%; width: 100%; margin-bottom: 15px;");
+                    // 根据用户ID调整对齐方式
+                    if (isClient == false) {  // 表示当前为客服
+                        if (userId == 1)
+                            chatArea->setAlignment(Qt::AlignRight);
+                        else
+                            chatArea->setAlignment(Qt::AlignLeft);
+                    } else {  // 其他用户
+                        if (userId == 1)
+                            chatArea->setAlignment(Qt::AlignLeft);
+                        else
+                            chatArea->setAlignment(Qt::AlignRight);
                     }
 
-                    // 将消息标签添加到垂直布局中
-                    chatLayout->addWidget(msgLabel);
+                    // 将消息内容添加到聊天区域
+                    chatArea->append(msgContent);
                 }
-
-                // 滚动到底部
-                QScrollBar *scrollBar = chatScrollArea->verticalScrollBar();
-                scrollBar->setValue(scrollBar->maximum());
             } else {
                 qDebug() << "Failed to retrieve chat history:" << responseObject["message"].toString();
                 QMessageBox::critical(nullptr, "获取历史记录失败", responseObject["message"].toString());
@@ -145,10 +149,10 @@ void ChatWindow::fetchChatHistory()
         reply->deleteLater();
     });
 }
-
 void ChatWindow::sendMessage(int userId, const QString& message)
 {
-    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    // 发送消息
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url("http://127.0.0.1:8080/api/chat/send");  // 后端接口URL
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -158,7 +162,7 @@ void ChatWindow::sendMessage(int userId, const QString& message)
     json["message"] = message;
     json["timestamp"] = QDateTime::currentSecsSinceEpoch();
 
-    QNetworkReply* reply = manager->post(request, QJsonDocument(json).toJson());
+    QNetworkReply *reply = manager->post(request, QJsonDocument(json).toJson());
 
     connect(reply, &QNetworkReply::finished, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
@@ -176,25 +180,41 @@ void ChatWindow::sendMessage(int userId, const QString& message)
                 qint64 timestamp = message["timestamp"].toInt();
                 QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
 
-                // 创建消息标签并显示在聊天窗口
-                QLabel* msgLabel = new QLabel;
-                msgLabel->setText(time + " - " + messageText);
-
-                // 设置消息对齐方式
-                if (userId == 1) { // 假设1是当前用户的ID
-                    msgLabel->setAlignment(Qt::AlignRight);
-                    msgLabel->setStyleSheet("background-color: #d3f8e2; padding: 5px; border-radius: 10px; max-width: 70%;");
-                } else {
-                    msgLabel->setAlignment(Qt::AlignLeft);
-                    msgLabel->setStyleSheet("background-color: #f0f0f0; padding: 5px; border-radius: 10px; max-width: 70%;");
+                // 拼接显示的消息内容
+                QString msgContent = "<b>" + time + "</b>: " + messageText + "\n";
+                // 根据用户ID调整对齐方式
+                if (isClient==false)
+                {  //表示当前为客服
+                    // 根据用户ID调整对齐方式
+                    if (userId == 1) {  // 假设1是当前用户的ID
+                        msgContent.prepend("<div style='text-align:right;'>");
+                        msgContent.append("</div>");
+                    } else {
+                        msgContent.prepend("<div style='text-align:left;'>");
+                        msgContent.append("</div>");
+                    }
+                } else {  // 其他用户
+                    // 根据用户ID调整对齐方式
+                    if (userId == 1) {  // 假设1是当前用户的ID
+                        msgContent.prepend("<div style='text-align:left;'>");
+                        msgContent.append("</div>");
+                    } else {
+                        msgContent.prepend("<div style='text-align:right;'>");
+                        msgContent.append("</div>");
+                    }
                 }
 
-                // 将消息标签添加到垂直布局中
-                chatLayout->addWidget(msgLabel);
+                // // 根据用户ID调整对齐方式
+                // if (userId == 1) {  // 假设1是当前用户的ID
+                //     msgContent.prepend("<div style='text-align:right;'>");
+                //     msgContent.append("</div>");
+                // } else {
+                //     msgContent.prepend("<div style='text-align:left;'>");
+                //     msgContent.append("</div>");
+                // }
 
-                // 滚动到底部
-                QScrollBar *scrollBar = chatScrollArea->verticalScrollBar();
-                scrollBar->setValue(scrollBar->maximum());
+                // 将消息内容添加到聊天区域
+                chatArea->append(msgContent);
             } else {
                 qDebug() << "Message sending failed:" << responseObject["message"].toString();
                 QMessageBox::critical(nullptr, "发送失败", responseObject["message"].toString());
@@ -203,11 +223,10 @@ void ChatWindow::sendMessage(int userId, const QString& message)
             qDebug() << "Error sending message:" << reply->errorString();
             QMessageBox::critical(nullptr, "发送失败", "请求失败: " + reply->errorString());
         }
-        reply->deleteLater();
     });
 }
 
-// 按钮点击事件
+
 void ChatWindow::onSendMessage()
 {
     QString message = messageInput->text();
@@ -215,10 +234,7 @@ void ChatWindow::onSendMessage()
         QMessageBox::warning(this, "发送失败", "消息不能为空！");
         return;
     }
-
-    int userId = 1;  // 假设当前用户的ID为1
-    sendMessage(userId, message);
-
-    // 清空文本框
+    int userId = isClient ? 2 : 1;
+    sendMessage(userId, message);  // 假设1是当前用户ID
     messageInput->clear();
 }

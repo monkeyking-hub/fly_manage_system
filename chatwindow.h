@@ -4,37 +4,34 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QScrollArea>
-#include <QScrollBar>
-#include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
-#include <QTimer>
+#include <QTextBrowser>
+#include <QLabel>
 
 class ChatWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ChatWindow(QWidget *parent = nullptr);
+    explicit ChatWindow(bool isclient,QWidget *parent = nullptr);
     ~ChatWindow();
+    bool isClient = false;
 
 private:
-    QVBoxLayout *chatLayout;           // 用于显示聊天消息的垂直布局
-    QWidget *chatWidget;               // 包含消息的容器
-    QScrollArea *chatScrollArea;       // 显示聊天记录的滚动区域
-
-    QLineEdit *messageInput;           // 用于输入消息的文本框
+    QWidget *centralWidget;            // 中央控件
+    QVBoxLayout *mainLayout;           // 主布局
+    //void keyPressEvent(QKeyEvent *event);
+    QLabel *friendNameLabel;           // 显示对方名字
+    QTextBrowser *chatArea;            // 聊天记录显示区域
+    QLineEdit *messageInput;           // 消息输入框
     QPushButton *sendButton;           // 发送按钮
 
-    // 加载历史记录
-    void fetchChatHistory();
-
-    // 发送消息
-    void sendMessage(int userId, const QString& message);
+    void fetchChatHistory();           // 加载历史记录
+    void sendMessage(int userId, const QString& message);  // 发送消息
 
 private slots:
-    // 发送消息槽函数
-    void onSendMessage();
+    void onSendMessage();  // 发送消息槽函数
 };
 
 #endif // CHATWINDOW_H
