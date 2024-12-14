@@ -20,6 +20,7 @@ public:
     QTreeWidget *menuTree;
     //一级菜单
     QTreeWidgetItem *homeItem; //首页
+    QTreeWidgetItem *kefuItem; //客服中心
     QTreeWidgetItem *usersItem; //用户管理
     QTreeWidgetItem *ordersItem; //订单管理
     QTreeWidgetItem *flightsItem; //航班管理
