@@ -29,10 +29,10 @@
         <file>flightNumber.png</file>
         <file>company.png</file>
         <file>map.png</file>
-        <file>place1.jpg</file>
-        <file>place2.jpg</file>
-        <file>place3.jpg</file>
-        <file>place4.jpg</file>
+        <file>Aplace1.jpg</file>
+        <file>Aplace2.jpg</file>
+        <file>Aplace3.jpg</file>
+        <file>Aplace4.jpg</file>
         <file>homewindow1.png</file>
         <file>homewindow2.png</file>
         <file>homewindow3.png</file>
@@ -44,5 +44,14 @@
         <file>newicon/good.png</file>
         <file>newicon/nor.png</file>
         <file>newicon/star.png</file>
+        <file>Bplace1.jpg</file>
+        <file>Bplace2.jpg</file>
+        <file>Bplace3.jpg</file>
+        <file>Cplace1.jpg</file>
+        <file>Cplace2.jpg</file>
+        <file>Cplace3.jpg</file>
+        <file>Bplace4.jpg</file>
+        <file>Cplace4.jpg</file>
+        <file>kefu.png</file>
     </qresource>
 </RCC>

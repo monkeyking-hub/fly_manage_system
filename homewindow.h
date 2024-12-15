@@ -23,6 +23,7 @@ class homeWindow : public QMainWindow
     Q_OBJECT
 public:
     QHBoxLayout *scrollLayout;
+    QLineEdit *departureInput;
 
 public:
     explicit homeWindow(QWidget *parent = nullptr);
@@ -93,12 +94,32 @@ public:
         for (int i = 0; i < routes.size(); ++i) {
             QHBoxLayout *itemLayout = new QHBoxLayout();
 
-            // 创建图片标签
-            QLabel *imageLabel = new QLabel(this);
-            QString imgPath=":/place"+QString::number(i+1)+".jpg";
-            QPixmap imagePixmap(imgPath);
-            imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
-            imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
+            QLabel *imageLabel=new QLabel(this);
+            if(title=="周末省心游")
+            {
+                // 放图片
+                QString imgPath=":/Aplace"+QString::number(i+1)+".jpg";
+                QPixmap imagePixmap(imgPath);
+                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
+                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
+            }
+            else if(title=="爱上大草原")
+            {
+                // 放图片
+                QString imgPath=":/Bplace"+QString::number(i+1)+".jpg";
+                QPixmap imagePixmap(imgPath);
+                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
+                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
+            }
+            else
+            {
+                // 放图片
+                QString imgPath=":/Cplace"+QString::number(i+1)+".jpg";
+                QPixmap imagePixmap(imgPath);
+                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
+                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
+            }
+
 
             // 路线和价格标签
             QLabel *routeLabel = new QLabel(routes[i], this);

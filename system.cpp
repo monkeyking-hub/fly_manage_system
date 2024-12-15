@@ -42,7 +42,8 @@ void System::start()
     adminLoginWindow *adminLogin = new adminLoginWindow(); //管理员登录界面
     adminLoginHandler *adminLoginHand = new adminLoginHandler(); //adminLoginHand用于管理员登录界面的登录按钮信号与槽连接
     adminMainInterface *adminMainWindow = new adminMainInterface(); //管理员主界面
-    ChatWindow * chat = new ChatWindow();
+    ChatWindow * clientchat = new ChatWindow(true);
+    ChatWindow * managerchat = new ChatWindow(false);
     // 连接 newHomeWindow 的信号到 mainInterface 的槽
     connect(newHomePage, &newHomeWindow::commandLinkButton4Clicked, m_mainInterface, [this]() {
         // 切换到航班动态界面
@@ -96,7 +97,8 @@ void System::start()
 
     InterfaceManager::instance()->registerPage("lxt_adminMainInterface",adminMainWindow); //管理员主界面
 
-    InterfaceManager::instance()->registerPage("chatWindow",chat); //管理员主界面
+    InterfaceManager::instance()->registerPage("clientchatWindow",clientchat); //用户和客服对线界面
+    InterfaceManager::instance()->registerPage("managerchatWindow",managerchat); //客服对线用户界面
 
     //注册gama界面
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);
@@ -107,8 +109,9 @@ void System::start()
 
     InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
 
-     //InterfaceManager::instance()->switchToPage("lxt_mainInterface");
-    //InterfaceManager::instance()->switchToPage("chatWindow");
+     // InterfaceManager::instance()->switchToPage("lxt_adminMainInterface");
+    // InterfaceManager::instance()->switchToPage("clientchatWindow");
+    // InterfaceManager::instance()->switchToPage("managerchatWindow");
 }
 System::~System()
 {
