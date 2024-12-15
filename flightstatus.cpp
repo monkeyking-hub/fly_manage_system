@@ -11,6 +11,255 @@ flightstatus::flightstatus(QWidget *parent)
     , ui(new Ui::flightstatus)
 {
     ui->setupUi(this);
+    init();
+    ui->departureInput->installEventFilter(this);
+    ui->destinationInput->installEventFilter(this);
+    connect(ui->departureInput, &QLineEdit::textChanged, this, [this](){ui->pick_widget->setVisible(false);});
+    connect(ui->destinationInput, &QLineEdit::textChanged, this, [this](){ui->pick_widget_2->setVisible(false);});
+    this->installEventFilter(this);
+}
+
+// 析构函数
+flightstatus::~flightstatus()
+{
+    delete ui;
+}
+
+void flightstatus::showPickWidget(QLineEdit* qle)
+{
+    if(qle==ui->departureInput)
+    {
+    QPoint pos=QPoint(250,91);
+    ui->pick_widget->move(pos);
+    ui->pick_widget->setVisible(true);
+    }
+    if(qle==ui->destinationInput)
+    {
+        QPoint pos=QPoint(550,91);
+        ui->pick_widget_2->move(pos);
+        ui->pick_widget_2->setVisible(true);
+    }
+}
+
+bool flightstatus::eventFilter(QObject* obj,QEvent* event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+
+        // 检查点击是否在特定控件上
+        bool onDepartureInput = ui->departureInput->underMouse();
+        bool onDestinationInput = ui->destinationInput->underMouse();
+        bool onPickWidget = ui->pick_widget->underMouse();
+        bool onPickWidget2 = ui->pick_widget_2->underMouse();
+
+        // 如果没有点击在上述任何控件上，则隐藏
+        if (!onDepartureInput && !onDestinationInput && !onPickWidget && !onPickWidget2) {
+            ui->pick_widget->setVisible(false);
+            ui->pick_widget_2->setVisible(false);
+        }
+    }
+
+    if (obj == ui->departureInput || obj == ui->destinationInput) {
+        if (event->type() == QEvent::FocusOut) {
+            if (obj == ui->departureInput) {
+                ui->pick_widget->setVisible(false);
+            } else if (obj == ui->destinationInput) {
+                ui->pick_widget_2->setVisible(false);
+            }
+            return false; // Continue the event propagation
+        } else if (event->type() == QEvent::MouseButtonPress) {
+            QLineEdit* qle = static_cast<QLineEdit*>(obj);
+            showPickWidget(qle);
+            return true; // Stop the event propagation
+        }
+    }
+    return QObject::eventFilter(obj, event);
+}
+
+void flightstatus::cityPicked(const QString city)
+{
+    ui->departureInput->setText(city);
+    ui->pick_widget->setVisible(false);
+}
+
+void flightstatus::dscityPicked(const QString city)
+{
+    ui->destinationInput->setText(city);
+    ui->pick_widget->setVisible(false);
+}
+
+// 设置出发地和目的地的补全器
+void flightstatus::setupCompleter()
+{
+    cityListModel = new QStringListModel(cityList, this);
+
+    // 创建补全器
+    departureCompleter = new QCompleter(this);
+    departureCompleter->setModel(cityListModel);
+    departureCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    departureCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    ui->departureInput->setCompleter(departureCompleter);
+
+    destinationCompleter = new QCompleter(this);
+    destinationCompleter->setModel(cityListModel);
+    destinationCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    destinationCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    ui->destinationInput->setCompleter(destinationCompleter);
+}
+
+// 出发地输入框文本变化时触发
+void flightstatus::on_departureInput_textChanged(const QString &text)
+{
+    // 使用拼音或中文进行匹配
+    QStringList filteredCities;
+    for (const QString &city : cityList) {
+        if (city.contains(text, Qt::CaseInsensitive)) {
+
+            filteredCities << city;
+        }
+    }
+    cityListModel->setStringList(filteredCities);
+}
+
+// 目的地输入框文本变化时触发
+void flightstatus::on_destinationInput_textChanged(const QString &text)
+{
+    // 使用拼音或中文进行匹配
+    QStringList filteredCities;
+    for (const QString &city : cityList) {
+        if (city.contains(text, Qt::CaseInsensitive)) {
+
+            filteredCities << city;
+        }
+    }
+    cityListModel->setStringList(filteredCities);
+}
+
+
+void flightstatus::on_pushButton_4_clicked()
+{
+    ui->sw->setCurrentIndex(2);
+}
+
+
+void flightstatus::on_pushButton_5_clicked()
+{
+    ui->sw->setCurrentIndex(3);
+}
+
+
+void flightstatus::on_pushButton_6_clicked()
+{
+    ui->sw->setCurrentIndex(4);
+}
+
+
+void flightstatus::on_pushButton_7_clicked()
+{
+    ui->sw->setCurrentIndex(5);
+}
+
+
+void flightstatus::on_pushButton_8_clicked()
+{
+    ui->sw->setCurrentIndex(6);
+}
+
+
+void flightstatus::on_btn_popuplar_clicked()
+{
+    ui->sw->setCurrentIndex(1);
+}
+
+
+void flightstatus::on_btn_domestic_clicked()
+{
+    ui->top_sw->setCurrentIndex(0);
+    ui->sw->setCurrentIndex(1);
+}
+
+
+void flightstatus::on_btn_abroad_clicked()
+{
+    ui->top_sw->setCurrentIndex(1);
+    ui->sw->setCurrentIndex(0);
+}
+
+void flightstatus::on_pushButton_9_clicked()
+{
+    ui->sw_2->setCurrentIndex(2);
+}
+
+
+void flightstatus::on_pushButton_10_clicked()
+{
+    ui->sw_2->setCurrentIndex(3);
+}
+
+
+void flightstatus::on_pushButton_11_clicked()
+{
+    ui->sw_2->setCurrentIndex(4);
+}
+
+
+void flightstatus::on_pushButton_12_clicked()
+{
+    ui->sw_2->setCurrentIndex(5);
+}
+
+
+void flightstatus::on_pushButton_13_clicked()
+{
+    ui->sw_2->setCurrentIndex(6);
+}
+
+
+void flightstatus::on_btn_popuplar_2_clicked()
+{
+    ui->sw_2->setCurrentIndex(1);
+}
+
+void flightstatus::on_btn_domestic_2_clicked()
+{
+    ui->top_sw_2->setCurrentIndex(0);
+    ui->sw_2->setCurrentIndex(1);
+}
+
+void flightstatus::on_btn_abroad_2_clicked()
+{
+    ui->top_sw_2->setCurrentIndex(1);
+    ui->sw_2->setCurrentIndex(0);
+}
+
+void flightstatus::init()
+{
+    ui->pick_widget->setVisible(false);
+    for(int i=0;i<ui->sw->count();i++)
+    {
+        QWidget* widget=ui->sw->widget(i);
+        QList<QPushButton*> buttonsInpage=widget->findChildren<QPushButton*>();
+
+        for (QPushButton *button : buttonsInpage) {
+            connect(button, &QPushButton::clicked, [button, this]() {
+                ui->departureInput->setText(button->text());
+                ui->pick_widget->setVisible(false);
+            });
+    }
+    }
+    ui->pick_widget_2->setVisible(false);
+    for(int i=0;i<ui->sw_2->count();i++)
+    {
+        QWidget* widget=ui->sw_2->widget(i);
+        QList<QPushButton*> buttonsInpage=widget->findChildren<QPushButton*>();
+
+        for (QPushButton *button : buttonsInpage) {
+            connect(button, &QPushButton::clicked, [button, this]() {
+                ui->destinationInput->setText(button->text());
+                ui->pick_widget_2->setVisible(false);
+            });
+        }
+    }
     // 初始化城市列表
     cityList << "安庆" << "anqing"
              << "安阳" << "anyang"
@@ -105,58 +354,19 @@ flightstatus::flightstatus(QWidget *parent)
 
     // 设置补全器
     setupCompleter();
+
 }
 
-// 析构函数
-flightstatus::~flightstatus()
-{
-    delete ui;
-}
 
-// 设置出发地和目的地的补全器
-void flightstatus::setupCompleter()
-{
-    cityListModel = new QStringListModel(cityList, this);
 
-    // 创建补全器
-    departureCompleter = new QCompleter(this);
-    departureCompleter->setModel(cityListModel);
-    departureCompleter->setCaseSensitivity(Qt::CaseInsensitive);
-    departureCompleter->setCompletionMode(QCompleter::PopupCompletion);
-    ui->departureInput->setCompleter(departureCompleter);
 
-    destinationCompleter = new QCompleter(this);
-    destinationCompleter->setModel(cityListModel);
-    destinationCompleter->setCaseSensitivity(Qt::CaseInsensitive);
-    destinationCompleter->setCompletionMode(QCompleter::PopupCompletion);
-    ui->destinationInput->setCompleter(destinationCompleter);
-}
 
-// 出发地输入框文本变化时触发
-void flightstatus::on_departureInput_textChanged(const QString &text)
-{
-    // 使用拼音或中文进行匹配
-    QStringList filteredCities;
-    for (const QString &city : cityList) {
-        if (city.contains(text, Qt::CaseInsensitive)) {
 
-            filteredCities << city;
-        }
-    }
-    cityListModel->setStringList(filteredCities);
-}
 
-// 目的地输入框文本变化时触发
-void flightstatus::on_destinationInput_textChanged(const QString &text)
-{
-    // 使用拼音或中文进行匹配
-    QStringList filteredCities;
-    for (const QString &city : cityList) {
-        if (city.contains(text, Qt::CaseInsensitive)) {
 
-            filteredCities << city;
-        }
-    }
-    cityListModel->setStringList(filteredCities);
-}
+
+
+
+
+
 

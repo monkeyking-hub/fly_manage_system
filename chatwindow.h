@@ -27,6 +27,7 @@ private:
     QLineEdit *messageInput;           // 消息输入框
     QPushButton *sendButton;           // 发送按钮
 
+
     void fetchChatHistory();           // 加载历史记录
     void sendMessage(int userId, const QString& message);  // 发送消息
 

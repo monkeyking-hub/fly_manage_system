@@ -79,7 +79,7 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     // 设置定时器每3秒刷新一次
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
-    timer->start(3000);  // 每3秒刷新一次
+    //timer->start(3000);  // 每3秒刷新一次
 
     // 发送消息按钮点击事件
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::onSendMessage);
