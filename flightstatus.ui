@@ -10,6 +10,9 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -24,60 +27,56 @@
       <x>250</x>
       <y>70</y>
       <width>161</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">ui-&gt;departureInput-&gt;setStyleSheet(
-    &quot;border: 1px solid #dcdde1; &quot;
-    &quot;border-radius: 5px; &quot;
-    &quot;padding: 5px; &quot;
-    &quot;background-color: #ffffff; &quot;
-    &quot;font-size: 14px;&quot;
-);
-ui-&gt;destinationInput-&gt;setStyleSheet(
-    &quot;border: 1px solid #dcdde1; &quot;
-    &quot;border-radius: 5px; &quot;
-    &quot;padding: 5px; &quot;
-    &quot;background-color: #ffffff; &quot;
-    &quot;font-size: 14px;&quot;
-);
+     <string notr="true">QLineEdit {
+    border: 1px solid #c0c0c0; /* 浅灰色边框 */
+    border-radius: 15px; /* 圆角半径 */
+    padding: 5px; /* 内边距，为文本提供空间 */
+    background-color: white; /* 背景色为白色 */
+    color: black; /* 文字颜色为黑色 */
+    font-size: 14px; /* 字体大小 */
+}
+
+QLineEdit:focus {
+    border: 1px solid #0078D7; /* 聚焦时边框颜色为深蓝色 */
+}
 </string>
     </property>
    </widget>
    <widget class="QLineEdit" name="destinationInput">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>540</x>
       <y>70</y>
-      <width>161</width>
-      <height>21</height>
+      <width>171</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">ui-&gt;departureInput-&gt;setStyleSheet(
-    &quot;border: 1px solid #dcdde1; &quot;
-    &quot;border-radius: 5px; &quot;
-    &quot;padding: 5px; &quot;
-    &quot;background-color: #ffffff; &quot;
-    &quot;font-size: 14px;&quot;
-);
-ui-&gt;destinationInput-&gt;setStyleSheet(
-    &quot;border: 1px solid #dcdde1; &quot;
-    &quot;border-radius: 5px; &quot;
-    &quot;padding: 5px; &quot;
-    &quot;background-color: #ffffff; &quot;
-    &quot;font-size: 14px;&quot;
-);
+     <string notr="true">QLineEdit {
+    border: 1px solid #c0c0c0; /* 浅灰色边框 */
+    border-radius: 15px; /* 圆角半径 */
+    padding: 5px; /* 内边距，为文本提供空间 */
+    background-color: white; /* 背景色为白色 */
+    color: black; /* 文字颜色为黑色 */
+    font-size: 14px; /* 字体大小 */
+}
+
+QLineEdit:focus {
+    border: 1px solid #0078D7; /* 聚焦时边框颜色为深蓝色 */
+}
 </string>
     </property>
    </widget>
    <widget class="QDateTimeEdit" name="departureTimeInput">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>350</x>
       <y>10</y>
-      <width>211</width>
+      <width>221</width>
       <height>31</height>
      </rect>
     </property>
@@ -160,7 +159,7 @@ ui-&gt;destinationInput-&gt;setStyleSheet(
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>460</x>
       <y>70</y>
       <width>71</width>
       <height>21</height>
@@ -242,11 +241,16 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
    <widget class="QWidget" name="pick_widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>340</y>
+      <x>540</x>
+      <y>560</y>
       <width>501</width>
       <height>391</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#pick_widget_2 {
+    background-color: #f0f0f0; /* 浅灰色背景 */
+}</string>
     </property>
     <widget class="QPushButton" name="btn_domestic_2">
      <property name="geometry">
@@ -254,8 +258,39 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
        <x>0</x>
        <y>0</y>
        <width>81</width>
-       <height>31</height>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: 1px solid transparent; /* 去掉边框 */
+    color: black; /* 默认状态下的文字颜色为黑色 */
+    padding: 10px; /* 内边距 */
+    font-size: 16px; /* 字体大小 */
+    text-align: center; /* 文本居中 */
+    border-radius: 5px; /* 圆角矩形的半径 */
+    background-color: #f0f0f0; /* 浅灰色背景 */
+}
+
+QPushButton:hover {
+    background-color: #e0e0e0; /* 鼠标悬停时的背景颜色稍微亮一点 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:checked {
+    color: white; /* 选中状态的文字颜色为白色 */
+    background-color: #0078D7; /* 选中状态的背景颜色为蓝色 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:focus {
+    outline: none; /* 去掉焦点的外边框 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+</string>
      </property>
      <property name="text">
       <string>国内</string>
@@ -265,10 +300,41 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>30</y>
+       <y>40</y>
        <width>81</width>
-       <height>31</height>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: 1px solid transparent; /* 去掉边框 */
+    color: black; /* 默认状态下的文字颜色为黑色 */
+    padding: 10px; /* 内边距 */
+    font-size: 16px; /* 字体大小 */
+    text-align: center; /* 文本居中 */
+    border-radius: 5px; /* 圆角矩形的半径 */
+    background-color: #f0f0f0; /* 浅灰色背景 */
+}
+
+QPushButton:hover {
+    background-color: #e0e0e0; /* 鼠标悬停时的背景颜色稍微亮一点 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:checked {
+    color: white; /* 选中状态的文字颜色为白色 */
+    background-color: #0078D7; /* 选中状态的背景颜色为蓝色 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:focus {
+    outline: none; /* 去掉焦点的外边框 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+</string>
      </property>
      <property name="text">
       <string>国际</string>
@@ -4847,6 +4913,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 12px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>热门</string>
        </property>
@@ -4859,6 +4950,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <width>71</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 12px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
        </property>
        <property name="text">
         <string>ABCDEF</string>
@@ -4873,6 +4989,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 12px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>GHIJ</string>
        </property>
@@ -4885,6 +5026,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <width>71</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 12px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
        </property>
        <property name="text">
         <string>KLMN</string>
@@ -4899,6 +5065,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 11px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>PQRSTUVW</string>
        </property>
@@ -4912,6 +5103,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 12px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>XYZ</string>
        </property>
@@ -4923,11 +5139,19 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
    <widget class="QWidget" name="pick_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>270</y>
+      <x>30</x>
+      <y>560</y>
       <width>501</width>
       <height>391</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#pick_widget {
+    background-color: #f0f0f0; /* 浅灰色背景 */
+}</string>
     </property>
     <widget class="QPushButton" name="btn_domestic">
      <property name="geometry">
@@ -4935,8 +5159,39 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
        <x>0</x>
        <y>0</y>
        <width>81</width>
-       <height>31</height>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: 1px solid transparent; /* 去掉边框 */
+    color: black; /* 默认状态下的文字颜色为黑色 */
+    padding: 10px; /* 内边距 */
+    font-size: 16px; /* 字体大小 */
+    text-align: center; /* 文本居中 */
+    border-radius: 5px; /* 圆角矩形的半径 */
+   background-color: #f0f0f0; /* 浅灰色背景 */
+}
+
+QPushButton:hover {
+    background-color: #e0e0e0; /* 鼠标悬停时的背景颜色稍微亮一点 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:checked {
+    color: white; /* 选中状态的文字颜色为白色 */
+    background-color: #0078D7; /* 选中状态的背景颜色为蓝色 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:focus {
+    outline: none; /* 去掉焦点的外边框 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+</string>
      </property>
      <property name="text">
       <string>国内</string>
@@ -4946,10 +5201,41 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>30</y>
+       <y>40</y>
        <width>81</width>
-       <height>31</height>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: 1px solid transparent; /* 去掉边框 */
+    color: black; /* 默认状态下的文字颜色为黑色 */
+    padding: 10px; /* 内边距 */
+    font-size: 16px; /* 字体大小 */
+    text-align: center; /* 文本居中 */
+    border-radius: 5px; /* 圆角矩形的半径 */
+   background-color: #f0f0f0; /* 浅灰色背景 */
+}
+
+QPushButton:hover {
+    background-color: #e0e0e0; /* 鼠标悬停时的背景颜色稍微亮一点 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:checked {
+    color: white; /* 选中状态的文字颜色为白色 */
+    background-color: #0078D7; /* 选中状态的背景颜色为蓝色 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+
+QPushButton:focus {
+    outline: none; /* 去掉焦点的外边框 */
+    border-radius: 5px; /* 保持圆角矩形的一致性 */
+}
+</string>
      </property>
      <property name="text">
       <string>国际</string>
@@ -9528,6 +9814,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 12px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>热门</string>
        </property>
@@ -9540,6 +9851,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <width>71</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 11px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
        </property>
        <property name="text">
         <string>ABCDEF</string>
@@ -9554,6 +9890,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 11px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>GHIJ</string>
        </property>
@@ -9566,6 +9927,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <width>71</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 11px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
        </property>
        <property name="text">
         <string>KLMN</string>
@@ -9580,6 +9966,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <height>31</height>
         </rect>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 11px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
+       </property>
        <property name="text">
         <string>PQRSTUVW</string>
        </property>
@@ -9592,6 +10003,31 @@ ui-&gt;resultTable-&gt;setAlternatingRowColors(true);
          <width>71</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none;
+    color: black;
+    font-size: 11px;
+    padding: 5px;
+    background: transparent;
+}
+
+QPushButton:hover {
+    color: #4AA0E6;  /* 鼠标悬停时字体变为浅蓝色 */
+}
+
+QPushButton:checked {
+    color: #4AA0E6;  /* 选中时字体变为浅蓝色 */
+    border-bottom: 2px solid #4AA0E6;  /* 选中时在按钮下方添加浅蓝色横线 */
+}
+
+QPushButton:focus {
+    outline: none;  /* 去掉焦点的外边框 */
+}</string>
        </property>
        <property name="text">
         <string>XYZ</string>

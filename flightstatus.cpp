@@ -17,6 +17,10 @@ flightstatus::flightstatus(QWidget *parent)
     connect(ui->departureInput, &QLineEdit::textChanged, this, [this](){ui->pick_widget->setVisible(false);});
     connect(ui->destinationInput, &QLineEdit::textChanged, this, [this](){ui->pick_widget_2->setVisible(false);});
     this->installEventFilter(this);
+
+    // 安装事件过滤器，处理点击 pick_widget 以外的区域隐藏 pick_widget
+    ui->pick_widget->installEventFilter(this);
+    ui->pick_widget_2->installEventFilter(this);
 }
 
 // 析构函数
@@ -29,50 +33,48 @@ void flightstatus::showPickWidget(QLineEdit* qle)
 {
     if(qle==ui->departureInput)
     {
-    QPoint pos=QPoint(250,91);
+    QPoint pos=QPoint(250,101);
     ui->pick_widget->move(pos);
     ui->pick_widget->setVisible(true);
     }
     if(qle==ui->destinationInput)
     {
-        QPoint pos=QPoint(550,91);
+        QPoint pos=QPoint(550,101);
         ui->pick_widget_2->move(pos);
         ui->pick_widget_2->setVisible(true);
     }
 }
-
-bool flightstatus::eventFilter(QObject* obj,QEvent* event)
+bool flightstatus::eventFilter(QObject* obj, QEvent* event)
 {
+
+
+    // 处理全局的鼠标点击事件，隐藏 pick_widget 和 pick_widget_2
     if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-
-        // 检查点击是否在特定控件上
-        bool onDepartureInput = ui->departureInput->underMouse();
-        bool onDestinationInput = ui->destinationInput->underMouse();
-        bool onPickWidget = ui->pick_widget->underMouse();
-        bool onPickWidget2 = ui->pick_widget_2->underMouse();
-
-        // 如果没有点击在上述任何控件上，则隐藏
-        if (!onDepartureInput && !onDestinationInput && !onPickWidget && !onPickWidget2) {
+        if (ui->pick_widget->isVisible() && !ui->pick_widget->geometry().contains(static_cast<QMouseEvent*>(event)->pos())) {
             ui->pick_widget->setVisible(false);
+        }
+        if (ui->pick_widget_2->isVisible() && !ui->pick_widget_2->geometry().contains(static_cast<QMouseEvent*>(event)->pos())) {
             ui->pick_widget_2->setVisible(false);
         }
     }
-
+    // 处理 departureInput 和 destinationInput 的其他事件
     if (obj == ui->departureInput || obj == ui->destinationInput) {
-        if (event->type() == QEvent::FocusOut) {
-            if (obj == ui->departureInput) {
-                ui->pick_widget->setVisible(false);
-            } else if (obj == ui->destinationInput) {
-                ui->pick_widget_2->setVisible(false);
-            }
-            return false; // Continue the event propagation
-        } else if (event->type() == QEvent::MouseButtonPress) {
+        if (event->type() == QEvent::MouseButtonPress) {
             QLineEdit* qle = static_cast<QLineEdit*>(obj);
             showPickWidget(qle);
-            return true; // Stop the event propagation
+            return true; // 阻止事件继续传播
         }
     }
+
+    // 处理 pick_widget 和 pick_widget_2 的事件
+    if (obj == ui->pick_widget || obj == ui->pick_widget_2) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            // 点击了 pick_widget 或 pick_widget_2，不隐藏窗口，直接返回
+            return true;
+        }
+    }
+
+    // 默认事件过滤器行为
     return QObject::eventFilter(obj, event);
 }
 
@@ -139,41 +141,49 @@ void flightstatus::on_destinationInput_textChanged(const QString &text)
 void flightstatus::on_pushButton_4_clicked()
 {
     ui->sw->setCurrentIndex(2);
+    setActiveSection("ABCDEF");
 }
 
 
 void flightstatus::on_pushButton_5_clicked()
 {
     ui->sw->setCurrentIndex(3);
+    setActiveSection("GHIJ");
 }
 
 
 void flightstatus::on_pushButton_6_clicked()
 {
     ui->sw->setCurrentIndex(4);
+    setActiveSection("KLMN");
 }
 
 
 void flightstatus::on_pushButton_7_clicked()
 {
     ui->sw->setCurrentIndex(5);
+    setActiveSection("PQRST");
 }
 
 
 void flightstatus::on_pushButton_8_clicked()
 {
     ui->sw->setCurrentIndex(6);
+    setActiveSection("XYZ");
 }
 
 
 void flightstatus::on_btn_popuplar_clicked()
 {
     ui->sw->setCurrentIndex(1);
+    setActiveSection("HOT");
 }
 
 
 void flightstatus::on_btn_domestic_clicked()
 {
+    ui->btn_abroad->setChecked(false);
+    ui->btn_domestic->setChecked(true);
     ui->top_sw->setCurrentIndex(0);
     ui->sw->setCurrentIndex(1);
 }
@@ -181,6 +191,8 @@ void flightstatus::on_btn_domestic_clicked()
 
 void flightstatus::on_btn_abroad_clicked()
 {
+    ui->btn_domestic->setChecked(false);
+    ui->btn_abroad->setChecked(true);
     ui->top_sw->setCurrentIndex(1);
     ui->sw->setCurrentIndex(0);
 }
@@ -188,59 +200,161 @@ void flightstatus::on_btn_abroad_clicked()
 void flightstatus::on_pushButton_9_clicked()
 {
     ui->sw_2->setCurrentIndex(2);
+    setActiveSection_2("ABCDEF");
 }
 
 
 void flightstatus::on_pushButton_10_clicked()
 {
     ui->sw_2->setCurrentIndex(3);
+    setActiveSection_2("GHIJ");
 }
 
 
 void flightstatus::on_pushButton_11_clicked()
 {
     ui->sw_2->setCurrentIndex(4);
+    setActiveSection_2("KLMN");
 }
 
 
 void flightstatus::on_pushButton_12_clicked()
 {
     ui->sw_2->setCurrentIndex(5);
+    setActiveSection_2("PQRST");
 }
 
 
 void flightstatus::on_pushButton_13_clicked()
 {
     ui->sw_2->setCurrentIndex(6);
+    setActiveSection_2("XYZ");
 }
 
 
 void flightstatus::on_btn_popuplar_2_clicked()
 {
     ui->sw_2->setCurrentIndex(1);
+    setActiveSection_2("HOT");
 }
 
 void flightstatus::on_btn_domestic_2_clicked()
 {
+    ui->btn_abroad_2->setChecked(false);
+    ui->btn_domestic_2->setChecked(true);
     ui->top_sw_2->setCurrentIndex(0);
     ui->sw_2->setCurrentIndex(1);
 }
 
 void flightstatus::on_btn_abroad_2_clicked()
 {
+    ui->btn_domestic_2->setChecked(false);
+    ui->btn_abroad_2->setChecked(true);
     ui->top_sw_2->setCurrentIndex(1);
     ui->sw_2->setCurrentIndex(0);
 }
-
+void flightstatus::setActiveSection(const QString& section)
+{
+    for(QPushButton* button : checkableButtons)
+    {
+        button->setChecked(false);
+    }
+    if(section==" ")
+    {
+        ui->btn_domestic->setChecked(true);
+        ui->btn_popuplar->setChecked(true);
+    }
+    // 根据分区名称激活对应的按钮
+    if(section=="HOT")
+    {
+        ui->btn_popuplar->setChecked(true);
+    }
+    if (section == "ABCDEF") {
+        ui->pushButton_4->setChecked(true);
+    } else if (section == "GHIJ") {
+        ui->pushButton_5->setChecked(true);
+    } else if (section == "KLMN") {
+        ui->pushButton_6->setChecked(true);
+    } else if(section == "PQRST")
+    {
+        ui->pushButton_7->setChecked(true);
+    } else if(section == "XYZ")
+    {
+        ui->pushButton_8->setChecked(true);
+    }
+}
+void flightstatus::setActiveSection_2(const QString& section)
+{
+    for(QPushButton* button : checkableButtons_2)
+    {
+        button->setChecked(false);
+    }
+    if(section==" ")
+    {
+        ui->btn_domestic_2->setChecked(true);
+        ui->btn_popuplar_2->setChecked(true);
+    }
+    // 根据分区名称激活对应的按钮
+    if(section=="HOT")
+    {
+        ui->btn_popuplar_2->setChecked(true);
+    }
+    if (section == "ABCDEF") {
+        ui->pushButton_9->setChecked(true);
+    } else if (section == "GHIJ") {
+        ui->pushButton_10->setChecked(true);
+    } else if (section == "KLMN") {
+        ui->pushButton_11->setChecked(true);
+    } else if(section == "PQRST")
+    {
+        ui->pushButton_12->setChecked(true);
+    } else if(section == "XYZ")
+    {
+        ui->pushButton_13->setChecked(true);
+    }
+}
 void flightstatus::init()
 {
+    QList<QPushButton*> allButtons = ui->pick_widget->findChildren<QPushButton*>();
+    // 2. 筛选名字以 "pushbutton" 或 "btn" 开头的控件
+    for (QPushButton* button : allButtons) {
+        QString objectName = button->objectName();
+        if (objectName.startsWith("pushButton") || objectName.startsWith("btn_")) {
+            if(objectName.startsWith("btn_p")||objectName.startsWith("pushButton")) checkableButtons.append(button);
+            button->setCheckable(true);
+        }
+    }
+    QList<QPushButton*> allButtons_2 = ui->pick_widget_2->findChildren<QPushButton*>();
+    // 2. 筛选名字以 "pushbutton" 或 "btn" 开头的控件
+    for (QPushButton* button : allButtons_2) {
+        QString objectName = button->objectName();
+        if (objectName.startsWith("pushButton") || objectName.startsWith("btn_")) {
+            if(objectName.startsWith("btn_p")||objectName.startsWith("pushButton")) checkableButtons_2.append(button);
+            button->setCheckable(true);
+        }
+    }
+    setActiveSection(" ");
+    setActiveSection_2(" ");
+    QString buttonStyle = R"(
+QPushButton {
+    background-color: transparent;  /* 设置背景透明 */
+    border: none;  /* 无边框 */
+    color: black;  /* 文字颜色为黑色 */
+}
+
+QPushButton:hover {
+    cursor: pointer;
+    background-color: #E5F1FB;  /* 鼠标悬浮时背景颜色为浅蓝色 */
+    color: #0078D7;  /* 鼠标悬浮时文字颜色为深蓝色 */
+}
+)";
     ui->pick_widget->setVisible(false);
     for(int i=0;i<ui->sw->count();i++)
     {
         QWidget* widget=ui->sw->widget(i);
         QList<QPushButton*> buttonsInpage=widget->findChildren<QPushButton*>();
-
         for (QPushButton *button : buttonsInpage) {
+            button->setStyleSheet(buttonStyle);
             connect(button, &QPushButton::clicked, [button, this]() {
                 ui->departureInput->setText(button->text());
                 ui->pick_widget->setVisible(false);
@@ -252,8 +366,8 @@ void flightstatus::init()
     {
         QWidget* widget=ui->sw_2->widget(i);
         QList<QPushButton*> buttonsInpage=widget->findChildren<QPushButton*>();
-
         for (QPushButton *button : buttonsInpage) {
+            button->setStyleSheet(buttonStyle);
             connect(button, &QPushButton::clicked, [button, this]() {
                 ui->destinationInput->setText(button->text());
                 ui->pick_widget_2->setVisible(false);
