@@ -29,6 +29,7 @@
 #include <QStringList>
 #include "chatwindow.h"
 
+
 maininterface::maininterface(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::maininterface)
@@ -264,6 +265,8 @@ maininterface::maininterface(QWidget *parent)
     QAction *editInfoAction = new QAction("个人信息编辑",this);
     QAction *switchLoginAction = new QAction("切换登录",this);
     QAction *switchFlightStatusWindowAction = new QAction("航班动态",this);
+
+
     // 设置图标
     editInfoAction->setIcon(QIcon(":/usr.png"));
     switchLoginAction->setIcon(QIcon(":/switchLogin.png"));
@@ -278,6 +281,8 @@ maininterface::maininterface(QWidget *parent)
     connect(editInfoAction,&QAction::triggered,this,&maininterface::editUserInfo);
     connect(switchLoginAction,&QAction::triggered,this,&maininterface::switchLogin);
     connect(switchFlightStatusWindowAction,&QAction::triggered,this,&maininterface::switchtoFlightStatusWindow);
+
+
 }
 
 void maininterface::editUserInfo()
