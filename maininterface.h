@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 #include <QListWidget>
 #include <QMainWindow>
+#include "orderdetailwindow.h"
 
 namespace Ui {
 class maininterface;
@@ -16,6 +17,7 @@ public:
     QStackedWidget *stackedWidget;
     QListWidget *menuList;
 
+
 public:
     explicit maininterface(QWidget *parent = nullptr);
     void editUserInfo(); //修改个人资料
@@ -26,6 +28,8 @@ public:
 
 private:
     Ui::maininterface *ui;
+
+
 };
 
 #endif // MAININTERFACE_H

@@ -14,6 +14,8 @@
 #include "orderwidget.h"
 #include "order.h"
 #include <QScrollArea>
+#include "maininterface.h"
+
 
 
 
