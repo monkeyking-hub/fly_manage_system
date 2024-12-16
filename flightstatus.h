@@ -79,7 +79,10 @@ private:
     QLineEdit *currentLineEdit;
     void dpcityPicked(const QString city);
     void dscityPicked(const QString city);
-
+    QList<QPushButton*> checkableButtons;
+    QList<QPushButton*> checkableButtons_2;
+    void setActiveSection(const QString& section);
+    void setActiveSection_2(const QString& section);
 };
 
 #endif // FLIGHTSTATUS_H
