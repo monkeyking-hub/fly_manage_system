@@ -20,7 +20,7 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     setWindowState(Qt::WindowMaximized);  // 窗口最大化
 
     // 设置主窗口的背景图片
-    setStyleSheet("QMainWindow { background-image: url(:/blue.png); background-position: center; }");
+    setStyleSheet("QWidget { background-image: url(:/blue.png); background-position: center; }");
 
     // 创建一个 QWidget 作为主窗口的中心控件
     centralWidget = new QWidget(this);
@@ -76,6 +76,11 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
     // 加载历史聊天记录
     fetchChatHistory();
 
+
+
+
+
+
     // 设置定时器每3秒刷新一次
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
@@ -105,8 +110,8 @@ void ChatWindow::fetchChatHistory()
 {
     // 模拟获取历史消息
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QUrl url("http://127.0.0.1:8080/api/chat/history");  // 数据库URL
-    // QUrl url("http://192.168.238.224:8080/api/chat/history");  // sjhURL
+    //QUrl url("http://127.0.0.1:8080/api/chat/history");  // 数据库URL
+     QUrl url("http://192.168.238.224:8080/api/chat/history");  // sjhURL
     QNetworkRequest request(url);
 
     QNetworkReply *reply = manager->get(request);
@@ -224,8 +229,8 @@ void ChatWindow::sendMessage(int userId, const QString& message)
 
     // 发送消息到服务器
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QUrl url("http://127.0.0.1:8080/api/chat/send");  // 后端接口URL
-    // QUrl url("http://192.168.238.224:8080/api/chat/send");  // sjhURL
+    //QUrl url("http://127.0.0.1:8080/api/chat/send");  // 后端接口URL
+     QUrl url("http://192.168.238.224:8080/api/chat/send");  // sjhURL
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 

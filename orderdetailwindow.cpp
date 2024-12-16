@@ -10,6 +10,7 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include "maininterface.h"
+#include "interfacemanager.h"
 
 OrderDetailWindow::OrderDetailWindow(const Order &order, QWidget *parent)
     : QWidget(parent)
@@ -20,13 +21,13 @@ OrderDetailWindow::OrderDetailWindow(const Order &order, QWidget *parent)
 void OrderDetailWindow::setupUI(const Order &order)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setSpacing(5);  // 减小布局之间的间隙
 
     // 字体设置
     QFont titleFont = QFont("Arial", 14, QFont::Bold);  // 更大字体
     QFont contentFont = QFont("Arial", 12);
     QPalette palette;
     palette.setColor(QPalette::WindowText, QColor("#008000")); // 绿色
-
 
     // 订单号
     QLabel *orderNumberLabel = new QLabel(QString("订单号: %1").arg(order.orderNumber()), this);
@@ -49,19 +50,17 @@ void OrderDetailWindow::setupUI(const Order &order)
     amountLabel->setFont(titleFont);
     layout->addWidget(amountLabel);
 
-
-
-
-
     // 评价模块
     QLabel *evaluationLabel = new QLabel("您对此次出行满意吗？", this);
     evaluationLabel->setFont(titleFont);
     layout->addWidget(evaluationLabel);
 
     QVBoxLayout *ratingLayout = new QVBoxLayout();
+    ratingLayout->setSpacing(5);  // 减小评分部分的间隙
 
     // 星星评分
     QHBoxLayout *starsLayout = new QHBoxLayout();
+    starsLayout->setSpacing(5);  // 星星评分按钮间隙
     for (int i = 0; i < 5; ++i) {
         QPushButton *starButton = new QPushButton(QIcon(":/newicon/star.png"), "", this);
         starButton->setIconSize(QSize(30, 30));
@@ -86,6 +85,7 @@ void OrderDetailWindow::setupUI(const Order &order)
 
     // 表情与说明文字对齐
     QHBoxLayout *facesLayout = new QHBoxLayout();
+    facesLayout->setSpacing(10);  // 调整表情按钮间隙
 
     QVBoxLayout *cryFaceLayout = new QVBoxLayout();
     QPushButton *cryFaceButton = new QPushButton(QIcon(":/newicon/bad.png"), "", this);
@@ -93,6 +93,13 @@ void OrderDetailWindow::setupUI(const Order &order)
     cryFaceButton->setFlat(true);
     cryFaceLayout->addWidget(cryFaceButton, 0, Qt::AlignHCenter);
     QLabel *cryFaceLabel = new QLabel("不满意", this);
+    cryFaceLabel->setStyleSheet("QLabel {"
+                                "background-color: orange; "
+                                "border-radius: 15px; "
+                                "color: white; "
+                                "font-weight: bold;"
+                                "padding: 10px 20px;"
+                                "}");
     cryFaceLabel->setAlignment(Qt::AlignHCenter);
     cryFaceLayout->addWidget(cryFaceLabel);
 
@@ -102,6 +109,20 @@ void OrderDetailWindow::setupUI(const Order &order)
     normalFaceButton->setFlat(true);
     normalFaceLayout->addWidget(normalFaceButton, 0, Qt::AlignHCenter);
     QLabel *normalFaceLabel = new QLabel("一般", this);
+    normalFaceLabel->setStyleSheet("QLabel {"
+                                   "background-color: orange; "
+                                   "border-radius: 15px; "
+                                   "color: white; "
+                                   "font-weight: bold;"
+                                   "padding: 10px 20px;"
+                                   "}");
+    normalFaceLabel->setStyleSheet("QLabel {"
+                                   "background-color: orange; "
+                                   "border-radius: 15px; "
+                                   "color: white; "
+                                   "font-weight: bold;"
+                                   "padding: 10px 20px;"
+                                   "}");
     normalFaceLabel->setAlignment(Qt::AlignHCenter);
     normalFaceLayout->addWidget(normalFaceLabel);
 
@@ -111,6 +132,13 @@ void OrderDetailWindow::setupUI(const Order &order)
     smileFaceButton->setFlat(true);
     smileFaceLayout->addWidget(smileFaceButton, 0, Qt::AlignHCenter);
     QLabel *smileFaceLabel = new QLabel("满意", this);
+    smileFaceLabel->setStyleSheet("QLabel {"
+                                  "background-color: orange; "
+                                  "border-radius: 15px; "
+                                  "color: white; "
+                                  "font-weight: bold;"
+                                  "padding: 10px 20px;"
+                                  "}");
     smileFaceLabel->setAlignment(Qt::AlignHCenter);
     smileFaceLayout->addWidget(smileFaceLabel);
 
@@ -121,17 +149,13 @@ void OrderDetailWindow::setupUI(const Order &order)
 
     layout->addLayout(ratingLayout);
 
-
-
-
-
-
     // 常见问题模块
     QLabel *faqLabel = new QLabel("常见问题", this);
     faqLabel->setFont(titleFont);
     layout->addWidget(faqLabel);
 
-    QVBoxLayout *faqLayout = new QVBoxLayout();
+    QHBoxLayout *faqLayout = new QHBoxLayout();  // 使用 QHBoxLayout 进行横向排列
+    faqLayout->setSpacing(5);  // 减小按钮间隙
 
     // 常见问题按钮
     QPushButton *serviceIssueButton = new QPushButton("服务态度差", this);
@@ -140,6 +164,28 @@ void OrderDetailWindow::setupUI(const Order &order)
     QPushButton *poorExperienceButton = new QPushButton("候机体验不好", this);
     QPushButton *complaintButton = new QPushButton("我要投诉", this);
 
+    // 设置按钮样式：圆角和大字体
+    QFont buttonFont = QFont("Arial", 12, QFont::Bold);
+    serviceIssueButton->setFont(buttonFont);
+    flightDelayButton->setFont(buttonFont);
+    baggageRuleButton->setFont(buttonFont);
+    poorExperienceButton->setFont(buttonFont);
+    complaintButton->setFont(buttonFont);
+
+    for (QPushButton *button : {serviceIssueButton, flightDelayButton, baggageRuleButton, poorExperienceButton, complaintButton}) {
+        button->setStyleSheet("QPushButton {"
+                              "border-radius: 15px; "
+                              "padding: 10px 20px; "
+                              "background-color: #4CAF50; "
+                              "color: white; "
+                              "font-weight: bold;"
+                              "}"
+                              "QPushButton:hover {"
+                              "background-color: #45a049;"
+                              "}");
+    }
+
+    // 添加按钮到布局
     faqLayout->addWidget(serviceIssueButton);
     faqLayout->addWidget(flightDelayButton);
     faqLayout->addWidget(baggageRuleButton);
@@ -153,7 +199,6 @@ void OrderDetailWindow::setupUI(const Order &order)
         showBaggageTable();
     });
 
-
     // 连接信号与槽函数
     connect(serviceIssueButton, &QPushButton::clicked, this, [this]() {
         QMessageBox::information(this, "反馈", "感谢反馈，我们会积极改正");
@@ -163,7 +208,6 @@ void OrderDetailWindow::setupUI(const Order &order)
         QMessageBox::information(this, "反馈", "感谢反馈，我们会积极改正");
     });
 
-    // 点击按钮显示表格
     connect(baggageRuleButton, &QPushButton::clicked, this, [this]() {
         showBaggageTable();
     });
@@ -177,15 +221,15 @@ void OrderDetailWindow::setupUI(const Order &order)
         // 关闭当前窗口
         this->close();
         emit complaintButtonClicked();
+        InterfaceManager::instance()->switchToPage("clientchatWindow");
     });
 
     // 窗口设置
     setWindowTitle("订单详情");
-    setFixedSize(702, 800); // 调整窗口大小
+    setFixedSize(702, 700); // 减小窗口高度
     setLayout(layout);
-
-
 }
+
 
 // 显示行李重量/尺寸规定表格
 void OrderDetailWindow::showBaggageTable()
