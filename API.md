@@ -305,6 +305,100 @@
   "data": null
 }
 ```
+## API 文档：根据 ID 查询航班信息
+
+### 描述
+根据航班 ID 查询指定航班的详细信息。
+
+---
+
+### 请求方式
+`POST`
+
+---
+
+### 请求 URL
+```
+/api/flights/queryById
+```
+
+---
+
+### 请求头
+- `Content-Type: application/json`
+
+---
+
+### 请求体
+```json
+{
+  "id": 123
+}
+```
+
+---
+
+### 请求参数说明
+| 参数名 | 类型 | 必填 | 描述         |
+|--------|------|------|--------------|
+| id     | int  | 是   | 航班的唯一 ID |
+
+---
+
+### 响应体
+```json
+{
+  "code": 200,
+  "message": "Query successful",
+  "data": {
+    "id": 123,
+    "flightNumber": "CA123",
+    "departure": "北京",
+    "destination": "上海",
+    "departureTime": 1674532500,
+    "arrivalTime": 1674540000,
+    "firstClassSeats": 10,
+    "economyClassSeats": 150,
+    "firstClassPrice": 1500,
+    "economyClassPrice": 500,
+    "airlineCompany": "中国国际航空公司",
+    "aircraftModel": "Boeing 737"
+  }
+}
+```
+
+---
+
+### 响应参数说明
+| 参数名             | 类型     | 描述                   |
+|--------------------|----------|------------------------|
+| code              | int      | 状态码                |
+| message           | string   | 响应信息              |
+| data              | object   | 航班信息（成功时返回） |
+| id                | int      | 航班 ID               |
+| flightNumber      | string   | 航班号                |
+| departure         | string   | 出发地                |
+| destination       | string   | 目的地                |
+| departureTime     | int      | 起飞时间（UNIX 时间戳）|
+| arrivalTime       | int      | 到达时间（UNIX 时间戳）|
+| firstClassSeats   | int      | 头等舱座位数          |
+| economyClassSeats | int      | 经济舱座位数          |
+| firstClassPrice   | double   | 头等舱票价            |
+| economyClassPrice | double   | 经济舱票价            |
+| airlineCompany    | string   | 航空公司              |
+| aircraftModel     | string   | 飞机型号              |
+
+---
+
+### 错误响应示例
+```json
+{
+  "code": 404,
+  "message": "Query failed: Flight not found",
+  "data": null
+}
+```
+
 
 ---
 
