@@ -53,5 +53,8 @@
         <file>Bplace4.jpg</file>
         <file>Cplace4.jpg</file>
         <file>kefu.png</file>
+        <file>imgforsearch.jpg</file>
+        <file>imgfordelete.jpg</file>
+        <file>imgfordelete.png</file>
     </qresource>
 </RCC>
