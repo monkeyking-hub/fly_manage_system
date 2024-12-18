@@ -224,14 +224,7 @@ maininterface::maininterface(QWidget *parent)
     });
     //添加用户头像按钮
     QToolButton *usrButton = new QToolButton(this);
-    QPixmap avatar;
-    qDebug()<<"当前头像路径"<<currentUser.avatarUrl;
-    if (avatar.load(currentUser.avatarUrl)) {
-        qDebug("大厅加载头像成功");
-    } else {
-        qDebug("大厅加载头像不成功,使用默认头像");
-    }
-    usrButton->setIcon(QIcon(avatar));
+    usrButton->setIcon(QIcon("://usr.png"));
     usrButton->setIconSize(QSize(100,100));
     usrButton->setPopupMode(QToolButton::InstantPopup);
     connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, [usrButton](const User &user) {

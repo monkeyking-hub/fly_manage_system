@@ -35,7 +35,7 @@ void Userwindow::loadUserInfo() {
         ui->profileLbl->setPixmap(avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         qDebug("加载头像成功");
     } else {
-        ui->profileLbl->setPixmap(QPixmap("ml")); // 加载默认头像
+        ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
         qDebug("加载头像不成功,使用默认头像");
     }
 }
@@ -58,7 +58,7 @@ void Userwindow::updateUserInfo(const User &user) {
         ui->profileLbl->setPixmap(avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         qDebug("加载头像成功");
     } else {
-        ui->profileLbl->setPixmap(QPixmap("ml")); // 加载默认头像
+        ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
         qDebug("加载头像不成功,使用默认头像");
     }
 }

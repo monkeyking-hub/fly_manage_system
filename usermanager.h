@@ -67,7 +67,7 @@ public:
                 }
             } else {
                 qDebug() << "fetch avartar 头像连接失败" << reply->errorString();
-                currentUser.avatarUrl = ":/images/default_avatar.png"; // Use default avatar on failure
+                currentUser.avatarUrl = "://defaultedProfile.jpg"; // Use default avatar on failure
             }
             emit currentUserChanged(currentUser);
             reply->deleteLater();
