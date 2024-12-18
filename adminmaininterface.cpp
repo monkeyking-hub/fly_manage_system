@@ -7,6 +7,8 @@
 #include "adminaddflightwindow.h"
 #include "interfacemanager.h"
 #include "chatwindow.h"
+#include"adminupdateflightwindow.h"
+#include"admindeleteflightwindow.h"
 
 adminMainInterface::adminMainInterface(QWidget *parent)
     : QMainWindow(parent)
@@ -66,7 +68,6 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     userUpdateItem = new QTreeWidgetItem(usersItem, QStringList() << "修改用户信息");
     orderSearchItem = new QTreeWidgetItem(ordersItem, QStringList() << "查找订单信息");
     orderUpdateItem = new QTreeWidgetItem(ordersItem, QStringList() << "修改订单信息");
-    flightSearchItem = new QTreeWidgetItem(flightsItem, QStringList() << "查找航班信息");
     flightRemoveItem = new QTreeWidgetItem(flightsItem, QStringList() << "删除航班信息");
     flightUpdateItem = new QTreeWidgetItem(flightsItem, QStringList() << "修改航班信息");
     flightAddItem = new QTreeWidgetItem(flightsItem, QStringList() << "添加航班信息");
@@ -96,9 +97,8 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     stackedWidget->addWidget(new QLabel("查询订单信息"));
     stackedWidget->addWidget(new QLabel("修改订单信息"));
 
-    stackedWidget->addWidget(new QLabel("查询航班信息"));
-    stackedWidget->addWidget(new QLabel("删除航班信息"));
-    stackedWidget->addWidget(new QLabel("修改航班信息"));
+    stackedWidget->addWidget(new adminDeleteFlightWindow());
+    stackedWidget->addWidget(new adminUpdateFlightWindow());
 
     adminAddFlightWindow *adminAddflight = new adminAddFlightWindow();
     addFlightHandler *addFlightHand = new addFlightHandler();
@@ -265,10 +265,6 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
     else if(item==flightsItem->child(2))
     {
         stackedWidget->setCurrentIndex(11);
-    }
-    else if(item==flightsItem->child(3))
-    {
-        stackedWidget->setCurrentIndex(12);
     }
 }
 

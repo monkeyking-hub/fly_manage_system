@@ -12,8 +12,10 @@ CONFIG += c++17
 
 SOURCES += \
     adminaddflightwindow.cpp \
+    admindeleteflightwindow.cpp \
     adminloginwindow.cpp \
     adminmaininterface.cpp \
+    adminupdateflightwindow.cpp \
     animatedinputfield.cpp \
     chatwindow.cpp \
     flightstatus.cpp \
@@ -40,8 +42,10 @@ SOURCES += \
 
 HEADERS += \
     adminaddflightwindow.h \
+    admindeleteflightwindow.h \
     adminloginwindow.h \
     adminmaininterface.h \
+    adminupdateflightwindow.h \
     animatedInputField.h \
     chatwindow.h \
     flightstatus.h \
@@ -67,8 +71,10 @@ HEADERS += \
 
 FORMS += \
     adminaddflightwindow.ui \
+    admindeleteflightwindow.ui \
     adminloginwindow.ui \
     adminmaininterface.ui \
+    adminupdateflightwindow.ui \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \

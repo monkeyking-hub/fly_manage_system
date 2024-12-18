@@ -31,7 +31,6 @@ public:
     QTreeWidgetItem *orderSearchItem; //查找订单信息
     QTreeWidgetItem *orderRemoveItem; //删除订单信息
     QTreeWidgetItem *orderUpdateItem; //修改订单信息
-    QTreeWidgetItem *flightSearchItem; //查找航班信息
     QTreeWidgetItem *flightRemoveItem; //删除航班信息
     QTreeWidgetItem *flightUpdateItem; //修改航班信息
     QTreeWidgetItem *flightAddItem; //添加航班信息
