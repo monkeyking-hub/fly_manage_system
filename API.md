@@ -480,7 +480,7 @@
 ### 3. **修改航班信息接口** (`/api/flights/update`)
 
 #### 描述：
-根据航班 ID 修改航班的详细信息。
+用于修改航班的详细信息，支持修改任意字段。提供航班 ID 和需要更新的字段及其值。
 
 #### 请求方式：
 `POST`
@@ -492,19 +492,51 @@
 ```json
 {
   "id": 1,
-  "departure": "上海",
-  "arrivalTime": 1674630000,
-  "firstClassSeats": 8
+  "departure": "上海虹桥",
+  "destination": "广州白云",
+  "departureTime": 1674633600,
+  "arrivalTime": 1674648000,
+  "flightNumber": "CA456",
+  "firstClassSeats": 8,
+  "businessClassSeats": 20,
+  "economyClassSeats": 140,
+  "firstClassPrice": 1800,
+  "businessClassPrice": 1200,
+  "economyClassPrice": 600,
+  "departureAirport": "虹桥机场",
+  "arrivalAirport": "白云机场",
+  "boardingGate": "A12",
+  "aircraftModel": "Airbus A320",
+  "airlineCompany": "南方航空",
+  "hasMeal": true,
+  "luggageSizeLimit": 23,
+  "isInternational": false
 }
 ```
 
 #### 请求参数说明：
-| 参数              | 类型     | 必填 | 描述               |
-|-------------------|----------|------|--------------------|
-| id                | int      | 是   | 航班 ID           |
-| departure         | string   | 否   | 出发地             |
-| arrivalTime       | int      | 否   | 到达时间（UNIX 时间戳） |
-| firstClassSeats   | int      | 否   | 头等舱座位数       |
+| 参数              | 类型      | 必填 | 描述                                |
+|-------------------|-----------|------|-------------------------------------|
+| id                | int       | 是   | 航班 ID                            |
+| departure         | string    | 否   | 出发地                              |
+| destination       | string    | 否   | 目的地                              |
+| departureTime     | int       | 否   | 出发时间（UNIX 时间戳）              |
+| arrivalTime       | int       | 否   | 到达时间（UNIX 时间戳）              |
+| flightNumber      | string    | 否   | 航班号                              |
+| firstClassSeats   | int       | 否   | 头等舱座位数                        |
+| businessClassSeats| int       | 否   | 商务舱座位数                        |
+| economyClassSeats | int       | 否   | 经济舱座位数                        |
+| firstClassPrice   | int       | 否   | 头等舱票价                          |
+| businessClassPrice| int       | 否   | 商务舱票价                          |
+| economyClassPrice | int       | 否   | 经济舱票价                          |
+| departureAirport  | string    | 否   | 出发机场                            |
+| arrivalAirport    | string    | 否   | 到达机场                            |
+| boardingGate      | string    | 否   | 登机口                              |
+| aircraftModel     | string    | 否   | 飞机型号                            |
+| airlineCompany    | string    | 否   | 航空公司                            |
+| hasMeal           | boolean   | 否   | 是否提供餐饮                        |
+| luggageSizeLimit  | int       | 否   | 行李限制大小（kg）                   |
+| isInternational   | boolean   | 否   | 是否为国际航班                      |
 
 #### 响应体：
 ```json
@@ -517,13 +549,60 @@
 }
 ```
 
+#### 响应参数说明：
+| 参数      | 类型      | 描述              |
+|-----------|-----------|-------------------|
+| code      | int       | 响应状态码         |
+| message   | string    | 响应信息           |
+| data      | object    | 包含航班 ID 的对象 |
+| id        | int       | 修改的航班 ID      |
 
 #### 错误响应：
 ```json
 {
   "code": 500,
-  "message": "Update failed: Flight not found",
+  "message": "Flight update failed: Missing flight ID",
   "data": null
+}
+```
+或
+```json
+{
+  "code": 500,
+  "message": "Flight update failed: Flight not found",
+  "data": null
+}
+```
+
+#### 错误描述：
+| 错误码 | 错误信息                                        | 描述                                   |
+|--------|------------------------------------------------|----------------------------------------|
+| 500    | Flight update failed: Missing flight ID        | 请求中未提供必要的航班 ID              |
+| 500    | Flight update failed: Flight not found         | 根据提供的航班 ID 未找到对应航班信息    |
+| 500    | Flight update failed: Invalid JSON format      | 提供的 JSON 格式不正确                |
+| 500    | Flight update failed: Database error           | 更新数据库时发生错误                   |
+
+---
+
+#### 示例：
+##### 修改航班到达时间和票价：
+**请求体**：
+```json
+{
+  "id": 2,
+  "arrivalTime": 1674672000,
+  "economyClassPrice": 550
+}
+```
+
+**响应体**：
+```json
+{
+  "code": 200,
+  "message": "Flight updated successfully",
+  "data": {
+    "id": 2
+  }
 }
 ```
 
