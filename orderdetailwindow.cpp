@@ -29,6 +29,54 @@ void OrderDetailWindow::setupUI(const Order &order)
     QPalette palette;
     palette.setColor(QPalette::WindowText, QColor("#008000")); // 绿色
 
+    // 创建一个用于出发地和目的地的整体布局
+    QVBoxLayout *locationLayout = new QVBoxLayout();
+
+    // 创建一个小方框
+    QLabel *departureBox = new QLabel(this);
+    departureBox->setFixedSize(10, 10);
+    departureBox->setStyleSheet("background-color: blue; border: 1px solid black;");
+
+    // 出发地标签
+    QLabel *departureLabel = new QLabel(QString("始发地: %1").arg(order.departure()), this);
+    departureLabel->setFont(titleFont);
+
+    // 将小方框和出发地标签添加到水平布局中
+    QHBoxLayout *departureLayout = new QHBoxLayout();
+    departureLayout->addWidget(departureBox);
+    departureLayout->addWidget(departureLabel);
+    departureLayout->addStretch(); // 保证布局整齐
+
+    // 添加一个竖杠
+    QFrame *verticalLine = new QFrame(this);
+    verticalLine->setFrameShape(QFrame::VLine);
+    verticalLine->setFrameShadow(QFrame::Sunken);
+    verticalLine->setFixedHeight(20);
+    verticalLine->setStyleSheet("color: gray;");
+
+    // 创建另一个小方框
+    QLabel *destinationBox = new QLabel(this);
+    destinationBox->setFixedSize(10, 10);
+    destinationBox->setStyleSheet("background-color: green; border: 1px solid black;");
+
+    // 目的地标签
+    QLabel *destinationLabel = new QLabel(QString("目的地: %1").arg(order.destination()), this);
+    destinationLabel->setFont(titleFont);
+
+    // 将小方框和目的地标签添加到水平布局中
+    QHBoxLayout *destinationLayout = new QHBoxLayout();
+    destinationLayout->addWidget(destinationBox);
+    destinationLayout->addWidget(destinationLabel);
+    destinationLayout->addStretch(); // 保证布局整齐
+
+    // 将出发地布局、竖杠、目的地布局垂直排列
+    locationLayout->addLayout(departureLayout);
+    locationLayout->addWidget(verticalLine);
+    locationLayout->addLayout(destinationLayout);
+
+    // 最后将整个出发地和目的地布局添加到主布局中
+    layout->addLayout(locationLayout);
+
     // 订单号
     QLabel *orderNumberLabel = new QLabel(QString("订单号: %1").arg(order.orderNumber()), this);
     orderNumberLabel->setFont(titleFont);
@@ -40,15 +88,38 @@ void OrderDetailWindow::setupUI(const Order &order)
     passengerLabel->setFont(titleFont);
     layout->addWidget(passengerLabel);
 
-    // 预订日期
-    QLabel *bookingDateLabel = new QLabel(QString("预订日期: %1").arg(order.bookingDate()), this);
-    bookingDateLabel->setFont(titleFont);
-    layout->addWidget(bookingDateLabel);
 
     // 金额
     QLabel *amountLabel = new QLabel(QString("金额: %1").arg(order.amount()), this);
     amountLabel->setFont(titleFont);
     layout->addWidget(amountLabel);
+
+    // 新增：航空公司
+    QLabel *airlineLabel = new QLabel(QString("航空公司: %1").arg(order.airline()), this);
+    airlineLabel->setFont(titleFont);
+    layout->addWidget(airlineLabel);
+
+    // 新增：飞机型号
+    QLabel *planeModelLabel = new QLabel(QString("飞机型号: %1").arg(order.aircraftType()), this);
+    planeModelLabel->setFont(titleFont);
+    layout->addWidget(planeModelLabel);
+
+    // 新增：出发时间
+    QLabel *departureTimeLabel = new QLabel(QString("出发时间: %1").arg(order.departureTime()), this);
+    departureTimeLabel->setFont(titleFont);
+    layout->addWidget(departureTimeLabel);
+
+    // 新增：到达时间
+    QLabel *arrivalTimeLabel = new QLabel(QString("到达时间: %1").arg(order.arrivalTime()), this);
+    arrivalTimeLabel->setFont(titleFont);
+    layout->addWidget(arrivalTimeLabel);
+
+
+
+
+
+
+
 
     // 评价模块
     QLabel *evaluationLabel = new QLabel("您对此次出行满意吗？", this);
