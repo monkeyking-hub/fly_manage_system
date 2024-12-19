@@ -231,73 +231,119 @@
 
 ## API 文档：航班管理系统
 
-### 1. **搜索航班信息接口** (`/api/flights/search`)
+明白了！为了避免误解，我会更新搜索航班信息接口的 `data` 字段，让它可以包含多个航班，表示查询多个目的地的航班。这样，用户就不会误以为只能查询一个目的地的航班。
 
-#### 描述：
-通过出发地和目的地搜索航班，返回符合条件的航班列表。
+以下是更新后的 API 文档：
 
-#### 请求方式：
+---
+
+## API 文档：搜索航班信息接口 (`/api/flights/search`)
+
+### 描述：
+通过出发地和多个目的地搜索航班，返回符合条件的航班列表。
+
+### 请求方式：
 `POST`
 
-#### 请求头：
+### 请求头：
 - `Content-Type: application/json`
 
-#### 请求体：
+### 请求体：
 ```json
 {
   "departure": "北京",
-  "destination": "上海"
+  "destinations": ["上海", "成都"]
 }
 ```
 
-#### 请求参数说明：
-| 参数         | 类型     | 必填 | 描述       |
-|--------------|----------|------|------------|
-| departure    | string   | 是   | 出发地     |
-| destination  | string   | 是   | 目的地     |
+### 请求参数说明：
+| 参数           | 类型     | 必填 | 描述           |
+|----------------|----------|------|----------------|
+| departure      | string   | 是   | 出发地         |
+| destinations   | array    | 是   | 目的地列表     |
 
-#### 响应体：
+### 响应体：
 ```json
 {
   "code": 200,
   "message": "Search successful",
   "data": [
     {
-      "id": 1,
-      "flightNumber": "CA123",
+      "id": 4787,
+      "flightNumber": "3U5341",
       "departure": "北京",
       "destination": "上海",
-      "departureTime": 1674532500,
-      "arrivalTime": 1674540000,
-      "firstClassSeats": 10,
-      "economyClassSeats": 150,
-      "firstClassPrice": 1500,
-      "economyClassPrice": 500,
-      "airlineCompany": "中国国际航空公司"
+      "departureTime": 1735971531,
+      "arrivalTime": 1735974951,
+      "firstClassSeats": 5,
+      "economyClassSeats": 182,
+      "firstClassPrice": 0,
+      "economyClassPrice": 0,
+      "airlineCompany": "四川航空",
+      "aircraftModel": "JET",
+      "boardingGate": "T2",
+      "arrivalAirport": "T2",
+      "departureAirport": "大兴国际机场",
+      "hasMeal": 0,
+      "isInternational": 0,
+      "luggageSizeLimit": 20,
+      "businessClassSeats": 18,
+      "businessClassPrice": 0
+    },
+    {
+      "id": 4788,
+      "flightNumber": "3U5342",
+      "departure": "北京",
+      "destination": "成都",
+      "departureTime": 1735971532,
+      "arrivalTime": 1735974952,
+      "firstClassSeats": 5,
+      "economyClassSeats": 180,
+      "firstClassPrice": 0,
+      "economyClassPrice": 0,
+      "airlineCompany": "四川航空",
+      "aircraftModel": "JET",
+      "boardingGate": "T3",
+      "arrivalAirport": "T3",
+      "departureAirport": "大兴国际机场",
+      "hasMeal": 0,
+      "isInternational": 0,
+      "luggageSizeLimit": 20,
+      "businessClassSeats": 20,
+      "businessClassPrice": 0
     }
   ]
 }
 ```
 
-#### 响应参数说明：
-| 参数              | 类型      | 描述                               |
-|-------------------|-----------|------------------------------------|
-| code              | int       | 响应状态码                         |
-| message           | string    | 响应信息                           |
-| data              | array     | 符合条件的航班信息列表             |
-| id                | int       | 航班 ID                            |
-| flightNumber      | string    | 航班号                             |
-| departure         | string    | 出发地                             |
-| destination       | string    | 目的地                             |
-| departureTime     | int       | 出发时间（UNIX 时间戳）           |
-| arrivalTime       | int       | 到达时间（UNIX 时间戳）           |
-| firstClassSeats   | int       | 头等舱余量                         |
-| economyClassSeats | int       | 经济舱余量                         |
-| firstClassPrice   | int       | 头等舱票价                         |
-| economyClassPrice | int       | 经济舱票价                         |
-| airlineCompany    | string    | 航空公司                           |
+### 响应参数说明：
+| 参数               | 类型      | 描述                               |
+|--------------------|-----------|------------------------------------|
+| code               | int       | 响应状态码                         |
+| message            | string    | 响应信息                           |
+| data               | array     | 符合条件的航班信息列表             |
+| id                 | int       | 航班 ID                            |
+| flightNumber       | string    | 航班号                             |
+| departure          | string    | 出发地                             |
+| destination        | string    | 目的地                             |
+| departureTime      | int       | 出发时间（UNIX 时间戳）           |
+| arrivalTime        | int       | 到达时间（UNIX 时间戳）           |
+| firstClassSeats    | int       | 头等舱余量                         |
+| economyClassSeats  | int       | 经济舱余量                         |
+| firstClassPrice    | double    | 头等舱票价                         |
+| economyClassPrice  | double    | 经济舱票价                         |
+| airlineCompany     | string    | 航空公司                           |
+| aircraftModel      | string    | 飞机型号                           |
+| boardingGate       | string    | 登机口                             |
+| arrivalAirport     | string    | 到达机场                           |
+| departureAirport   | string    | 出发机场                           |
+| hasMeal            | int       | 是否提供餐食 (0-否，1-是)         |
+| isInternational    | int       | 是否为国际航班 (0-否，1-是)       |
+| luggageSizeLimit   | int       | 行李大小限制 (kg)                 |
+| businessClassSeats | int       | 商务舱座位数                       |
+| businessClassPrice | double    | 商务舱票价                         |
 
-#### 错误响应：
+### 错误响应：
 ```json
 {
   "code": 500,
@@ -305,6 +351,9 @@
   "data": null
 }
 ```
+
+---
+
 ## API 文档：根据 ID 查询航班信息
 
 ### 描述
@@ -351,49 +400,37 @@
   "code": 200,
   "message": "Query successful",
   "data": {
-    "id": 123,
-    "flightNumber": "CA123",
+    "id": 4787,
+    "flightNumber": "3U5341",
     "departure": "北京",
     "destination": "上海",
-    "departureTime": 1674532500,
-    "arrivalTime": 1674540000,
-    "firstClassSeats": 10,
-    "economyClassSeats": 150,
-    "firstClassPrice": 1500,
-    "economyClassPrice": 500,
-    "airlineCompany": "中国国际航空公司",
-    "aircraftModel": "Boeing 737"
+    "departureTime": 1735971531,
+    "arrivalTime": 1735974951,
+    "firstClassSeats": 5,
+    "economyClassSeats": 182,
+    "firstClassPrice": 0,
+    "economyClassPrice": 0,
+    "airlineCompany": "四川航空",
+    "aircraftModel": "JET",
+    "boardingGate": "T2",
+    "arrivalAirport": "T2",
+    "departureAirport": "大兴国际机场",
+    "hasMeal": 0,
+    "isInternational": 0,
+    "luggageSizeLimit": 20,
+    "businessClassSeats": 18,
+    "businessClassPrice": 0
   }
 }
+
 ```
-
----
-
-### 响应参数说明
-| 参数名             | 类型     | 描述                   |
-|--------------------|----------|------------------------|
-| code              | int      | 状态码                |
-| message           | string   | 响应信息              |
-| data              | object   | 航班信息（成功时返回） |
-| id                | int      | 航班 ID               |
-| flightNumber      | string   | 航班号                |
-| departure         | string   | 出发地                |
-| destination       | string   | 目的地                |
-| departureTime     | int      | 起飞时间（UNIX 时间戳）|
-| arrivalTime       | int      | 到达时间（UNIX 时间戳）|
-| firstClassSeats   | int      | 头等舱座位数          |
-| economyClassSeats | int      | 经济舱座位数          |
-| firstClassPrice   | double   | 头等舱票价            |
-| economyClassPrice | double   | 经济舱票价            |
-| airlineCompany    | string   | 航空公司              |
-| aircraftModel     | string   | 飞机型号              |
 
 ---
 
 ### 错误响应示例
 ```json
 {
-  "code": 404,
+  "code": 400,
   "message": "Query failed: Flight not found",
   "data": null
 }
