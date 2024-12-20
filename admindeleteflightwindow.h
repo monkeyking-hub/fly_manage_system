@@ -13,6 +13,7 @@ class adminDeleteFlightWindow : public QMainWindow
 
 public:
     explicit adminDeleteFlightWindow(QWidget *parent = nullptr);
+    void onDeleteButtonClicked();
     ~adminDeleteFlightWindow();
 
 private:

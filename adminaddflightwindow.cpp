@@ -79,17 +79,17 @@ void adminAddFlightWindow::onAddFlightBtnClicked()
     QString departure = ui->lineEdit_departure->text();
     QString destination = ui->lineEdit_destination->text();
 
-    QString departure_date=ui->lineEdit_date1->text();
-    QString departure_time=ui->dateTimeEdit1->time().toString("HH:mm");
-    QString dateTimeString1 = departure_date+" "+departure_time;
-    QDateTime combinedDateTime1=QDateTime::fromString(dateTimeString1,"yyyy-MM-dd HH:mm");
-    qint64 unixTimeStamp1 = combinedDateTime1.toSecsSinceEpoch();
+    QString departure_datestr=ui->lineEdit_date1->text();
+    QDate departure_date=QDate::fromString(departure_datestr,"yyyy-MM-dd");
+    QTime departure_time=ui->dateTimeEdit1->time();
+    QDateTime departure_datetime(departure_date,departure_time);
+    qint64 unixTimeStamp1=departure_datetime.toSecsSinceEpoch();
 
-    QString arrival_date=ui->lineEdit_date2->text();
-    QString arrival_time=ui->dateTimeEdit2->time().toString("HH:mm");
-    QString dateTimeString2 = arrival_date+" "+arrival_time;
-    QDateTime combinedDateTime2=QDateTime::fromString(dateTimeString2,"yyyy-MM-dd HH:mm");
-    qint64 unixTimeStamp2 = combinedDateTime2.toSecsSinceEpoch();
+    QString arrival_datestr=ui->lineEdit_date2->text();
+    QDate arrival_date=QDate::fromString(arrival_datestr,"yyyy-MM-dd");
+    QTime arrival_time=ui->dateTimeEdit2->time();
+    QDateTime arrival_datetime(arrival_date,arrival_time);
+    qint64 unixTimeStamp2 = arrival_datetime.toSecsSinceEpoch();
 
     int firstClassSeats = ui->spinBox_firstClassSeat->value();
     int economyClassSeats = ui->spinBox_economyClassSeat->value();
@@ -98,7 +98,7 @@ void adminAddFlightWindow::onAddFlightBtnClicked()
     QString company = ui->lineEdit_airlineCompany->text();
 
     //检查是否填了全部内容
-    if(flightNumber.contains(" ") || aircraftModel.contains(" ") || departure.contains(" ") || destination.contains(" ") || departure_date.contains(" ") || arrival_date.contains(" ") ||company.contains(" "))
+    if(flightNumber.contains(" ") || aircraftModel.contains(" ") || departure.contains(" ") || destination.contains(" ") || departure_datestr.contains(" ") || arrival_datestr.contains(" ") ||company.contains(" "))
     {
         QMessageBox::critical(nullptr, "添加失败",
                               "添加失败: 输入的内容不能含有空格！",
@@ -107,7 +107,7 @@ void adminAddFlightWindow::onAddFlightBtnClicked()
     }
 
     //检查是否填了全部内容
-    if(flightNumber=="" || aircraftModel=="" || departure=="" || destination=="" || departure_date=="" || arrival_date=="" ||company=="")
+    if(flightNumber=="" || aircraftModel=="" || departure=="" || destination=="" || departure_datestr=="" || arrival_datestr=="" ||company=="")
     {
         QMessageBox::critical(nullptr, "添加失败",
                               "添加失败: 您需要填写全部信息！",
