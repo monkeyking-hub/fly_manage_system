@@ -176,8 +176,15 @@ void homeWindow::onSearchButtonClicked()
                     if (responseObject["code"].toInt() == 200) {
                         QJsonArray flightsArray = responseObject["data"].toArray();
                         if (!flightsArray.isEmpty()) {
-                            QJsonObject flight = flightsArray[0].toObject();
-                            prices[j] = flight["economyClassPrice"].toInt();
+                            double minPrice = std::numeric_limits<int>::max();
+                            // 遍历航班数组
+                            for (const QJsonValue &value : flightsArray) {
+                                QJsonObject flight = value.toObject();
+                                int price = flight["economyClassPrice"].toInt();
+                                if (price < minPrice)
+                                    minPrice = price;
+                            }
+                            prices[j] = minPrice/100;
                             hasFlights = true;
                         }
                     } else {

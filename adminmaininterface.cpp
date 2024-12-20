@@ -9,6 +9,7 @@
 #include "chatwindow.h"
 #include"adminupdateflightwindow.h"
 #include"admindeleteflightwindow.h"
+#include"adminhomewindow.h"
 
 adminMainInterface::adminMainInterface(QWidget *parent)
     : QMainWindow(parent)
@@ -85,7 +86,7 @@ adminMainInterface::adminMainInterface(QWidget *parent)
 
     //右侧内容区
     stackedWidget = new QStackedWidget(this);
-    stackedWidget->addWidget(new QLabel("首页界面"));
+    stackedWidget->addWidget(new adminHomeWindow());
     stackedWidget->addWidget(new QLabel("用户管理"));
     stackedWidget->addWidget(new QLabel("航班管理"));
     stackedWidget->addWidget(new QLabel("订单管理"));
@@ -216,7 +217,7 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
     }
     else if(item == menuTree->topLevelItem(1)) //客服中心
     {
-        stackedWidget->setCurrentIndex(13);
+        stackedWidget->setCurrentIndex(12);
     }
     else if (item == menuTree->topLevelItem(2)) // "用户管理"
     {
