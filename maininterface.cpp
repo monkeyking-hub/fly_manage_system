@@ -218,18 +218,20 @@ maininterface::maininterface(QWidget *parent)
     // 获取当前用户信息并显示昵称
     User currentUser = UserManager::getInstance()->getCurrentUser();
     usrNameLabel->setText(currentUser.username.isEmpty() ? "未登录" : currentUser.username);
-
     // 监听用户信息更新信号，动态刷新界面上的昵称
     connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, [usrNameLabel](const User &user) {
         usrNameLabel->setText(user.username.isEmpty() ? "未登录" : user.username);
     });
-
-
     //添加用户头像按钮
     QToolButton *usrButton = new QToolButton(this);
-    usrButton->setIcon(QIcon(":/profilePhoto.png"));
+    usrButton->setIcon(QIcon("://usr.png"));
     usrButton->setIconSize(QSize(100,100));
     usrButton->setPopupMode(QToolButton::InstantPopup);
+    connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, [usrButton](const User &user) {
+        QPixmap newAvatar;
+        newAvatar.load(user.avatarUrl);
+        usrButton->setIcon(QIcon(newAvatar));
+    });
     //创建用户头像下拉菜单
     QMenu *profileMenu = new QMenu(usrButton);
     //设置菜单效果

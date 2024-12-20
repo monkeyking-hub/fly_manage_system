@@ -11,6 +11,7 @@ public:
     int age;
     int id;
     QString sex;
+    QString avatarUrl;
     User(){}
 };
 
