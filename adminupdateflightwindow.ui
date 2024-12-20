@@ -587,7 +587,7 @@ QPushButton:pressed {
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_add_3">
+   <widget class="QPushButton" name="btn_search">
     <property name="geometry">
      <rect>
       <x>960</x>

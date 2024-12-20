@@ -56,5 +56,6 @@
         <file>imgforsearch.jpg</file>
         <file>imgfordelete.jpg</file>
         <file>imgfordelete.png</file>
+        <file>adminshouye.jpg</file>
     </qresource>
 </RCC>
