@@ -4,7 +4,7 @@
 #include <QMap>
 #include <QStackedWidget>
 #include <QWidget>
-
+#include <order.h>
 //界面调度类
 class InterfaceManager : private QObject
 {
@@ -20,7 +20,8 @@ public:
 
     // 切换到指定页面
     void switchToPage(const QString &fullPath);
-
+    QList<Order> m_orderList;         // 用于存储订单的列表
+    //QList<Order> & olist=
     QStackedWidget *m_stackedWidget; // 堆叠控件
 private:
     explicit InterfaceManager(QObject *parent = nullptr);
