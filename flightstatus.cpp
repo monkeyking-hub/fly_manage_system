@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QListView>
 #include <QStringList>
+#include <QCalendarWidget>
 #include "ui_flightstatus.h"
 
 flightstatus::flightstatus(QWidget *parent)
@@ -33,21 +34,33 @@ void flightstatus::showPickWidget(QLineEdit* qle)
 {
     if(qle==ui->departureInput)
     {
-    QPoint pos=QPoint(250,101);
+    QPoint pos=QPoint(80,131);
     ui->pick_widget->move(pos);
     ui->pick_widget->setVisible(true);
     }
     if(qle==ui->destinationInput)
     {
-        QPoint pos=QPoint(550,101);
+        QPoint pos=QPoint(380,131);
         ui->pick_widget_2->move(pos);
         ui->pick_widget_2->setVisible(true);
     }
 }
 bool flightstatus::eventFilter(QObject* obj, QEvent* event)
 {
-
-
+    if (obj==ui->groupBox_2) {
+        switch (event->type()) {
+        case QEvent::Enter:
+            // 鼠标进入时的样式
+            ui->groupBox_2->setStyleSheet("QGroupBox { background-color: #f0f0f0; border: 2px solid #0096D6; }");
+            break;
+        case QEvent::Leave:
+            // 鼠标离开时恢复原样
+            ui->groupBox_2->setStyleSheet("QGroupBox { background-color: white; border: 2px solid #A3C1DA; }");
+            break;
+        default:
+            break;
+        }
+    }
     // 处理全局的鼠标点击事件，隐藏 pick_widget 和 pick_widget_2
     if (event->type() == QEvent::MouseButtonPress) {
         if (ui->pick_widget->isVisible() && !ui->pick_widget->geometry().contains(static_cast<QMouseEvent*>(event)->pos())) {
@@ -62,6 +75,7 @@ bool flightstatus::eventFilter(QObject* obj, QEvent* event)
         if (event->type() == QEvent::MouseButtonPress) {
             QLineEdit* qle = static_cast<QLineEdit*>(obj);
             showPickWidget(qle);
+            ui->calendar->setVisible(false);
             return true; // 阻止事件继续传播
         }
     }
@@ -73,7 +87,23 @@ bool flightstatus::eventFilter(QObject* obj, QEvent* event)
             return true;
         }
     }
-
+    if (obj == ui->dateEdit && event->type() == QEvent::MouseButtonPress) {
+        // Toggle calendar visibility on mouse press events inside QLineEdit
+        ui->calendar->setVisible(!ui->calendar->isVisible());
+        return true;  // Stop event propagation
+    } else if (event->type() == QEvent::MouseButtonPress) {
+        // Check if the click is outside the QLineEdit and QCalendarWidget
+        if (!ui->dateEdit->geometry().contains(static_cast<QMouseEvent*>(event)->pos()) &&
+            !ui->calendar->geometry().contains(static_cast<QMouseEvent*>(event)->pos()) &&
+            ui->calendar->isVisible()) {
+            ui->calendar->hide();
+        }
+    } else if (obj == ui->calendar && event->type() == QEvent::Hide) {
+        // Update QLineEdit text when the calendar is hidden
+        if (ui->calendar->selectedDate().isValid()) {
+            ui->dateEdit->setText(ui->calendar->selectedDate().toString("yyyy-MM-dd"));
+        }
+    }
     // 默认事件过滤器行为
     return QObject::eventFilter(obj, event);
 }
@@ -315,6 +345,7 @@ void flightstatus::setActiveSection_2(const QString& section)
 }
 void flightstatus::init()
 {
+    calenIni();
     QList<QPushButton*> allButtons = ui->pick_widget->findChildren<QPushButton*>();
     // 2. 筛选名字以 "pushbutton" 或 "btn" 开头的控件
     for (QPushButton* button : allButtons) {
@@ -358,6 +389,7 @@ QPushButton:hover {
             connect(button, &QPushButton::clicked, [button, this]() {
                 ui->departureInput->setText(button->text());
                 ui->pick_widget->setVisible(false);
+                ui->label_90->setFocus();
             });
     }
     }
@@ -371,6 +403,7 @@ QPushButton:hover {
             connect(button, &QPushButton::clicked, [button, this]() {
                 ui->destinationInput->setText(button->text());
                 ui->pick_widget_2->setVisible(false);
+                ui->label_90->setFocus();
             });
         }
     }
@@ -469,6 +502,58 @@ QPushButton:hover {
     // 设置补全器
     setupCompleter();
 
+}
+
+void flightstatus::calenIni()
+{
+    ui->lbl_db->setVisible(false);
+    ui->calendar->setHidden(true);
+    ui->dateEditPushbutton->setStyleSheet("QPushButton {"
+                          "background: transparent;"  // 背景透明
+                          "border: none;"            // 无边框
+                          "}");
+    ui->dateEditPushbutton_2->setStyleSheet("QPushButton {"
+                                          "background: transparent;"  // 背景透明
+                                          "border: none;"            // 无边框
+                                          "}");
+    //ui->dateEdit->setPlaceholderText("选择出发日期");
+    //ui->dateEdit_2->setPlaceholderText("选择返回日期");
+    ui->dateEdit->setReadOnly(true);  // 设置为只读
+    ui->frame->setVisible(false);
+    ui->dateEdit_2->setVisible(false);
+    ui->radioButton->isChecked();
+    connect(ui->calendar, &QCalendarWidget::selectionChanged, [this]() {
+        QDate selectedDate = ui->calendar->selectedDate();
+        QLocale locale = QLocale(QLocale::Chinese, QLocale::China);  // 设置区域为中国
+        QString dateString = selectedDate.toString("yyyy-MM-dd");
+        QString dayOfWeek = locale.dayName(selectedDate.dayOfWeek());
+        if(ui->calendar->pos()==QPoint(680,131))    ui->dateEdit->setText(dateString + " " + dayOfWeek);
+        else ui->dateEdit_2->setText(dateString + " " + dayOfWeek);
+        ui->calendar->setHidden(true);
+        ui->label_75->setFocus();
+    });
+    connect(ui->dateEditPushbutton, &QPushButton::clicked, [this]() {
+        ui->calendar->setHidden(!ui->calendar->isHidden());  // 切换日历的显示状态
+        ui->calendar->move(680,131);
+        ui->pick_widget->setVisible(false);
+        ui->pick_widget_2->setVisible(false);
+    });
+    connect(ui->dateEditPushbutton_2, &QPushButton::clicked, [this]() {
+        ui->calendar->setHidden(!ui->calendar->isHidden());  // 切换日历的显示状态
+        ui->calendar->move(840,131);
+        ui->pick_widget->setVisible(false);
+        ui->pick_widget_2->setVisible(false);
+    });
+    connect(ui->radioButton,&QRadioButton::clicked,[this](){
+        ui->frame->setVisible(false);
+        ui->dateEdit_2->setVisible(false);
+        ui->lbl_db->setVisible(false);
+    });
+    connect(ui->radioButton_2,&QRadioButton::clicked,[this](){
+        ui->frame->setVisible(true);
+        ui->dateEdit_2->setVisible(true);
+        ui->lbl_db->setVisible(true);
+    });
 }
 
 
