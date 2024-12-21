@@ -9,6 +9,8 @@
 #include "chatwindow.h"
 #include"adminupdateflightwindow.h"
 #include"admindeleteflightwindow.h"
+#include "mfindorderwindow.h"
+#include <mreorder.h>
 #include"adminhomewindow.h"
 
 adminMainInterface::adminMainInterface(QWidget *parent)
@@ -95,8 +97,8 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     stackedWidget->addWidget(new QLabel("删除用户信息"));
     stackedWidget->addWidget(new QLabel("修改用户信息"));
 
-    stackedWidget->addWidget(new QLabel("查询订单信息"));
-    stackedWidget->addWidget(new QLabel("修改订单信息"));
+    stackedWidget->addWidget(new MFindOrderWindow);
+    stackedWidget->addWidget(new MReorderWindow);
 
     stackedWidget->addWidget(new adminDeleteFlightWindow());
     stackedWidget->addWidget(new adminUpdateFlightWindow());
