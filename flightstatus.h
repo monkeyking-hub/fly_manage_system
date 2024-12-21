@@ -83,6 +83,8 @@ private:
     QList<QPushButton*> checkableButtons_2;
     void setActiveSection(const QString& section);
     void setActiveSection_2(const QString& section);
+    void calenIni();
+    void lblIni();
 };
 
 #endif // FLIGHTSTATUS_H

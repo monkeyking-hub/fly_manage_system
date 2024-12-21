@@ -14,6 +14,7 @@ class adminUpdateFlightWindow : public QMainWindow
 
 public:
     QPushButton *selectedBtn;
+    int id;
 
 public:
     explicit adminUpdateFlightWindow(QWidget *parent = nullptr);
@@ -22,6 +23,9 @@ public:
 public slots:
     void showCalendar(QPushButton *button);
     void selectDate(const QDate &date);
+    void onSearchButtonClicked();
+    void onCancelButtonClicked();
+    void onSaveButtonClicked();
 
 private:
     Ui::adminUpdateFlightWindow *ui;

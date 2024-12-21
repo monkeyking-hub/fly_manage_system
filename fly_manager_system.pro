@@ -13,6 +13,7 @@ CONFIG += c++17
 SOURCES += \
     adminaddflightwindow.cpp \
     admindeleteflightwindow.cpp \
+    adminhomewindow.cpp \
     adminloginwindow.cpp \
     adminmaininterface.cpp \
     adminupdateflightwindow.cpp \
@@ -45,6 +46,7 @@ SOURCES += \
 HEADERS += \
     adminaddflightwindow.h \
     admindeleteflightwindow.h \
+    adminhomewindow.h \
     adminloginwindow.h \
     adminmaininterface.h \
     adminupdateflightwindow.h \
@@ -76,6 +78,7 @@ HEADERS += \
 FORMS += \
     adminaddflightwindow.ui \
     admindeleteflightwindow.ui \
+    adminhomewindow.ui \
     adminloginwindow.ui \
     adminmaininterface.ui \
     adminupdateflightwindow.ui \
