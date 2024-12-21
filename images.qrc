@@ -57,5 +57,6 @@
         <file>imgfordelete.jpg</file>
         <file>imgfordelete.png</file>
         <file>defaultedProfile.jpg</file>
+        <file>dw.jpg</file>
     </qresource>
 </RCC>

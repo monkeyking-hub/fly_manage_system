@@ -243,7 +243,7 @@ void Userwindow::on_uploadProfileButton_clicked() {
                 ui->profileLbl->setPixmap(avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             }
         } else {
-            QMessageBox::warning(this, "错误", reply->errorString());
+            QMessageBox::warning(this, "错误123", reply->errorString());
         }
         reply->deleteLater();
     });
