@@ -25,6 +25,8 @@ SOURCES += \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
+    mfindorderwindow.cpp \
+    mreorder.cpp \
     newhomewindow.cpp \
     newloginwindow.cpp \
     order.cpp \
@@ -54,6 +56,8 @@ HEADERS += \
     interfacemanager.h \
     maininterface.h \
     mainwindow.h \
+    mfindorderwindow.h \
+    mreorder.h \
     newhomewindow.h \
     newloginwindow.h \
     order.h \
@@ -80,6 +84,8 @@ FORMS += \
     homewindow.ui \
     maininterface.ui \
     mainwindow.ui \
+    mfindorderwindow.ui \
+    mreorder.ui \
     newhomewindow.ui \
     newloginwindow.ui \
     newregisterwindow.ui \
