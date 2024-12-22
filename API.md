@@ -742,18 +742,94 @@
 成功:
 ```json
 {
-  "code": 200,
-  "message": "Query successful",
-  "data": [
-    {
-      "id": 201,
-      "flightNumber": "MU1234",
-      "seatType": "Economy",
-      "price": 500.0,
-      "status": "Pending payment",
-      "paymentTime": null
-    }
-  ]
+    "code": 200,
+    "data": [
+        {
+            "aircraftModel": "190",
+            "airlineCompany": "海航旗下天津航",
+            "arrivalAirport": "白塔国际机场",
+            "arrivalTime": 1735882411,
+            "boardingGate": "",
+            "businessClassPrice": 57000,
+            "businessClassSeats": 10,
+            "departure": "阿尔山",
+            "departureAirport": "伊尔施机场",
+            "departureTime": 1735877851,
+            "destination": "呼和浩特",
+            "economyClassPrice": 38000,
+            "economyClassSeats": 60,
+            "firstClassPrice": 114000,
+            "firstClassSeats": 8,
+            "flightId": 1,
+            "flightNumber": "GS6676",
+            "hasMeal": 0,
+            "id": 1,
+            "isInternational": 0,
+            "luggageSizeLimit": 20,
+            "paymentTime": 1732068900,
+            "price": 1200,
+            "refundTime": -62170013160,
+            "seatType": "头等舱",
+            "status": "已支付"
+        },
+        {
+            "aircraftModel": "190",
+            "airlineCompany": "海航旗下天津航",
+            "arrivalAirport": "白塔国际机场",
+            "arrivalTime": 1735939488,
+            "boardingGate": "",
+            "businessClassPrice": 57000,
+            "businessClassSeats": 37,
+            "departure": "阿尔山",
+            "departureAirport": "伊尔施机场",
+            "departureTime": 1735932648,
+            "destination": "呼和浩特",
+            "economyClassPrice": 38000,
+            "economyClassSeats": 164,
+            "firstClassPrice": 114000,
+            "firstClassSeats": 6,
+            "flightId": 2,
+            "flightNumber": "GS6676",
+            "hasMeal": 1,
+            "id": 8,
+            "isInternational": 0,
+            "luggageSizeLimit": 20,
+            "paymentTime": 1732442400,
+            "price": 1250,
+            "refundTime": -62170013160,
+            "seatType": "头等舱",
+            "status": "已支付"
+        },
+        {
+            "aircraftModel": "191",
+            "airlineCompany": "海航旗下天津航",
+            "arrivalAirport": "白塔国际机场",
+            "arrivalTime": 1735955539,
+            "boardingGate": "",
+            "businessClassPrice": 57000,
+            "businessClassSeats": 50,
+            "departure": "阿尔山",
+            "departureAirport": "伊尔施机场",
+            "departureTime": 1735953319,
+            "destination": "呼和浩特",
+            "economyClassPrice": 38000,
+            "economyClassSeats": 71,
+            "firstClassPrice": 114000,
+            "firstClassSeats": 4,
+            "flightId": 3,
+            "flightNumber": "GS6676",
+            "hasMeal": 1,
+            "id": 22,
+            "isInternational": 0,
+            "luggageSizeLimit": 20,
+            "paymentTime": 1732445100,
+            "price": 1200,
+            "refundTime": -62170013160,
+            "seatType": "头等舱",
+            "status": "已支付"
+        }
+    ],
+    "message": "Query successful"
 }
 ```
 失败:
