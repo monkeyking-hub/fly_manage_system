@@ -1,13 +1,16 @@
 #include "mfindorderwindow.h"
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
 MFindOrderWindow::MFindOrderWindow(QWidget *parent)
-    : QWidget(parent), userIdLineEdit(new QLineEdit(this)), searchButton(new QPushButton("Search", this)) {
+    : QWidget(parent)
+    , userIdLineEdit(new QLineEdit(this))
+    , searchButton(new QPushButton("Search", this))
+{
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(userIdLineEdit);
     layout->addWidget(searchButton);
@@ -18,7 +21,8 @@ MFindOrderWindow::MFindOrderWindow(QWidget *parent)
 
 MFindOrderWindow::~MFindOrderWindow() {}
 
-void MFindOrderWindow::onSearchButtonClicked() {
+void MFindOrderWindow::onSearchButtonClicked()
+{
     QString userId = userIdLineEdit->text();
     if (userId.isEmpty()) {
         QMessageBox::warning(this, "Input Error", "Please enter a User ID.");
@@ -27,7 +31,7 @@ void MFindOrderWindow::onSearchButtonClicked() {
 
     // 创建请求体
     QJsonObject requestObj;
-    requestObj["userId"] = userId.toInt();  // 传递用户ID
+    requestObj["userId"] = userId.toInt(); // 传递用户ID
 
     QJsonDocument requestDoc(requestObj);
     QByteArray requestData = requestDoc.toJson();
@@ -56,7 +60,8 @@ void MFindOrderWindow::onSearchButtonClicked() {
                     // 处理订单信息
                     for (const QJsonValue &value : data) {
                         QJsonObject orderObj = value.toObject();
-                        QString orderInfo = QString("Flight: %1\nSeat Type: %2\nPrice: %3\nStatus: %4")
+                        QString orderInfo = QString(
+                                                "Flight: %1\nSeat Type: %2\nPrice: %3\nStatus: %4")
                                                 .arg(orderObj["flightNumber"].toString())
                                                 .arg(orderObj["seatType"].toString())
                                                 .arg(orderObj["price"].toDouble())

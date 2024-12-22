@@ -1,34 +1,32 @@
 #include "maininterface.h"
-#include "ui_maininterface.h"
-#include "interfacemanager.h"
-#include "flightstatus.h"
-#include "homewindow.h"
-#include "orderwindow.h"
-#include "newhomewindow.h"
-#include "user.h"
-#include "usermanager.h"
-#include <QStackedWidget>
-#include <QDebug>
-#include <QApplication>
-#include <QMainWindow>
-#include <QListWidget>
-#include <QStackedWidget>
-#include <QHBoxLayout>
-#include <QWidget>
-#include <QLabel>
-#include <QToolBar>
 #include <QAction>
-#include <QIcon>
+#include <QApplication>
 #include <QComboBox>
+#include <QDebug>
+#include <QHBoxLayout>
+#include <QIcon>
+#include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QMainWindow>
+#include <QSpacerItem>
+#include <QStackedWidget>
+#include <QStringList>
+#include <QToolBar>
 #include <QToolButton>
-#include<QSpacerItem>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QListWidgetItem>
-#include <QStringList>
+#include <QWidget>
 #include "chatwindow.h"
-
+#include "flightstatus.h"
+#include "homewindow.h"
+#include "interfacemanager.h"
+#include "newhomewindow.h"
+#include "orderwindow.h"
+#include "ui_maininterface.h"
+#include "user.h"
+#include "usermanager.h"
 
 maininterface::maininterface(QWidget *parent)
     : QMainWindow(parent)
@@ -53,36 +51,34 @@ maininterface::maininterface(QWidget *parent)
     menuList->setCurrentRow(0); //默认在首页窗口
 
     //自定义菜单栏样式
-    menuList->setStyleSheet(
-        "QListWidget {"
-        "    background-color: #f5f5f5;"
-        "    border: none;"
-        "    font: 14px 'Arial';"
-        "    outline: 0;"
-        "}"
-        "QListWidget::item {"
-        "    padding: 10px 15px;"
-        "    color: #333;"
-        "    background-color: transparent;"
-        "    border-left: 4px solid transparent;"
-        "    transition: all 0.3s;"
-        "}"
-        "QListWidget::item:hover {"
-        "    background-color: #e6f7ff;"
-        "    color: #1890ff;"
-        "    border-left: 4px solid #1890ff;"
-        "}"
-        "QListWidget::item:selected {"
-        "    background-color: #d9f7be;"
-        "    color: #52c41a;"
-        "    border-left: 4px solid #52c41a;"
-        "}"
-        "QListWidget::item:pressed {"
-        "    background-color: #bae7ff;"
-        "    color: #096dd9;"
-        "    border-left: 4px solid #096dd9;"
-        "}"
-    );
+    menuList->setStyleSheet("QListWidget {"
+                            "    background-color: #f5f5f5;"
+                            "    border: none;"
+                            "    font: 14px 'Arial';"
+                            "    outline: 0;"
+                            "}"
+                            "QListWidget::item {"
+                            "    padding: 10px 15px;"
+                            "    color: #333;"
+                            "    background-color: transparent;"
+                            "    border-left: 4px solid transparent;"
+                            "    transition: all 0.3s;"
+                            "}"
+                            "QListWidget::item:hover {"
+                            "    background-color: #e6f7ff;"
+                            "    color: #1890ff;"
+                            "    border-left: 4px solid #1890ff;"
+                            "}"
+                            "QListWidget::item:selected {"
+                            "    background-color: #d9f7be;"
+                            "    color: #52c41a;"
+                            "    border-left: 4px solid #52c41a;"
+                            "}"
+                            "QListWidget::item:pressed {"
+                            "    background-color: #bae7ff;"
+                            "    color: #096dd9;"
+                            "    border-left: 4px solid #096dd9;"
+                            "}");
 
     //将左侧菜单栏添加到主布局mainLayout
     mainLayout->addWidget(menuList);
@@ -90,10 +86,10 @@ maininterface::maininterface(QWidget *parent)
     //右侧内容区
     stackedWidget = new QStackedWidget(this);
     newHomeWindow *w1 = new newHomeWindow();
-    stackedWidget->addWidget(w1); //首页界面
-    stackedWidget->addWidget(new flightstatus()); //航班动态界面
-    stackedWidget->addWidget(new orderwindow()); //订单界面
-    stackedWidget->addWidget(new homeWindow()); //特惠机票界面
+    stackedWidget->addWidget(w1);                   //首页界面
+    stackedWidget->addWidget(new flightstatus());   //航班动态界面
+    stackedWidget->addWidget(new orderwindow());    //订单界面
+    stackedWidget->addWidget(new homeWindow());     //特惠机票界面
     stackedWidget->addWidget(new ChatWindow(true)); //客服中心
 
     //将右侧内容添加到主布局mainLayout
@@ -103,7 +99,10 @@ maininterface::maininterface(QWidget *parent)
     setCentralWidget(centralWidget);
 
     //信号槽：菜单项切换页面
-    connect(menuList,&QListWidget::currentRowChanged,stackedWidget,&QStackedWidget::setCurrentIndex);
+    connect(menuList,
+            &QListWidget::currentRowChanged,
+            stackedWidget,
+            &QStackedWidget::setCurrentIndex);
 
     // 连接 newHomeWindow 信号到槽
     connect(w1, &newHomeWindow::commandLinkButton4Clicked, this, [this]() {
@@ -165,42 +164,39 @@ maininterface::maininterface(QWidget *parent)
     }
     )");
 
-    addToolBar(Qt::TopToolBarArea,toolBar); //将工具栏添加到顶部
+    addToolBar(Qt::TopToolBarArea, toolBar); //将工具栏添加到顶部
 
     //在工具栏添加label，显示软件logo图片
     QLabel *label_logo = new QLabel(this);
-    label_logo->setFixedSize(100,100);
+    label_logo->setFixedSize(100, 100);
     label_logo->setStyleSheet("background-color: transparent;");
     QPixmap *pix = new QPixmap(":/logo.png");
-    QSize sz=label_logo->size();
+    QSize sz = label_logo->size();
     label_logo->setPixmap(pix->scaled(sz));
     toolBar->addWidget(label_logo);
 
     //在工具栏里添加label，显示软件名字
-    QLabel *label_name = new QLabel("云程",this);
-    label_name->setFixedSize(100,100);
+    QLabel *label_name = new QLabel("云程", this);
+    label_name->setFixedSize(100, 100);
     label_name->setStyleSheet(
-        "font-size: 40px; color: rgb(52, 127, 196); font-family: '千图笔锋手写体';"
-    );
+        "font-size: 40px; color: rgb(52, 127, 196); font-family: '千图笔锋手写体';");
     toolBar->addWidget(label_name);
-
 
     // 创建一个QWidget作为间隔
     QWidget *spacerWidget1 = new QWidget();
     spacerWidget1->setFixedWidth(550);
     toolBar->addWidget(spacerWidget1);
 
-    QLabel *kefuLabel = new QLabel("客服中心",this);
+    QLabel *kefuLabel = new QLabel("客服中心", this);
     kefuLabel->setFixedSize(75, 50);
-    kefuLabel->setStyleSheet(
-        "font-size: 20px; color: black; font-family: '千图笔锋手写体';");
+    kefuLabel->setStyleSheet("font-size: 20px; color: black; font-family: '千图笔锋手写体';");
     toolBar->addWidget(kefuLabel);
 
     QToolButton *kefuButton = new QToolButton();
     kefuButton->setIcon(QIcon(":/kefu.png"));
     kefuButton->setToolTip("客服");
-    kefuButton->setIconSize(QSize(70,70));
-    connect(kefuButton,&QToolButton::clicked,this,&maininterface::onKefuButtonClicked);
+    kefuButton->setIconSize(QSize(70, 70));
+    connect(kefuButton, &QToolButton::clicked, this, &maininterface::onKefuButtonClicked);
     toolBar->addWidget(kefuButton);
 
     // 创建一个QWidget作为间隔
@@ -211,27 +207,32 @@ maininterface::maininterface(QWidget *parent)
     // 在工具栏添加用户名label
     QLabel *usrNameLabel = new QLabel(this);
     usrNameLabel->setFixedSize(100, 50);
-    usrNameLabel->setStyleSheet(
-        "font-size: 20px; color: black; font-family: '千图笔锋手写体';");
+    usrNameLabel->setStyleSheet("font-size: 20px; color: black; font-family: '千图笔锋手写体';");
     toolBar->addWidget(usrNameLabel);
 
     // 获取当前用户信息并显示昵称
     User currentUser = UserManager::getInstance()->getCurrentUser();
     usrNameLabel->setText(currentUser.username.isEmpty() ? "未登录" : currentUser.username);
     // 监听用户信息更新信号，动态刷新界面上的昵称
-    connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, [usrNameLabel](const User &user) {
-        usrNameLabel->setText(user.username.isEmpty() ? "未登录" : user.username);
-    });
+    connect(UserManager::getInstance(),
+            &UserManager::currentUserChanged,
+            this,
+            [usrNameLabel](const User &user) {
+                usrNameLabel->setText(user.username.isEmpty() ? "未登录" : user.username);
+            });
     //添加用户头像按钮
     QToolButton *usrButton = new QToolButton(this);
     usrButton->setIcon(QIcon("://usr.png"));
-    usrButton->setIconSize(QSize(100,100));
+    usrButton->setIconSize(QSize(100, 100));
     usrButton->setPopupMode(QToolButton::InstantPopup);
-    connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, [usrButton](const User &user) {
-        QPixmap newAvatar;
-        newAvatar.load(user.avatarUrl);
-        usrButton->setIcon(QIcon(newAvatar));
-    });
+    connect(UserManager::getInstance(),
+            &UserManager::currentUserChanged,
+            this,
+            [usrButton](const User &user) {
+                QPixmap newAvatar;
+                newAvatar.load(user.avatarUrl);
+                usrButton->setIcon(QIcon(newAvatar));
+            });
     //创建用户头像下拉菜单
     QMenu *profileMenu = new QMenu(usrButton);
     //设置菜单效果
@@ -264,10 +265,9 @@ maininterface::maininterface(QWidget *parent)
         color: #000000;                  /* 鼠标按下时字体颜色 */
     }
     )");
-    QAction *editInfoAction = new QAction("个人信息编辑",this);
-    QAction *switchLoginAction = new QAction("切换登录",this);
-    QAction *switchFlightStatusWindowAction = new QAction("航班动态",this);
-
+    QAction *editInfoAction = new QAction("个人信息编辑", this);
+    QAction *switchLoginAction = new QAction("切换登录", this);
+    QAction *switchFlightStatusWindowAction = new QAction("航班动态", this);
 
     // 设置图标
     editInfoAction->setIcon(QIcon(":/usr.png"));
@@ -280,11 +280,12 @@ maininterface::maininterface(QWidget *parent)
     //将头像按钮添加到工具栏
     toolBar->addWidget(usrButton);
     //信号槽：连接菜单项
-    connect(editInfoAction,&QAction::triggered,this,&maininterface::editUserInfo);
-    connect(switchLoginAction,&QAction::triggered,this,&maininterface::switchLogin);
-    connect(switchFlightStatusWindowAction,&QAction::triggered,this,&maininterface::switchtoFlightStatusWindow);
-
-
+    connect(editInfoAction, &QAction::triggered, this, &maininterface::editUserInfo);
+    connect(switchLoginAction, &QAction::triggered, this, &maininterface::switchLogin);
+    connect(switchFlightStatusWindowAction,
+            &QAction::triggered,
+            this,
+            &maininterface::switchtoFlightStatusWindow);
 }
 
 void maininterface::editUserInfo()

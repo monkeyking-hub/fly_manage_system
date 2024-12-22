@@ -9919,20 +9919,7 @@ QLineEdit:hover {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QComboBox {
-    border: 1px solid #CCCCCC;
-    border-radius: 4px;
-    padding: 2px 5px;
-    background-color: white;
-    min-width: 80px;
-    min-height: 20px;
-    font-size: 12px;
-}
-
-
-
-
-</string>
+      <string notr="true"/>
      </property>
      <item>
       <property name="text">
@@ -10176,7 +10163,7 @@ QLineEdit:focus {
    <widget class="QPushButton" name="searchButton">
     <property name="geometry">
      <rect>
-      <x>540</x>
+      <x>530</x>
       <y>140</y>
       <width>114</width>
       <height>44</height>
@@ -10218,8 +10205,8 @@ QPushButton:pressed {
    <widget class="QCalendarWidget" name="calendar">
     <property name="geometry">
      <rect>
-      <x>880</x>
-      <y>300</y>
+      <x>1050</x>
+      <y>560</y>
       <width>241</width>
       <height>261</height>
      </rect>
@@ -10290,11 +10277,161 @@ QCalendarWidget QHeaderView::section { /* 头部星期显示 */
 </string>
     </property>
    </widget>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>45</x>
+      <y>231</y>
+      <width>1071</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QListView{
+Background-cp;pr:red;//背景色
+Alternate-background-color:yellow;//行与行之间交替的颜色setAlternatingRowColors(true);
+Show-decoration-selected:1;设置是否选中时，整行都高亮显示
+}
+//交替颜色设置
+QListView::item:alternate{
+Background:#000000;
+}
+QScrollBar::handle:vertical {
+    background: rgb(144, 139, 138);  /* 滚动条手柄颜色 */
+    min-height: 20px;  /* 滚动条手柄最小高度 */
+}
+//当条目被选中时
+QListView::item:selected{
+Border:2px solid #000000;
+}
+ 
+//当条目被选中，并且不是有效的
+QListView::item::selected:!active{
+ 
+}
+//鼠标悬浮在条目上
+QListView::item::hover{
+}
+</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_3">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>500</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>190</y>
+      <width>1061</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QComboBox" name="comboBox_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>61</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_4">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>10</y>
+       <width>60</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_5">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>10</y>
+       <width>61</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_6">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>10</y>
+       <width>61</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_lowPrice">
+     <property name="geometry">
+      <rect>
+       <x>750</x>
+       <y>10</y>
+       <width>61</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">PushButton{
+    background-color: transparent;
+    border: none;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>低价优先</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_period_short">
+     <property name="geometry">
+      <rect>
+       <x>840</x>
+       <y>10</y>
+       <width>71</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>飞行时间短-长</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_takeoff_early">
+     <property name="geometry">
+      <rect>
+       <x>930</x>
+       <y>10</y>
+       <width>71</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>起飞时间早-晚</string>
+     </property>
+    </widget>
+   </widget>
+   <zorder>groupBox_3</zorder>
+   <zorder>listWidget</zorder>
    <zorder>groupBox</zorder>
    <zorder>searchButton</zorder>
    <zorder>pick_widget</zorder>
    <zorder>pick_widget_2</zorder>
    <zorder>calendar</zorder>
+   <zorder>comboBox_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -5,9 +5,9 @@
 #include <QLineEdit>
 #include <QListView>
 #include <QMainWindow>
-#include <QStringListModel>
-#include <QPushButton>
 #include <QNetworkAccessManager>
+#include <QPushButton>
+#include <QStringListModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -48,7 +48,7 @@ private slots:
 
     void on_btn_abroad_clicked();
 
-    void showPickWidget(QLineEdit* qle);
+    void showPickWidget(QLineEdit *qle);
 
     void cityPicked(const QString city);
 
@@ -70,23 +70,29 @@ private slots:
 
     void on_searchButton_clicked();
 
+    void on_btn_lowPrice_clicked();
+
+    void on_btn_takeoff_early_clicked();
+
+    void on_btn_period_short_clicked();
+
 private:
     void init();
-    QNetworkAccessManager* networkmanager;
+    QNetworkAccessManager *networkmanager;
     Ui::flightstatus *ui;
     QStringList cityList;             // 存储所有城市数据
     QStringListModel *cityListModel;  // 用于设置给Completer
     QCompleter *departureCompleter;   // 出发地补全器
     QCompleter *destinationCompleter; // 目的地补全器
-    QList<QPushButton*> cityButtons;
+    QList<QPushButton *> cityButtons;
     void setupCompleter(); // 设置补全器
     QLineEdit *currentLineEdit;
     void dpcityPicked(const QString city);
     void dscityPicked(const QString city);
-    QList<QPushButton*> checkableButtons;
-    QList<QPushButton*> checkableButtons_2;
-    void setActiveSection(const QString& section);
-    void setActiveSection_2(const QString& section);
+    QList<QPushButton *> checkableButtons;
+    QList<QPushButton *> checkableButtons_2;
+    void setActiveSection(const QString &section);
+    void setActiveSection_2(const QString &section);
     void calenIni();
     void lblIni();
 };

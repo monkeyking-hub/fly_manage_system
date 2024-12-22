@@ -12,13 +12,28 @@ public:
     Order();
 
     // 带参数的构造函数
-    Order(const QString &orderNumber, const QString &passenger, const QString &amount,
-          const QString &departure, const QString &destination, const QString &airline,
-          const QString &flightNumber, const QString &departureTime, const QString &arrivalTime,
-          const QString &aircraftType, const QString &seatClass, Status status,
-          const QString &flightId, const QString &boardingGate, const QString &arrivalAirport,
-          const QString &departureAirport, int firstClassSeats, int economyClassSeats,
-          int businessClassSeats, double firstClassPrice, double economyClassPrice, double businessClassPrice);
+    Order(const QString &orderNumber,
+          const QString &passenger,
+          const QString &amount,
+          const QString &departure,
+          const QString &destination,
+          const QString &airline,
+          const QString &flightNumber,
+          const QString &departureTime,
+          const QString &arrivalTime,
+          const QString &aircraftType,
+          const QString &seatClass,
+          Status status,
+          const QString &flightId,
+          const QString &boardingGate,
+          const QString &arrivalAirport,
+          const QString &departureAirport,
+          int firstClassSeats,
+          int economyClassSeats,
+          int businessClassSeats,
+          double firstClassPrice,
+          double economyClassPrice,
+          double businessClassPrice);
 
     // Getter 方法
     QString orderNumber() const;

@@ -19,10 +19,12 @@ SOURCES += \
     adminupdateflightwindow.cpp \
     animatedinputfield.cpp \
     chatwindow.cpp \
+    flightinfo.cpp \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
     interfacemanager.cpp \
+    listitem.cpp \
     main.cpp \
     maininterface.cpp \
     mainwindow.cpp \
@@ -52,10 +54,12 @@ HEADERS += \
     adminupdateflightwindow.h \
     animatedInputField.h \
     chatwindow.h \
+    flightinfo.h \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
     interfacemanager.h \
+    listitem.h \
     maininterface.h \
     mainwindow.h \
     mfindorderwindow.h \
@@ -85,6 +89,7 @@ FORMS += \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
+    listitem.ui \
     maininterface.ui \
     mainwindow.ui \
     mfindorderwindow.ui \

@@ -1,9 +1,10 @@
 #ifndef ORDERWIDGET_H
 #define ORDERWIDGET_H
 
-#include <QWidget>
+#include <QEvent> // 确保包含了 QEvent 头文件
 #include <QLabel>
 #include <QMouseEvent>
+#include <QWidget>
 #include "order.h"
 #include <QEvent>  // 确保包含了 QEvent 头文件
 
@@ -16,7 +17,7 @@ public:
     explicit OrderWidget(const Order &order, QWidget *parent = nullptr);
 
     // 获取当前订单数据
-    const Order& getOrder() const;
+    const Order &getOrder() const;
 
 signals:
     // 当订单被点击时发出信号

@@ -1,18 +1,18 @@
 #ifndef ADMINADDFLIGHTWINDOW_H
 #define ADMINADDFLIGHTWINDOW_H
 
-#include <QMainWindow>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
+#include <QCalendarWidget>
 #include <QDateTimeEdit>
-#include <QSpinBox>
 #include <QFormLayout>
 #include <QGridLayout>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMainWindow>
 #include <QMessageBox>
-#include <QCalendarWidget>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 namespace Ui {
 class adminAddFlightWindow;
@@ -30,10 +30,17 @@ public:
     QPushButton *selectedBtn;
 
 signals:
-    void addFlightRequested(const QString &flightNumber,const QString& aircraftModel,const QString& departure,
-                           const QString &destination,qint64 departureTime,qint64 arrivalTime,
-                           const int &firstClssSeats,const int &economyClassSeats,const int &firstClassPrice,
-                           const int &economyClassPrice,const QString &company);
+    void addFlightRequested(const QString &flightNumber,
+                            const QString &aircraftModel,
+                            const QString &departure,
+                            const QString &destination,
+                            qint64 departureTime,
+                            qint64 arrivalTime,
+                            const int &firstClssSeats,
+                            const int &economyClassSeats,
+                            const int &firstClassPrice,
+                            const int &economyClassPrice,
+                            const QString &company);
 
 public slots:
     void showCalendar(QPushButton *button);
@@ -46,15 +53,22 @@ private:
     Ui::adminAddFlightWindow *ui;
 };
 
-class addFlightHandler:public QObject
+class addFlightHandler : public QObject
 {
     Q_OBJECT;
 
 public slots:
-    void handleAddFlight(const QString &flightNumber,const QString& aircraftModel,const QString& departure,
-                         const QString &destination,qint64 departureTime,const qint64 arrivalTime,
-                         const int &firstClassSeats,const int &economyClassSeats,const int &firstClassPrice,
-                         const int &economyClassPrice,const QString &company);
+    void handleAddFlight(const QString &flightNumber,
+                         const QString &aircraftModel,
+                         const QString &departure,
+                         const QString &destination,
+                         qint64 departureTime,
+                         const qint64 arrivalTime,
+                         const int &firstClassSeats,
+                         const int &economyClassSeats,
+                         const int &firstClassPrice,
+                         const int &economyClassPrice,
+                         const QString &company);
 };
 
 #endif // ADMINADDFLIGHTWINDOW_H

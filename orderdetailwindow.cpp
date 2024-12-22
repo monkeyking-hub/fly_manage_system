@@ -1,16 +1,16 @@
 #include "orderdetailwindow.h"
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QIcon>
 #include <QFont>
-#include <QPixmap>
-#include <QTableWidget>
+#include <QHBoxLayout>
 #include <QHeaderView>
-#include "maininterface.h"
+#include <QIcon>
+#include <QLabel>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QVBoxLayout>
 #include "interfacemanager.h"
+#include "maininterface.h"
 
 OrderDetailWindow::OrderDetailWindow(const Order &order, QWidget *parent)
     : QWidget(parent)
@@ -21,10 +21,10 @@ OrderDetailWindow::OrderDetailWindow(const Order &order, QWidget *parent)
 void OrderDetailWindow::setupUI(const Order &order)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setSpacing(5);  // 减小布局之间的间隙
+    layout->setSpacing(5); // 减小布局之间的间隙
 
     // 字体设置
-    QFont titleFont = QFont("Arial", 14, QFont::Bold);  // 更大字体
+    QFont titleFont = QFont("Arial", 14, QFont::Bold); // 更大字体
     QFont contentFont = QFont("Arial", 12);
     QFont airportFont = QFont("Arial", 10);  // 机场信息的小字体
     QPalette palette;
@@ -125,7 +125,8 @@ void OrderDetailWindow::setupUI(const Order &order)
     layout->addWidget(planeModelLabel);
 
     // 新增：出发时间
-    QLabel *departureTimeLabel = new QLabel(QString("出发时间: %1").arg(order.departureTime()), this);
+    QLabel *departureTimeLabel = new QLabel(QString("出发时间: %1").arg(order.departureTime()),
+                                            this);
     departureTimeLabel->setFont(titleFont);
     layout->addWidget(departureTimeLabel);
 
@@ -148,11 +149,11 @@ void OrderDetailWindow::setupUI(const Order &order)
     layout->addWidget(evaluationLabel);
 
     QVBoxLayout *ratingLayout = new QVBoxLayout();
-    ratingLayout->setSpacing(5);  // 减小评分部分的间隙
+    ratingLayout->setSpacing(5); // 减小评分部分的间隙
 
     // 星星评分
     QHBoxLayout *starsLayout = new QHBoxLayout();
-    starsLayout->setSpacing(5);  // 星星评分按钮间隙
+    starsLayout->setSpacing(5); // 星星评分按钮间隙
     for (int i = 0; i < 5; ++i) {
         QPushButton *starButton = new QPushButton(QIcon(":/newicon/star.png"), "", this);
         starButton->setIconSize(QSize(30, 30));
@@ -177,7 +178,7 @@ void OrderDetailWindow::setupUI(const Order &order)
 
     // 表情与说明文字对齐
     QHBoxLayout *facesLayout = new QHBoxLayout();
-    facesLayout->setSpacing(10);  // 调整表情按钮间隙
+    facesLayout->setSpacing(10); // 调整表情按钮间隙
 
     QVBoxLayout *cryFaceLayout = new QVBoxLayout();
     QPushButton *cryFaceButton = new QPushButton(QIcon(":/newicon/bad.png"), "", this);
@@ -246,8 +247,8 @@ void OrderDetailWindow::setupUI(const Order &order)
     faqLabel->setFont(titleFont);
     layout->addWidget(faqLabel);
 
-    QHBoxLayout *faqLayout = new QHBoxLayout();  // 使用 QHBoxLayout 进行横向排列
-    faqLayout->setSpacing(5);  // 减小按钮间隙
+    QHBoxLayout *faqLayout = new QHBoxLayout(); // 使用 QHBoxLayout 进行横向排列
+    faqLayout->setSpacing(5);                   // 减小按钮间隙
 
     // 常见问题按钮
     QPushButton *serviceIssueButton = new QPushButton("服务态度差", this);
@@ -264,7 +265,11 @@ void OrderDetailWindow::setupUI(const Order &order)
     poorExperienceButton->setFont(buttonFont);
     complaintButton->setFont(buttonFont);
 
-    for (QPushButton *button : {serviceIssueButton, flightDelayButton, baggageRuleButton, poorExperienceButton, complaintButton}) {
+    for (QPushButton *button : {serviceIssueButton,
+                                flightDelayButton,
+                                baggageRuleButton,
+                                poorExperienceButton,
+                                complaintButton}) {
         button->setStyleSheet("QPushButton {"
                               "border-radius: 15px; "
                               "padding: 10px 20px; "
@@ -287,9 +292,7 @@ void OrderDetailWindow::setupUI(const Order &order)
     layout->addLayout(faqLayout);
 
     // 点击"行李重量/尺寸规定"显示表格
-    connect(baggageRuleButton, &QPushButton::clicked, this, [this]() {
-        showBaggageTable();
-    });
+    connect(baggageRuleButton, &QPushButton::clicked, this, [this]() { showBaggageTable(); });
 
     // 连接信号与槽函数
     connect(serviceIssueButton, &QPushButton::clicked, this, [this]() {
@@ -300,9 +303,7 @@ void OrderDetailWindow::setupUI(const Order &order)
         QMessageBox::information(this, "反馈", "感谢反馈，我们会积极改正");
     });
 
-    connect(baggageRuleButton, &QPushButton::clicked, this, [this]() {
-        showBaggageTable();
-    });
+    connect(baggageRuleButton, &QPushButton::clicked, this, [this]() { showBaggageTable(); });
 
     connect(poorExperienceButton, &QPushButton::clicked, this, [this]() {
         QMessageBox::information(this, "反馈", "感谢反馈，我们会积极改正");
@@ -322,7 +323,6 @@ void OrderDetailWindow::setupUI(const Order &order)
     setLayout(layout);
 }
 
-
 // 显示行李重量/尺寸规定表格
 void OrderDetailWindow::showBaggageTable()
 {
@@ -330,18 +330,32 @@ void OrderDetailWindow::showBaggageTable()
     tableWindow->setWindowTitle("行李重量/尺寸规定");
     tableWindow->resize(600, 400);
 
-    QTableWidget *tableWidget = new QTableWidget(9, 3, tableWindow);  // 9行3列
-    tableWidget->setHorizontalHeaderLabels(QStringList() << "尺寸" << "三边尺寸" << "三边之和不超过");
+    QTableWidget *tableWidget = new QTableWidget(9, 3, tableWindow); // 9行3列
+    tableWidget->setHorizontalHeaderLabels(QStringList()
+                                           << "尺寸" << "三边尺寸" << "三边之和不超过");
     tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     // 表格数据
-    QStringList sizes = {"13寸拉杆箱尺寸", "18寸拉杆箱尺寸", "20寸拉杆箱尺寸",
-                         "22寸拉杆箱尺寸", "24寸拉杆箱尺寸", "26寸拉杆箱尺寸",
-                         "28寸拉杆箱尺寸", "30寸拉杆箱尺寸", "32寸拉杆箱尺寸"};
-    QStringList dimensions = {"28cm*40cm*13cm", "34cm*44cm*20cm", "33cm*22cm*52cm",
-                              "35cm*24cm*54cm", "37cm*29cm*64cm", "39cm*33cm*69cm",
-                              "44cm*34cm*74cm", "44cm*34cm*78cm", "57cm*81cm*35cm"};
-    QStringList totalSizes = {"81cm", "105cm", "115cm", "125cm", "135cm", "148cm", "158cm", "170cm", "195cm"};
+    QStringList sizes = {"13寸拉杆箱尺寸",
+                         "18寸拉杆箱尺寸",
+                         "20寸拉杆箱尺寸",
+                         "22寸拉杆箱尺寸",
+                         "24寸拉杆箱尺寸",
+                         "26寸拉杆箱尺寸",
+                         "28寸拉杆箱尺寸",
+                         "30寸拉杆箱尺寸",
+                         "32寸拉杆箱尺寸"};
+    QStringList dimensions = {"28cm*40cm*13cm",
+                              "34cm*44cm*20cm",
+                              "33cm*22cm*52cm",
+                              "35cm*24cm*54cm",
+                              "37cm*29cm*64cm",
+                              "39cm*33cm*69cm",
+                              "44cm*34cm*74cm",
+                              "44cm*34cm*78cm",
+                              "57cm*81cm*35cm"};
+    QStringList totalSizes
+        = {"81cm", "105cm", "115cm", "125cm", "135cm", "148cm", "158cm", "170cm", "195cm"};
 
     for (int i = 0; i < 9; ++i) {
         tableWidget->setItem(i, 0, new QTableWidgetItem(sizes[i]));
@@ -349,7 +363,7 @@ void OrderDetailWindow::showBaggageTable()
         tableWidget->setItem(i, 2, new QTableWidgetItem(totalSizes[i]));
     }
 
-    tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 禁止编辑
+    tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 禁止编辑
     tableWidget->setSelectionMode(QAbstractItemView::NoSelection);   // 禁止选中
     tableWidget->verticalHeader()->setVisible(false);                // 隐藏行号
 

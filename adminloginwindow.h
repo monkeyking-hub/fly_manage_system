@@ -1,17 +1,17 @@
 #ifndef ADMINLOGINWINDOW_H
 #define ADMINLOGINWINDOW_H
 
-#include <QMainWindow>
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QLineEdit>
-#include <QPropertyAnimation>
+#include <QMainWindow>
 #include <QMessageBox>
+#include <QPropertyAnimation>
+#include <QPushButton>
 #include <QSpacerItem>
-#include <QApplication>
+#include <QVBoxLayout>
+#include <QWidget>
 #include "animatedInputField.h"
 
 namespace Ui {
@@ -31,22 +31,21 @@ public:
     ~adminLoginWindow();
 
 signals:
-    void adminLoginRequested(const QString &usrname,const QString &password);
+    void adminLoginRequested(const QString &usrname, const QString &password);
 
 public slots:
-    void onAdminLogInButtonClicked(); //登录按钮点击的槽函数
+    void onAdminLogInButtonClicked();  //登录按钮点击的槽函数
     void onAdminReturnButtonClicked(); //返回按钮点击的槽函数
 private:
     Ui::adminLoginWindow *ui;
 };
 
-class adminLoginHandler:public QObject
+class adminLoginHandler : public QObject
 {
     Q_OBJECT;
 
 public slots:
-    void handleAdminLogin(const QString& email, const QString& password);
+    void handleAdminLogin(const QString &email, const QString &password);
 };
-
 
 #endif // ADMINLOGINWINDOW_H

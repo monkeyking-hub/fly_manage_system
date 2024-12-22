@@ -1,14 +1,15 @@
 #include "orderwidget.h"
+#include <QFrame> // 用于横线分隔符
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QSpacerItem>
+#include <QVBoxLayout>
 #include <QWidget>
-#include <QFrame>  // 用于横线分隔符
 
 // OrderWidget 构造函数
 OrderWidget::OrderWidget(const Order &order, QWidget *parent)
-    : QWidget(parent), m_order(order)
+    : QWidget(parent)
+    , m_order(order)
 {
     // 设置样式
     this->setObjectName("OrderWidget");
@@ -100,7 +101,7 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     layout->addWidget(line);
 }
 
-const Order& OrderWidget::getOrder() const
+const Order &OrderWidget::getOrder() const
 {
     return m_order;
 }

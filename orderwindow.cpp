@@ -1,42 +1,39 @@
 #include "orderwindow.h"
-#include "ui_orderwindow.h"
+#include <QComboBox>
+#include <QDebug>
+#include <QFontDatabase> // 用于加载自定义字体 // 引入 inorder 界面
+#include <QHeaderView>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLabel>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QPalette>
 #include <QPixmap>
 #include <QResource>
-#include <QLabel>
-#include <QPixmap>
-#include <QDebug>
-#include <QFontDatabase>  // 用于加载自定义字体 // 引入 inorder 界面
-#include <QTabWidget>
-#include <QVBoxLayout>
-#include <QTableWidget>
-#include <QHeaderView>
-#include "orderwidget.h"
-#include <interfacemanager.h>
-#include "order.h"
 #include <QScrollArea>
-#include "maininterface.h"
-#include "usermanager.h"
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QMessageBox>
+#include <QTabWidget>
+#include <QTableWidget>
 #include <QTimer>
-#include <QComboBox>
-
+#include <QVBoxLayout>
+#include "maininterface.h"
+#include "order.h"
+#include "orderwidget.h"
+#include "ui_orderwindow.h"
+#include "usermanager.h"
+#include <interfacemanager.h>
 
 // orderwindow 构造函数
 orderwindow::orderwindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::order_2)  // 这里应该是 Ui::order_2，而不是 Ui::orderwindow
+    , ui(new Ui::order_2) // 这里应该是 Ui::order_2，而不是 Ui::orderwindow
 {
     ui->setupUi(this);
 
     ui->cs->setObjectName("centralWidget");
-
 
     // 动态创建 QTabWidget
     QTabWidget *tabWidget = new QTabWidget(this);
@@ -93,9 +90,6 @@ orderwindow::~orderwindow()
 {
     delete ui;
 }
-
-
-
 
 void orderwindow::fetchOrders(int userId) {
     // 创建网络访问管理器
@@ -253,8 +247,7 @@ void orderwindow::showOrderDetails(const Order &order)
     OrderDetailWindow *detailWindow = new OrderDetailWindow(order, nullptr); // 父窗口改为 nullptr
     detailWindow->setAttribute(Qt::WA_DeleteOnClose);
     detailWindow->show();
-    detailWindow->raise(); // 提升到最前
+    detailWindow->raise();          // 提升到最前
     detailWindow->activateWindow(); // 激活窗口
     qDebug() << "Creating detail window for order:" << order.orderNumber();
 }
-

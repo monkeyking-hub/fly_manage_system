@@ -8,7 +8,9 @@ adminHomeWindow::adminHomeWindow(QWidget *parent)
     ui->setupUi(this);
 
     QPixmap pixmap(":/adminshouye.jpg");
-    QPixmap scaledPixmap=pixmap.scaled(ui->label->size(),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap scaledPixmap = pixmap.scaled(ui->label->size(),
+                                         Qt::KeepAspectRatio,
+                                         Qt::SmoothTransformation);
     ui->label->setPixmap(scaledPixmap);
 }
 

@@ -1,12 +1,12 @@
 #include "admindeleteflightwindow.h"
-#include "ui_admindeleteflightwindow.h"
-#include<QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
+#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDebug>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include "ui_admindeleteflightwindow.h"
 
 adminDeleteFlightWindow::adminDeleteFlightWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -36,28 +36,36 @@ adminDeleteFlightWindow::adminDeleteFlightWindow(QWidget *parent)
     ui->lineEdit->setStyleSheet(styleSheet);
 
     QPixmap pixmap(":/imgfordelete.png");
-    QPixmap scaledPixmap=pixmap.scaled(ui->label_image->size(),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap scaledPixmap = pixmap.scaled(ui->label_image->size(),
+                                         Qt::KeepAspectRatio,
+                                         Qt::SmoothTransformation);
     ui->label_image->setPixmap(scaledPixmap);
-    connect(ui->btn_delete,&QPushButton::clicked,this,&adminDeleteFlightWindow::onDeleteButtonClicked);
+    connect(ui->btn_delete,
+            &QPushButton::clicked,
+            this,
+            &adminDeleteFlightWindow::onDeleteButtonClicked);
 }
 
 void adminDeleteFlightWindow::onDeleteButtonClicked()
 {
-    if(ui->lineEdit->text()=="" || ui->lineEdit->text().contains(" "))
-    {
-        QMessageBox::critical(nullptr, "删除失败",
+    if (ui->lineEdit->text() == "" || ui->lineEdit->text().contains(" ")) {
+        QMessageBox::critical(nullptr,
+                              "删除失败",
                               "删除失败: 请输入有效的航班ID！",
-                              QMessageBox::Ok, QMessageBox::Ok);
+                              QMessageBox::Ok,
+                              QMessageBox::Ok);
         return;
     }
 
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(nullptr, "确认操作", "您确定要删除id为："+ui->lineEdit->text()+"的航班信息吗？",
+    reply = QMessageBox::question(nullptr,
+                                  "确认操作",
+                                  "您确定要删除id为：" + ui->lineEdit->text() + "的航班信息吗？",
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
         // // 创建网络管理器
-        QNetworkAccessManager* manager = new QNetworkAccessManager();
+        QNetworkAccessManager *manager = new QNetworkAccessManager();
 
         // // 设置请求 URL
         QUrl url("http://localhost:8080/api/flights/delete");
@@ -68,15 +76,15 @@ void adminDeleteFlightWindow::onDeleteButtonClicked()
 
         // // 构建 JSON 请求体
         QJsonObject json;
-        json["id"]=ui->lineEdit->text().toInt();
+        json["id"] = ui->lineEdit->text().toInt();
 
         QJsonDocument jsonDoc(json);
         QByteArray requestData = jsonDoc.toJson();
 
         // // 发送 POST 请求
-        QNetworkReply* reply = manager->post(request, requestData);
+        QNetworkReply *reply = manager->post(request, requestData);
         // 连接信号，等待响应
-        connect(reply, &QNetworkReply::finished, [reply,this]() {
+        connect(reply, &QNetworkReply::finished, [reply, this]() {
             if (reply->error() == QNetworkReply::NoError) {
                 // 请求成功，读取响应数据
                 QByteArray responseData = reply->readAll();
@@ -84,25 +92,27 @@ void adminDeleteFlightWindow::onDeleteButtonClicked()
                 QJsonObject responseObject = jsonResponse.object();
 
                 // 解析响应 JSON
-                int code = responseObject["code"].toInt();  // 获取返回的 code
+                int code = responseObject["code"].toInt(); // 获取返回的 code
                 QString message = responseObject["message"].toString();
                 QJsonObject data = responseObject["data"].toObject();
 
                 if (code == 200) {
                     // 删除成功,弹出信息框
                     QMessageBox msgBox;
-                    msgBox.setIcon(QMessageBox::Information);  // 设置图标类型
-                    msgBox.setWindowTitle("成功");         // 设置窗口标题
-                    msgBox.setText("删除成功！");          // 设置提示文本
+                    msgBox.setIcon(QMessageBox::Information); // 设置图标类型
+                    msgBox.setWindowTitle("成功");            // 设置窗口标题
+                    msgBox.setText("删除成功！");             // 设置提示文本
                     msgBox.setStandardButtons(QMessageBox::Ok); // 设置标准按钮（此处只有“确定”按钮）
                     // 显示消息框
                     msgBox.exec();
                 } else {
                     // 删除失败，弹出错误提示框
                     qDebug() << "删除失败";
-                    QMessageBox::critical(nullptr, "失败",
+                    QMessageBox::critical(nullptr,
+                                          "失败",
                                           "删除失败：ID不存在",
-                                          QMessageBox::Ok, QMessageBox::Ok);
+                                          QMessageBox::Ok,
+                                          QMessageBox::Ok);
                 }
             } else {
                 // 请求失败，弹出错误提示框
@@ -110,9 +120,11 @@ void adminDeleteFlightWindow::onDeleteButtonClicked()
                 qDebug() << "Error:" << errorString;
 
                 // 创建 QMessageBox 来显示错误信息
-                QMessageBox::critical(nullptr, "删除失败",
+                QMessageBox::critical(nullptr,
+                                      "删除失败",
                                       "删除失败: ID不存在",
-                                      QMessageBox::Ok, QMessageBox::Ok);
+                                      QMessageBox::Ok,
+                                      QMessageBox::Ok);
             }
 
             reply->deleteLater(); // 释放资源

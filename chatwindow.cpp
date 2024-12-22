@@ -1,23 +1,23 @@
 #include "chatwindow.h"
 #include <QDateTime>
+#include <QDebug>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
+#include <QKeyEvent> // 引入 QKeyEvent
 #include <QMessageBox>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QJsonDocument>
-#include <QDebug>
-#include <QTimer>  // 引入 QTimer
-#include <QKeyEvent>  // 引入 QKeyEvent
+#include <QNetworkRequest>
+#include <QTimer> // 引入 QTimer
 
-ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
-    isClient(isclient),
-    QMainWindow(parent)
+ChatWindow::ChatWindow(bool isclient, QWidget *parent)
+    : isClient(isclient)
+    , QMainWindow(parent)
 {
     // 设置窗口标题和尺寸
     setWindowTitle("ChatWindow");
-    setWindowState(Qt::WindowMaximized);  // 窗口最大化
+    setWindowState(Qt::WindowMaximized); // 窗口最大化
 
     // 设置主窗口的背景图片
     setStyleSheet("QWidget { background-image: url(:/blue.png); background-position: center; }");
@@ -36,28 +36,31 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
         friendNameLabel = new QLabel("事情很多的刁难客户", this);
     }
     friendNameLabel->setAlignment(Qt::AlignCenter);
-    friendNameLabel->setStyleSheet("font-size: 22px; font-weight: bold; padding: 15px; color: #ffffff;");
+    friendNameLabel->setStyleSheet(
+        "font-size: 22px; font-weight: bold; padding: 15px; color: #ffffff;");
 
     // 创建聊天记录区域（使用 QTextBrowser 来显示消息）
     chatArea = new QTextBrowser(this);
     chatArea->setReadOnly(true);
-    chatArea->setStyleSheet("background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; padding: 15px; font-size: 14px; color: #333; border: 1px solid #ddd;");
+    chatArea->setStyleSheet("background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; "
+                            "padding: 15px; font-size: 14px; color: #333; border: 1px solid #ddd;");
 
     // 输入框和发送按钮
     messageInput = new QLineEdit(this);
     messageInput->setPlaceholderText("请输入消息...");
     messageInput->setFixedHeight(40);
-    messageInput->setStyleSheet("padding: 5px; font-size: 14px; border: 1px solid #ddd; border-radius: 5px;");
+    messageInput->setStyleSheet(
+        "padding: 5px; font-size: 14px; border: 1px solid #ddd; border-radius: 5px;");
 
     sendButton = new QPushButton("发送", this);
     sendButton->setFixedHeight(40);
-    sendButton->setStyleSheet("background-color: #007bff; color: white; border-radius: 5px; font-size: 14px; transition: background-color 0.3s;");
+    sendButton->setStyleSheet("background-color: #007bff; color: white; border-radius: 5px; "
+                              "font-size: 14px; transition: background-color 0.3s;");
 
     // 添加按钮悬浮效果
-    sendButton->setStyleSheet(
-        "QPushButton { background-color: #007bff; color: white; border-radius: 5px; font-size: 14px; }"
-        "QPushButton:hover { background-color: #0056b3; }"
-        );
+    sendButton->setStyleSheet("QPushButton { background-color: #007bff; color: white; "
+                              "border-radius: 5px; font-size: 14px; }"
+                              "QPushButton:hover { background-color: #0056b3; }");
 
     // 创建输入区域布局
     QHBoxLayout *inputLayout = new QHBoxLayout;
@@ -71,20 +74,15 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent) :
 
     // 设置主布局间距和边距
     mainLayout->setSpacing(10);
-    mainLayout->setContentsMargins(20, 20, 20, 20);  // 给外围添加一些空隙
+    mainLayout->setContentsMargins(20, 20, 20, 20); // 给外围添加一些空隙
 
     // 加载历史聊天记录
     fetchChatHistory();
 
-
-
-
-
-
     // 设置定时器每3秒刷新一次
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
-    //timer->start(3000);  // 每3秒刷新一次
+    timer->start(3000); // 每3秒刷新一次
 
     // 发送消息按钮点击事件
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::onSendMessage);
@@ -110,8 +108,8 @@ void ChatWindow::fetchChatHistory()
 {
     // 模拟获取历史消息
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QUrl url("http://127.0.0.1:8080/api/chat/history");  // 数据库URL
-     // QUrl url("http://192.168.110.12:8080/api/chat/history");  // sjhURL
+    QUrl url("http://127.0.0.1:8080/api/chat/history"); // 数据库URL
+        // QUrl url("http://192.168.110.12:8080/api/chat/history");  // sjhURL
     QNetworkRequest request(url);
 
     QNetworkReply *reply = manager->get(request);
@@ -130,7 +128,7 @@ void ChatWindow::fetchChatHistory()
                 chatArea->clear();
 
                 // 处理返回的聊天记录数据
-                for (const QJsonValue& value : chatHistory) {
+                for (const QJsonValue &value : chatHistory) {
                     QJsonObject message = value.toObject();
                     int userId = message["userId"].toInt();
                     QString messageText = message["message"].toString();
@@ -138,45 +136,48 @@ void ChatWindow::fetchChatHistory()
                     QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
 
                     // 这里判断消息是由谁发送的来调整对齐方式
-                    QString alignStyle="left";
+                    QString alignStyle = "left";
                     QString userPrefix;
-                    QString space=  QString(100,' ');
-                    if(isClient)//如果是客户
+                    QString space = QString(100, ' ');
+                    if (isClient) //如果是客户
                     {
-                        if (userId == 1)//客户的人工消息
+                        if (userId == 1) //客户的人工消息
                         {
-                            userPrefix =  "-🤖人工客服🤖:" ;
+                            userPrefix = "-🤖人工客服🤖:";
+                        } else {
+                            userPrefix = "-用户2👨‍💼:";
                         }
-                        else
-                        {
-                            userPrefix =  "-用户2👨‍💼:" ;
-                        }
-                    }
-                    else//如果是客服
+                    } else //如果是客服
                     {
                         if (userId == 1) {
-                            userPrefix = "-🤖人工客服🤖:" ;
-                        }//客服自己的
-                        else
-                        {
-                            userPrefix = "-用户2👨‍💼:" ;
+                            userPrefix = "-🤖人工客服🤖:";
+                        } //客服自己的
+                        else {
+                            userPrefix = "-用户2👨‍💼:";
                         }
                     }
                     // 拼接显示的消息内容，使用 HTML 格式化
-                    QString msgContent = "<div style='border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px; background-color: rgba(255, 255, 255, 0.8);'>";
+                    QString msgContent
+                        = "<div style='border: 1px solid #ddd; padding: 10px; border-radius: 10px; "
+                          "margin-bottom: 10px; background-color: rgba(255, 255, 255, 0.8);'>";
                     msgContent += "<b style='font-size: 12px; color: #888;'>[" + time + "]</b><br>";
-                    msgContent += "<span style='font-size: 14px;'>" + userPrefix + " " + messageText + "</span>";
+                    msgContent += "<span style='font-size: 14px;'>" + userPrefix + " " + messageText
+                                  + "</span>";
                     msgContent += "</div>";
 
                     // 使用 inline-style 的 align 属性来调整每条消息的对齐方式
-                    msgContent = "<div style='text-align: " + alignStyle + ";'>" + msgContent + "</div>";
+                    msgContent = "<div style='text-align: " + alignStyle + ";'>" + msgContent
+                                 + "</div>";
 
                     // 将消息内容添加到聊天区域
                     chatArea->append(msgContent);
                 }
             } else {
-                qDebug() << "Failed to retrieve chat history:" << responseObject["message"].toString();
-                QMessageBox::critical(nullptr, "获取历史记录失败", responseObject["message"].toString());
+                qDebug() << "Failed to retrieve chat history:"
+                         << responseObject["message"].toString();
+                QMessageBox::critical(nullptr,
+                                      "获取历史记录失败",
+                                      responseObject["message"].toString());
             }
         } else {
             qDebug() << "Error fetching chat history:" << reply->errorString();
@@ -186,37 +187,34 @@ void ChatWindow::fetchChatHistory()
     });
 }
 
-void ChatWindow::sendMessage(int userId, const QString& message)
+void ChatWindow::sendMessage(int userId, const QString &message)
 {
     // 先将消息添加到聊天区域（假设消息最终会成功发送）
     qint64 timestamp = QDateTime::currentSecsSinceEpoch();
     QString time = QDateTime::fromSecsSinceEpoch(timestamp).toString("hh:mm:ss");
 
-    QString alignStyle="left";
+    QString alignStyle = "left";
     QString userPrefix;
-    if(isClient)//如果是客户
+    if (isClient) //如果是客户
     {
-        if (userId == 1)//客户的人工消息
+        if (userId == 1) //客户的人工消息
         {
-            userPrefix =  "-🤖人工客服🤖:" ;
+            userPrefix = "-🤖人工客服🤖:";
+        } else {
+            userPrefix = "-用户2👨‍💼:";
         }
-        else
-        {
-            userPrefix =  "-用户2👨‍💼:" ;
-        }
-    }
-    else//如果是客服
+    } else //如果是客服
     {
         if (userId == 1) {
-            userPrefix = "-🤖人工客服🤖:" ;
-        }//客服自己的
-        else
-        {
-            userPrefix = "-用户2👨‍💼:" ;
+            userPrefix = "-🤖人工客服🤖:";
+        } //客服自己的
+        else {
+            userPrefix = "-用户2👨‍💼:";
         }
     }
 
-    QString msgContent = "<div style='border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px; background-color: rgba(255, 255, 255, 0.8);'>";
+    QString msgContent = "<div style='border: 1px solid #ddd; padding: 10px; border-radius: 10px; "
+                         "margin-bottom: 10px; background-color: rgba(255, 255, 255, 0.8);'>";
     msgContent += "<b style='font-size: 12px; color: #888;'>[" + time + "]</b><br>";
     msgContent += "<span style='font-size: 14px;'>" + userPrefix + " " + message + "</span>";
     msgContent += "</div>";
@@ -229,7 +227,7 @@ void ChatWindow::sendMessage(int userId, const QString& message)
 
     // 发送消息到服务器
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QUrl url("http://127.0.0.1:8080/api/chat/send");  // 后端接口URL
+    QUrl url("http://127.0.0.1:8080/api/chat/send"); // 后端接口URL
     // QUrl url("http://192.168.110.12:8080/api/chat/send");  // sjhURL
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -257,7 +255,8 @@ void ChatWindow::sendMessage(int userId, const QString& message)
 
                 // 可选：你可以修改显示的消息状态，表示发送失败
                 // 比如：修改消息内容为 "发送失败"
-                chatArea->append("<div style='color: red;'>" + msgContent + " <b>发送失败</b></div>");
+                chatArea->append("<div style='color: red;'>" + msgContent
+                                 + " <b>发送失败</b></div>");
             }
         } else {
             // 网络错误或其他请求错误
@@ -270,8 +269,6 @@ void ChatWindow::sendMessage(int userId, const QString& message)
         reply->deleteLater();
     });
 }
-
-
 
 void ChatWindow::onSendMessage()
 {

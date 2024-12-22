@@ -3,13 +3,15 @@
 #include <QObject>
 #include "maininterface.h"
 
-class System:public QObject
+class System : public QObject
 {
     Q_OBJECT;
+
 public:
     System();
     ~System();
     void start();
+
 private:
     maininterface *m_mainInterface; // 主界面指针
 };

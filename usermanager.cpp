@@ -1,4 +1,3 @@
 #include "UserManager.h"
 
-
-UserManager* UserManager::instance = nullptr; // 初始化静态成员变量
+UserManager *UserManager::instance = nullptr; // 初始化静态成员变量

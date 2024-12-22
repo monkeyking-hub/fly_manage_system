@@ -1,27 +1,34 @@
 #include "userwindow.h"
 #include <QFileDialog>
 #include <QImage>
-#include <QMessageBox>
-#include <QPixmap>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QJsonObject>
 #include <QJsonDocument>
-#include "interfacemanager.h"
-#include "ui_userwindow.h"
+#include <QJsonObject>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QPixmap>
 #include "UserManager.h"
+#include "interfacemanager.h"
 #include "maininterface.h"
+#include "ui_userwindow.h"
 
-Userwindow::Userwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Userwindow) {
+Userwindow::Userwindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::Userwindow)
+{
     ui->setupUi(this);
-    connect(UserManager::getInstance(), &UserManager::currentUserChanged, this, &Userwindow::updateUserInfo);
+    connect(UserManager::getInstance(),
+            &UserManager::currentUserChanged,
+            this,
+            &Userwindow::updateUserInfo);
     connect(UserManager::getInstance(), &UserManager::loginSuccess, this, &Userwindow::loadUserInfo);
     // 每次打开界面时获取最新用户信息
     fetchUserInfoFromServer();
 }
 
-void Userwindow::loadUserInfo() {
+void Userwindow::loadUserInfo()
+{
     User currentUser = UserManager::getInstance()->getCurrentUser();
     ui->useNameLabel->setText(currentUser.username);
     ui->mailLabel_2->setText(currentUser.email);
@@ -30,9 +37,10 @@ void Userwindow::loadUserInfo() {
     currentUser.sex == "M" ? ui->sexLabel->setText("男") : ui->sexLabel->setText("女");
 
     QPixmap avatar;
-    qDebug()<<"当前头像路径"<<currentUser.avatarUrl;
+    qDebug() << "当前头像路径" << currentUser.avatarUrl;
     if (avatar.load(currentUser.avatarUrl)) {
-        ui->profileLbl->setPixmap(avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->profileLbl->setPixmap(
+            avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         qDebug("加载头像成功");
     } else {
         ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
@@ -40,22 +48,22 @@ void Userwindow::loadUserInfo() {
     }
 }
 
-
-void Userwindow::updateUserInfo(const User &user) {
+void Userwindow::updateUserInfo(const User &user)
+{
     ui->userNameSetBox->setText(user.username);
     ui->mailSetBox->setText(user.email);
     ui->phoneNumberSetBox->setText(user.phonenumber);
     ui->ageSetBox->setText(QString::number(user.age));
-    if(user.sex=="F")
-    {
+    if (user.sex == "F") {
         ui->famelButton->setChecked(true);
-    }
-    else ui->maleButton->setChecked(true);
+    } else
+        ui->maleButton->setChecked(true);
     User currentUser = UserManager::getInstance()->getCurrentUser();
     QPixmap avatar;
-    qDebug()<<"当前头像路径"<<currentUser.avatarUrl;
+    qDebug() << "当前头像路径" << currentUser.avatarUrl;
     if (avatar.load(currentUser.avatarUrl)) {
-        ui->profileLbl->setPixmap(avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->profileLbl->setPixmap(
+            avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         qDebug("加载头像成功");
     } else {
         ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
@@ -63,11 +71,13 @@ void Userwindow::updateUserInfo(const User &user) {
     }
 }
 
-Userwindow::~Userwindow() {
+Userwindow::~Userwindow()
+{
     delete ui;
 }
 
-void Userwindow::fetchUserInfoFromServer() {
+void Userwindow::fetchUserInfoFromServer()
+{
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url("http://localhost:8080/api/users/get");
     QNetworkRequest request(url);
@@ -93,7 +103,7 @@ void Userwindow::fetchUserInfoFromServer() {
                 currentUser.email = data["email"].toString();
                 currentUser.phonenumber = data["phone"].toString();
                 currentUser.age = data["age"].toInt();
-                data["gender"].toString()=="M"?currentUser.sex ="M":currentUser.sex ="F";
+                data["gender"].toString() == "M" ? currentUser.sex = "M" : currentUser.sex = "F";
                 UserManager::getInstance()->setCurrentUser(currentUser);
                 loadUserInfo(); // 更新界面显示
             } else {
@@ -106,7 +116,8 @@ void Userwindow::fetchUserInfoFromServer() {
     });
 }
 
-void Userwindow::on_pushButton_clicked() {
+void Userwindow::on_pushButton_clicked()
+{
     ui->userNameStackedWidget->setCurrentIndex(1);
     ui->mailStackedWidget->setCurrentIndex(1);
     ui->phoneNumberStackedWidget->setCurrentIndex(1);
@@ -116,7 +127,8 @@ void Userwindow::on_pushButton_clicked() {
     ui->ageStackedWidget->setCurrentIndex(1);
 }
 
-void Userwindow::on_saveButton_clicked() {
+void Userwindow::on_saveButton_clicked()
+{
     // 获取当前用户的信息
     User currentUser = UserManager::getInstance()->getCurrentUser();
 
@@ -125,14 +137,14 @@ void Userwindow::on_saveButton_clicked() {
     QString email = ui->mailSetBox->text();
     QString phone = ui->phoneNumberSetBox->text();
     int age = ui->ageSetBox->text().toInt();
-    QString gender = ui->maleButton->isChecked() ? "M" : (ui->famelButton->isChecked() ? "F" : "UnSelected");
+    QString gender = ui->maleButton->isChecked()
+                         ? "M"
+                         : (ui->famelButton->isChecked() ? "F" : "UnSelected");
 
     // 检查是否有任何信息发生变化
-    if (username == currentUser.username &&
-        email == currentUser.email &&
-        phone == currentUser.phonenumber &&
-        age == currentUser.age &&
-        gender == currentUser.sex) {
+    if (username == currentUser.username && email == currentUser.email
+        && phone == currentUser.phonenumber && age == currentUser.age
+        && gender == currentUser.sex) {
         // 如果没有任何修改，直接返回
         ui->userNameStackedWidget->setCurrentIndex(0);
         ui->mailStackedWidget->setCurrentIndex(0);
@@ -194,12 +206,14 @@ void Userwindow::on_saveButton_clicked() {
     });
 }
 
-
-
-void Userwindow::on_uploadProfileButton_clicked() {
-    QString filePath = QFileDialog::getOpenFileName(this, "选择头像", "", "Images (*.jpg);;All Files (*)");
+void Userwindow::on_uploadProfileButton_clicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    "选择头像",
+                                                    "",
+                                                    "Images (*.jpg);;All Files (*)");
     if (filePath.isEmpty()) {
-        return;  // 如果用户没有选择文件，直接返回
+        return; // 如果用户没有选择文件，直接返回
     }
 
     QFile file(filePath);
@@ -217,16 +231,17 @@ void Userwindow::on_uploadProfileButton_clicked() {
     QNetworkRequest request(url);
     request.setRawHeader("Content-Type", "multipart/form-data; boundary=" + boundary.toUtf8());
 
-    QByteArray finalData = QString("--%1\r\n"
-                                   "Content-Disposition: form-data; name=\"email\"\r\n\r\n"
-                                   "%2\r\n"
-                                   "--%1\r\n"
-                                   "Content-Disposition: form-data; name=\"avatar\"; filename=\"%3\"\r\n"
-                                   "Content-Type: image/jpeg\r\n\r\n")
-                               .arg(boundary)
-                               .arg(UserManager::getInstance()->getCurrentUser().email)
-                               .arg(QFileInfo(file.fileName()).fileName())
-                               .toUtf8();
+    QByteArray finalData
+        = QString("--%1\r\n"
+                  "Content-Disposition: form-data; name=\"email\"\r\n\r\n"
+                  "%2\r\n"
+                  "--%1\r\n"
+                  "Content-Disposition: form-data; name=\"avatar\"; filename=\"%3\"\r\n"
+                  "Content-Type: image/jpeg\r\n\r\n")
+              .arg(boundary)
+              .arg(UserManager::getInstance()->getCurrentUser().email)
+              .arg(QFileInfo(file.fileName()).fileName())
+              .toUtf8();
     finalData += fileContent;
     finalData += QString("\r\n--%1--\r\n").arg(boundary).toUtf8();
 
@@ -236,11 +251,14 @@ void Userwindow::on_uploadProfileButton_clicked() {
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject responseObject = jsonResponse.object();
-            QMessageBox::information(this, "成功", "头像上传成功： " + responseObject["file_path"].toString());
+            QMessageBox::information(this,
+                                     "成功",
+                                     "头像上传成功： " + responseObject["file_path"].toString());
             fetchUserInfoFromServer();
             QPixmap avatar;
             if (avatar.load(filePath)) {
-                ui->profileLbl->setPixmap(avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                ui->profileLbl->setPixmap(
+                    avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             }
         } else {
             QMessageBox::warning(this, "错误123", reply->errorString());
@@ -249,13 +267,13 @@ void Userwindow::on_uploadProfileButton_clicked() {
     });
 }
 
-
-
-void Userwindow::on_logOutButton_clicked() {
+void Userwindow::on_logOutButton_clicked()
+{
     InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
 }
 
-void Userwindow::on_returnButton_clicked() {
+void Userwindow::on_returnButton_clicked()
+{
     InterfaceManager::instance()->switchToPage("lxt_mainInterface");
 }
 
@@ -304,4 +322,3 @@ void Userwindow::on_logOffButton_clicked()
         reply->deleteLater();
     });
 }
-

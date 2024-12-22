@@ -2,6 +2,7 @@
 #define HOMEWINDOW_H
 
 #include <QApplication>
+#include <QEvent>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -9,10 +10,9 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QScrollArea>
-#include <QVBoxLayout>
-#include <QEvent>
-#include <QVector>
 #include <QStyle>
+#include <QVBoxLayout>
+#include <QVector>
 
 namespace Ui {
 class homeWindow;
@@ -67,23 +67,26 @@ public:
 
         // 分类标题
         QLabel *titleLabel = new QLabel(this);
-        titleLabel->setFixedSize(250,40);
-        if(title=="周末省心游")
-        {
+        titleLabel->setFixedSize(250, 40);
+        if (title == "周末省心游") {
             QPixmap pixmap(":/homewindow1.png");
-            QPixmap scaledPixmap=pixmap.scaled(titleLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QPixmap scaledPixmap = pixmap.scaled(titleLabel->size(),
+                                                 Qt::KeepAspectRatio,
+                                                 Qt::SmoothTransformation);
             titleLabel->setPixmap(scaledPixmap);
         }
-        if(title=="爱上大草原")
-        {
+        if (title == "爱上大草原") {
             QPixmap pixmap(":/homewindow2.png");
-            QPixmap scaledPixmap=pixmap.scaled(titleLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QPixmap scaledPixmap = pixmap.scaled(titleLabel->size(),
+                                                 Qt::KeepAspectRatio,
+                                                 Qt::SmoothTransformation);
             titleLabel->setPixmap(scaledPixmap);
         }
-        if(title=="海边浪一浪")
-        {
+        if (title == "海边浪一浪") {
             QPixmap pixmap(":/homewindow3.png");
-            QPixmap scaledPixmap=pixmap.scaled(titleLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QPixmap scaledPixmap = pixmap.scaled(titleLabel->size(),
+                                                 Qt::KeepAspectRatio,
+                                                 Qt::SmoothTransformation);
             titleLabel->setPixmap(scaledPixmap);
         }
         layout->addWidget(titleLabel);
@@ -94,32 +97,26 @@ public:
         for (int i = 0; i < routes.size(); ++i) {
             QHBoxLayout *itemLayout = new QHBoxLayout();
 
-            QLabel *imageLabel=new QLabel(this);
-            if(title=="周末省心游")
-            {
+            QLabel *imageLabel = new QLabel(this);
+            if (title == "周末省心游") {
                 // 放图片
-                QString imgPath=":/Aplace"+QString::number(i+1)+".jpg";
+                QString imgPath = ":/Aplace" + QString::number(i + 1) + ".jpg";
+                QPixmap imagePixmap(imgPath);
+                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
+                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
+            } else if (title == "爱上大草原") {
+                // 放图片
+                QString imgPath = ":/Bplace" + QString::number(i + 1) + ".jpg";
+                QPixmap imagePixmap(imgPath);
+                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
+                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
+            } else {
+                // 放图片
+                QString imgPath = ":/Cplace" + QString::number(i + 1) + ".jpg";
                 QPixmap imagePixmap(imgPath);
                 imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
                 imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
             }
-            else if(title=="爱上大草原")
-            {
-                // 放图片
-                QString imgPath=":/Bplace"+QString::number(i+1)+".jpg";
-                QPixmap imagePixmap(imgPath);
-                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
-                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
-            }
-            else
-            {
-                // 放图片
-                QString imgPath=":/Cplace"+QString::number(i+1)+".jpg";
-                QPixmap imagePixmap(imgPath);
-                imageLabel->setPixmap(imagePixmap.scaled(60, 50, Qt::KeepAspectRatio));
-                imageLabel->setStyleSheet("border-radius: 5px; background-color: white;");
-            }
-
 
             // 路线和价格标签
             QLabel *routeLabel = new QLabel(routes[i], this);
@@ -163,36 +160,35 @@ public:
         setLabelsToHighlight(labelsToHighlight);
     }
 
-    void setLabelsToHighlight(const QVector<QLabel *> &labels) {
-        labelsToHighlight = labels;
-    }
+    void setLabelsToHighlight(const QVector<QLabel *> &labels) { labelsToHighlight = labels; }
 
 protected:
-    void enterEvent(QEnterEvent *event) override {
+    void enterEvent(QEnterEvent *event) override
+    {
         for (QLabel *label : labelsToHighlight) {
-            if (label) {  // 确保指针有效
+            if (label) { // 确保指针有效
                 label->setProperty("hover", true);
                 label->style()->unpolish(label);
                 label->style()->polish(label);
             }
         }
-        QFrame::enterEvent(event);  // 调用基类方法
+        QFrame::enterEvent(event); // 调用基类方法
     }
 
-    void leaveEvent(QEvent *event) override {
+    void leaveEvent(QEvent *event) override
+    {
         for (QLabel *label : labelsToHighlight) {
-            if (label) {  // 确保指针有效
+            if (label) { // 确保指针有效
                 label->setProperty("hover", false);
                 label->style()->unpolish(label);
                 label->style()->polish(label);
             }
         }
-        QFrame::leaveEvent(event);  // 调用基类方法
+        QFrame::leaveEvent(event); // 调用基类方法
     }
 
 private:
     QVector<QLabel *> labelsToHighlight;
 };
-
 
 #endif // HOMEWINDOW_H
