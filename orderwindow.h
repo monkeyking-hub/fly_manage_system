@@ -4,9 +4,16 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QTabBar> // 引入 QTabBar 类
-#include "orderdetailwindow.h"
 #include <QVBoxLayout>
-
+#include "orderdetailwindow.h"
+#include "order.h"
+#include <QJsonObject>
+#include <QList>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QMessageBox>
+#include <QComboBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class order_2; }
@@ -19,18 +26,31 @@ class orderwindow : public QMainWindow
 public:
     explicit orderwindow(QWidget *parent = nullptr);
     ~orderwindow();
-    void setupTabButtons(); // 声明 setupTabButtons 函数
+
+    // 创建订单页面
+    QWidget* createOrderPage(const QString &type);
+
+    // Tab 切换时处理
+    void onTabChanged(int index);
+
+    // 显示订单详情
+    void showOrderDetails(const Order &order);
+
+    // 获取订单 ID
+    void fetchOrderIds(int userId);
+
+    // 获取订单详情
+    void fetchOrderDetails(const QList<QString> &flightNumbers);
+    //创建每个订单小窗口
+    void createOrderWidget(const Order &order, QVBoxLayout *containerLayout);
+
+    void updateOrderPage(const QString &type, QVBoxLayout *pageLayout, QComboBox *departureComboBox, QComboBox *destinationComboBox, QComboBox *airlineComboBox);
+
+
 
 private:
     Ui::order_2 *ui;
-
-    QWidget* createOrderPage(const QString &type); // 创建订单页面
-    void onTabChanged(int index);                 // 处理 Tab 切换
-    void showOrderDetails(const Order &order);
-    void fetchOrderIds(int userId, QVBoxLayout *containerLayout, const QString &type, QWidget *container);  // 获取订单 ID
-    void fetchOrderDetails(const QList<int> &orderIds, QVBoxLayout *containerLayout, const QString &type, QWidget *container);  // 获取订单详情
-
-    Order parseOrderDetail(const QJsonObject &orderDetail);  // 解析订单详细信息
 };
 
 #endif // ORDERWINDOW_H
+
