@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QStringListModel>
 #include <QPushButton>
+#include <QNetworkAccessManager>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -67,8 +68,11 @@ private slots:
 
     void on_btn_abroad_2_clicked();
 
+    void on_searchButton_clicked();
+
 private:
     void init();
+    QNetworkAccessManager* networkmanager;
     Ui::flightstatus *ui;
     QStringList cityList;             // 存储所有城市数据
     QStringListModel *cityListModel;  // 用于设置给Completer
