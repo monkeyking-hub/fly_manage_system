@@ -26,6 +26,7 @@ void OrderDetailWindow::setupUI(const Order &order)
     // 字体设置
     QFont titleFont = QFont("Arial", 14, QFont::Bold);  // 更大字体
     QFont contentFont = QFont("Arial", 12);
+    QFont airportFont = QFont("Arial", 10);  // 机场信息的小字体
     QPalette palette;
     palette.setColor(QPalette::WindowText, QColor("#008000")); // 绿色
 
@@ -41,11 +42,20 @@ void OrderDetailWindow::setupUI(const Order &order)
     QLabel *departureLabel = new QLabel(QString("始发地: %1").arg(order.departure()), this);
     departureLabel->setFont(titleFont);
 
+    // 出发机场标签（字体小一些）
+    QLabel *departureAirportLabel = new QLabel(QString("出发机场: %1").arg(order.departureAirport()), this);
+    departureAirportLabel->setFont(airportFont);
+
     // 将小方框和出发地标签添加到水平布局中
     QHBoxLayout *departureLayout = new QHBoxLayout();
     departureLayout->addWidget(departureBox);
     departureLayout->addWidget(departureLabel);
     departureLayout->addStretch(); // 保证布局整齐
+
+    // 将出发机场标签添加到布局中
+    QHBoxLayout *departureAirportLayout = new QHBoxLayout();
+    departureAirportLayout->addWidget(departureAirportLabel);
+    departureAirportLayout->addStretch(); // 保证布局整齐
 
     // 添加一个竖杠
     QFrame *verticalLine = new QFrame(this);
@@ -63,16 +73,27 @@ void OrderDetailWindow::setupUI(const Order &order)
     QLabel *destinationLabel = new QLabel(QString("目的地: %1").arg(order.destination()), this);
     destinationLabel->setFont(titleFont);
 
+    // 到达机场标签（字体小一些）
+    QLabel *arrivalAirportLabel = new QLabel(QString("到达机场: %1").arg(order.arrivalAirport()), this);
+    arrivalAirportLabel->setFont(airportFont);
+
     // 将小方框和目的地标签添加到水平布局中
     QHBoxLayout *destinationLayout = new QHBoxLayout();
     destinationLayout->addWidget(destinationBox);
     destinationLayout->addWidget(destinationLabel);
     destinationLayout->addStretch(); // 保证布局整齐
 
-    // 将出发地布局、竖杠、目的地布局垂直排列
+    // 将到达机场标签添加到布局中
+    QHBoxLayout *arrivalAirportLayout = new QHBoxLayout();
+    arrivalAirportLayout->addWidget(arrivalAirportLabel);
+    arrivalAirportLayout->addStretch(); // 保证布局整齐
+
+    // 将出发地布局、竖杠、目的地布局和机场信息垂直排列
     locationLayout->addLayout(departureLayout);
+    locationLayout->addLayout(departureAirportLayout); // 添加出发机场布局
     locationLayout->addWidget(verticalLine);
     locationLayout->addLayout(destinationLayout);
+    locationLayout->addLayout(arrivalAirportLayout); // 添加到达机场布局
 
     // 最后将整个出发地和目的地布局添加到主布局中
     layout->addLayout(locationLayout);
@@ -87,7 +108,6 @@ void OrderDetailWindow::setupUI(const Order &order)
     QLabel *passengerLabel = new QLabel(QString("出行人信息: %1").arg(order.passenger()), this);
     passengerLabel->setFont(titleFont);
     layout->addWidget(passengerLabel);
-
 
     // 金额
     QLabel *amountLabel = new QLabel(QString("金额: %1").arg(order.amount()), this);
@@ -113,6 +133,7 @@ void OrderDetailWindow::setupUI(const Order &order)
     QLabel *arrivalTimeLabel = new QLabel(QString("到达时间: %1").arg(order.arrivalTime()), this);
     arrivalTimeLabel->setFont(titleFont);
     layout->addWidget(arrivalTimeLabel);
+
 
 
 
