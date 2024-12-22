@@ -5,11 +5,17 @@
 #include <QListView>
 #include <QStringList>
 #include <QCalendarWidget>
+#include <QJsonObject>
+#include <QNetworkRequest>
+#include <QJsonDocument>
+#include <QNetworkReply>
+#include <QJsonArray>
 #include "ui_flightstatus.h"
 
 flightstatus::flightstatus(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::flightstatus)
+    ,networkmanager(new QNetworkAccessManager(this))
 {
     ui->setupUi(this);
     init();
@@ -567,5 +573,43 @@ void flightstatus::calenIni()
 
 
 
+
+
+
+void flightstatus::on_searchButton_clicked()
+{
+    // 创建 JSON 对象
+    QJsonObject json;
+    json["departure"] = ui->departureInput->text();
+    json["destination"] = ui->destinationInput->text();
+
+    // 设置请求
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/flights/search"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // 发送 POST 请求
+    QNetworkReply* reply = networkmanager->post(request, QJsonDocument(json).toJson());
+
+    // 处理响应
+    connect(reply, &QNetworkReply::finished, [reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObject = jsonResponse.object();
+            if (jsonObject["code"].toInt() == 200) {
+                QJsonArray flights = jsonObject["data"].toArray();
+                for (const QJsonValue &flightValue : flights) {
+                    QJsonObject flightObject = flightValue.toObject();
+                    qDebug() << "Flight Number:" << flightObject["flightNumber"].toString();
+                }
+            } else {
+                qDebug() << "查询错误:" << jsonObject["message"].toString();
+            }
+        } else {
+            qDebug() << "查询连接错误:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+}
 
 

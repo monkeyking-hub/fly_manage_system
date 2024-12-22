@@ -123,7 +123,7 @@ void ChatWindow::fetchChatHistory()
             QJsonObject responseObject = jsonResponse.object();
 
             if (responseObject["code"].toInt() == 200) {
-                qDebug() << "Chat history retrieved successfully";
+                //qDebug() << "Chat history retrieved successfully";
                 QJsonArray chatHistory = responseObject["data"].toArray();
 
                 // 清空聊天区域
