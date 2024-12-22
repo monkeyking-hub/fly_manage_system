@@ -45,6 +45,7 @@ orderwindow::orderwindow(QWidget *parent)
     UserManager *userManager = UserManager::getInstance();
     User currentUser = userManager->getCurrentUser();
     int userId = currentUser.id;
+    qDebug()<<"拿到用户id了"<<userId;
 
     // 获取所有订单 ID 和航班号，并获取详细信息
     fetchOrderIds(userId);
@@ -97,73 +98,101 @@ orderwindow::~orderwindow()
 
 //这个用来获取每个订单的id，出行人，航班号，价格
 void orderwindow::fetchOrderIds(int userId) {
-    // 假设通过 API 获取订单 ID 列表
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);  // 创建一个局部的 manager
+    // 创建网络访问管理器
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
+    // 设置请求 URL
     QNetworkRequest request(QUrl("/api/orders/search"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    qDebug()<<"进到第一个函数里了";
+
+
+    // 构建请求体，包含用户 ID
     QJsonObject requestBody;
     requestBody["userId"] = userId;
-    QNetworkReply *reply = manager->post(request, QJsonDocument(requestBody).toJson());
 
+    // 转换为 QByteArray 并发送 POST 请求
+    QByteArray jsonData = QJsonDocument(requestBody).toJson();
+    QNetworkReply *reply = manager->post(request, jsonData);
+
+    // 处理网络请求结果
     connect(reply, &QNetworkReply::finished, this, [this, reply, userId]() {
         if (reply->error() == QNetworkReply::NoError) {
             // 解析返回的订单数据
             QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
             QJsonArray ordersArray = doc.object()["data"].toArray();
-            QList<QString> flightNumbers;
 
-            // 遍历订单数据，初始化每个 Order 对象
-            for (const QJsonValue &value : ordersArray) {
-                QJsonObject orderData = value.toObject();
-
-                QString orderId = orderData["id"].toString();
-                QString flightNumber = orderData["flightNumber"].toString();
-                double price = orderData["price"].toDouble();
-
-                Order order;
-                order.m_orderNumber = orderId;
-                order.m_passenger = QString::number(userId); // 用户 ID 作为乘客姓名
-                order.m_amount = QString::number(price);
-                order.m_flightNumber = flightNumber;
-
-                // 设置订单的状态，默认设为 Pending
-                order.m_status = Order::Pending;
-
-                // 将初始化的 Order 添加到全局列表
-                InterfaceManager::instance()->m_orderList.append(order);
-
-                flightNumbers.append(flightNumber); // 存储航班号
+            if (ordersArray.isEmpty()) {
+                // 如果没有订单数据，说明已经查询完所有数据，结束查询
+                qDebug() << "No more orders found.";
+                return;
             }
 
+            // 只会获取一个订单，因为每次请求返回一个订单
+            QJsonObject orderData = ordersArray[0].toObject();
+            QString orderId = orderData["id"].toString();
+            QString flightNumber = orderData["flightNumber"].toString();
+            double price = orderData["price"].toDouble();
+
+            // 创建订单对象并填充数据
+            Order order;
+            order.m_orderNumber = orderId;
+            order.m_passenger = QString::number(userId);  // 用户 ID 作为乘客姓名
+            order.m_amount = QString::number(price);
+            order.m_flightNumber = flightNumber;
+
+            // 设置订单状态，默认设为 Pending
+            order.m_status = Order::Pending;
+
+            // 将初始化的 Order 添加到全局列表
+            InterfaceManager::instance()->m_orderList.append(order);
+
+            // 存储航班号，稍后查询航班详情
+            QList<QString> flightNumbers = {flightNumber};
+
             // 调用第二个函数根据航班号查询详细信息
-            fetchOrderDetails(flightNumbers);  // 修改这里，传入 flightNumbers
+            fetchOrderDetails(flightNumbers);  // 传入当前订单的航班号列表
+
+            // 继续请求下一个订单
+            fetchOrderIds(userId);  // 递归请求下一个订单
+        } else {
+            // 错误处理
+            qWarning() << "Error fetching orders for user " << userId << ": " << reply->errorString();
         }
 
-        reply->deleteLater(); // 确保删除 reply，避免内存泄漏
+        // 删除 reply，避免内存泄漏
+        reply->deleteLater();
     });
 }
 
 
 
-//这个根据上一个函数获得的航班号获取订单的详细信息
 void orderwindow::fetchOrderDetails(const QList<QString> &flightNumbers)
 {
-    // 获取容器布局，如果需要的话，可以在此函数内创建布局
-    QVBoxLayout *containerLayout = containerLayout;  // 这里替换为实际的布局
-
+    qDebug()<<"进到第二个函数里了";
     // 遍历每个航班号，获取相应的航班详细信息
     for (const QString &flightNumber : flightNumbers) {
-        // 使用 API 获取航班详细信息填充订单
+        // 创建 QNetworkAccessManager 用于发起网络请求
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QNetworkRequest request(QUrl(QString("/api/flight/details/%1").arg(flightNumber)));
-        QNetworkReply *reply = manager->get(request);
+
+        // 设置请求 URL
+        QNetworkRequest request(QUrl("http://yourapi.com/api/flights/queryById"));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        // 构建请求体
+        QJsonObject requestBody;
+        requestBody["id"] = flightNumber.toInt();  // 假设航班号可以转换为整数
+
+        // 转换为 QByteArray 发送请求
+        QByteArray jsonData = QJsonDocument(requestBody).toJson();
+        QNetworkReply *reply = manager->post(request, jsonData);
 
         // 使用 lambda 函数处理网络请求结果
-        connect(reply, &QNetworkReply::finished, this, [this, reply, flightNumber, containerLayout]() {
+        connect(reply, &QNetworkReply::finished, this, [this, reply, flightNumber]() {
             if (reply->error() == QNetworkReply::NoError) {
                 // 解析航班详细信息
                 QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-                QJsonObject flightDetails = doc.object();
+                QJsonObject flightDetails = doc.object()["data"].toObject();
 
                 // 查找对应的订单
                 for (Order &order : InterfaceManager::instance()->m_orderList) {
@@ -172,11 +201,11 @@ void orderwindow::fetchOrderDetails(const QList<QString> &flightNumbers)
                         order.m_departure = flightDetails["departure"].toString();
                         order.m_destination = flightDetails["destination"].toString();
                         order.m_airline = flightDetails["airlineCompany"].toString();
-                        order.m_departureTime = flightDetails["departureTime"].toString();
-                        order.m_arrivalTime = flightDetails["arrivalTime"].toString();
+                        order.m_departureTime = QDateTime::fromSecsSinceEpoch(flightDetails["departureTime"].toInt()).toString();
+                        order.m_arrivalTime = QDateTime::fromSecsSinceEpoch(flightDetails["arrivalTime"].toInt()).toString();
                         order.m_aircraftType = flightDetails["aircraftModel"].toString();
                         order.m_seatClass = flightDetails["seatType"].toString();
-                        order.m_flightId = flightDetails["id"].toString();
+                        order.m_flightId = QString::number(flightDetails["id"].toInt());
                         order.m_boardingGate = flightDetails["boardingGate"].toString();
                         order.m_arrivalAirport = flightDetails["arrivalAirport"].toString();
                         order.m_departureAirport = flightDetails["departureAirport"].toString();
@@ -186,13 +215,15 @@ void orderwindow::fetchOrderDetails(const QList<QString> &flightNumbers)
                         order.m_firstClassPrice = flightDetails["firstClassPrice"].toDouble();
                         order.m_economyClassPrice = flightDetails["economyClassPrice"].toDouble();
                         order.m_businessClassPrice = flightDetails["businessClassPrice"].toDouble();
-
-
                     }
                 }
+            } else {
+                // 错误处理
+                qWarning() << "Error fetching flight details for flight number " << flightNumber << ": " << reply->errorString();
             }
 
-            reply->deleteLater(); // 确保删除 reply，避免内存泄漏
+            // 删除 reply 确保内存不会泄漏
+            reply->deleteLater();
         });
     }
 }
@@ -247,7 +278,7 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     departureComboBox->addItem("Los Angeles");
     departureComboBox->addItem("San Francisco");
     departureComboBox->setMinimumWidth(220);  // 设置最小宽度为 220px
-    departureComboBox->setStyleSheet("QComboBox { height: 40px; font-size: 16px; }");  // 增加高度，设置字体大小
+    departureComboBox->setStyleSheet("QComboBox { height: 80px; font-size: 16px; }");  // 增加高度，设置字体大小
 
     // 目的地筛选框
     QComboBox *destinationComboBox = new QComboBox(this);
@@ -257,7 +288,7 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     destinationComboBox->addItem("San Francisco");
     destinationComboBox->addItem("New York");
     destinationComboBox->setMinimumWidth(220);  // 设置最小宽度为 220px
-    destinationComboBox->setStyleSheet("QComboBox { height: 40px; font-size: 16px; }");  // 增加高度，设置字体大小
+    destinationComboBox->setStyleSheet("QComboBox { height: 80px; font-size: 16px; }");  // 增加高度，设置字体大小
 
     // 航空公司筛选框
     QComboBox *airlineComboBox = new QComboBox(this);
@@ -267,7 +298,7 @@ QWidget* orderwindow::createOrderPage(const QString &type)
     airlineComboBox->addItem("Airline ABC");
     airlineComboBox->addItem("Airline DEF");
     airlineComboBox->setMinimumWidth(220);  // 设置最小宽度为 220px
-    airlineComboBox->setStyleSheet("QComboBox { height: 40px; font-size: 16px; }");  // 增加高度，设置字体大小
+    airlineComboBox->setStyleSheet("QComboBox { height: 80px; font-size: 16px; }");  // 增加高度，设置字体大小
 
     // 将筛选框添加到布局，并设置每个 comboBox 的伸缩因子
     filterLayout->addWidget(departureComboBox, 1);  // 1 表示占据 1 份空间
