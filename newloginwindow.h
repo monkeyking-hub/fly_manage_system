@@ -1,17 +1,17 @@
 #ifndef NEWLOGINWINDOW_H
 #define NEWLOGINWINDOW_H
 
-#include <QMainWindow>
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QLineEdit>
-#include <QPropertyAnimation>
+#include <QMainWindow>
 #include <QMessageBox>
+#include <QPropertyAnimation>
+#include <QPushButton>
 #include <QSpacerItem>
-#include <QApplication>
+#include <QVBoxLayout>
+#include <QWidget>
 #include "animatedInputField.h"
 
 namespace Ui {
@@ -31,22 +31,22 @@ public:
     ~newLoginWindow();
 
 signals:
-    void loginRequested(const QString &usrname,const QString &password);
+    void loginRequested(const QString &usrname, const QString &password);
 
 public slots:
     void onSignUpButtonClicked(); //注册按钮点击的槽函数
-    void onLogInButtonClicked(); //登录按钮点击的槽函数
+    void onLogInButtonClicked();  //登录按钮点击的槽函数
 
 private:
     Ui::newLoginWindow *ui;
 };
 
-class loginHandler:public QObject
+class loginHandler : public QObject
 {
     Q_OBJECT;
 
 public slots:
-    void handleLogin(const QString& email, const QString& password);
+    void handleLogin(const QString &email, const QString &password);
 };
 
 #endif // NEWLOGINWINDOW_H

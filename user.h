@@ -12,7 +12,7 @@ public:
     int id;
     QString sex;
     QString avatarUrl;
-    User(){}
+    User() {}
 };
 
 #endif // USER_H

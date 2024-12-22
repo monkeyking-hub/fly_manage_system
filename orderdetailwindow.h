@@ -12,7 +12,7 @@ public:
     explicit OrderDetailWindow(const Order &order, QWidget *parent = nullptr);
 
 signals:
-      void complaintButtonClicked();
+    void complaintButtonClicked();
 
 private:
     void setupUI(const Order &order); // 初始化界面

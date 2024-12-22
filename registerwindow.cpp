@@ -11,7 +11,6 @@ registerWindow::registerWindow(QWidget *parent)
     QPixmap *pix = new QPixmap(":/girl1.png");
     QSize sz = ui->label_image->size();
     ui->label_image->setPixmap(pix->scaled(sz));
-
 }
 
 registerWindow::~registerWindow()

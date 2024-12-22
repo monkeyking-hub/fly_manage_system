@@ -1,17 +1,18 @@
-#include <QWidget>
-#include <QLineEdit>
 #include <QComboBox>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QMessageBox>
+#include <QWidget>
 
-class MReorderWindow : public QWidget {
+class MReorderWindow : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -20,7 +21,7 @@ public:
 
 private slots:
     void onSubmitClicked();
-    void onReplyFinished(QNetworkReply* reply);
+    void onReplyFinished(QNetworkReply *reply);
 
 private:
     QLineEdit *orderIdEdit;
@@ -30,7 +31,9 @@ private:
     QNetworkAccessManager *networkManager;
 };
 
-MReorderWindow::MReorderWindow(QWidget *parent) : QWidget(parent) {
+MReorderWindow::MReorderWindow(QWidget *parent)
+    : QWidget(parent)
+{
     orderIdEdit = new QLineEdit(this);
     orderIdEdit->setPlaceholderText("Enter Order ID");
 
@@ -62,7 +65,8 @@ MReorderWindow::MReorderWindow(QWidget *parent) : QWidget(parent) {
 
 MReorderWindow::~MReorderWindow() {}
 
-void MReorderWindow::onSubmitClicked() {
+void MReorderWindow::onSubmitClicked()
+{
     int orderId = orderIdEdit->text().toInt();
     QString status = statusCombo->currentText();
     int paymentTime = paymentTimeEdit->text().toInt();
@@ -84,10 +88,14 @@ void MReorderWindow::onSubmitClicked() {
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     networkManager->post(request, data);
-    connect(networkManager, &QNetworkAccessManager::finished, this, &MReorderWindow::onReplyFinished);
+    connect(networkManager,
+            &QNetworkAccessManager::finished,
+            this,
+            &MReorderWindow::onReplyFinished);
 }
 
-void MReorderWindow::onReplyFinished(QNetworkReply* reply) {
+void MReorderWindow::onReplyFinished(QNetworkReply *reply)
+{
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray response = reply->readAll();
         QJsonDocument doc = QJsonDocument::fromJson(response);

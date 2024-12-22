@@ -1,28 +1,34 @@
 #include "flightstatus.h"
+#include <QCalendarWidget>
 #include <QCompleter>
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QKeyEvent>
 #include <QListView>
-#include <QStringList>
-#include <QCalendarWidget>
-#include <QJsonObject>
-#include <QNetworkRequest>
-#include <QJsonDocument>
 #include <QNetworkReply>
-#include <QJsonArray>
+#include <QNetworkRequest>
+#include <QStringList>
+#include <QListWidgetItem>
 #include "ui_flightstatus.h"
+#include "listitem.h"
 
 flightstatus::flightstatus(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::flightstatus)
-    ,networkmanager(new QNetworkAccessManager(this))
+    , networkmanager(new QNetworkAccessManager(this))
 {
     ui->setupUi(this);
     init();
     ui->departureInput->installEventFilter(this);
     ui->destinationInput->installEventFilter(this);
-    connect(ui->departureInput, &QLineEdit::textChanged, this, [this](){ui->pick_widget->setVisible(false);});
-    connect(ui->destinationInput, &QLineEdit::textChanged, this, [this](){ui->pick_widget_2->setVisible(false);});
+    connect(ui->departureInput, &QLineEdit::textChanged, this, [this]() {
+        ui->pick_widget->setVisible(false);
+    });
+    connect(ui->destinationInput, &QLineEdit::textChanged, this, [this]() {
+        ui->pick_widget_2->setVisible(false);
+    });
     this->installEventFilter(this);
 
     // 安装事件过滤器，处理点击 pick_widget 以外的区域隐藏 pick_widget
@@ -36,32 +42,32 @@ flightstatus::~flightstatus()
     delete ui;
 }
 
-void flightstatus::showPickWidget(QLineEdit* qle)
+void flightstatus::showPickWidget(QLineEdit *qle)
 {
-    if(qle==ui->departureInput)
-    {
-    QPoint pos=QPoint(80,131);
-    ui->pick_widget->move(pos);
-    ui->pick_widget->setVisible(true);
+    if (qle == ui->departureInput) {
+        QPoint pos = QPoint(80, 131);
+        ui->pick_widget->move(pos);
+        ui->pick_widget->setVisible(true);
     }
-    if(qle==ui->destinationInput)
-    {
-        QPoint pos=QPoint(380,131);
+    if (qle == ui->destinationInput) {
+        QPoint pos = QPoint(380, 131);
         ui->pick_widget_2->move(pos);
         ui->pick_widget_2->setVisible(true);
     }
 }
-bool flightstatus::eventFilter(QObject* obj, QEvent* event)
+bool flightstatus::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj==ui->groupBox_2) {
+    if (obj == ui->groupBox_2) {
         switch (event->type()) {
         case QEvent::Enter:
             // 鼠标进入时的样式
-            ui->groupBox_2->setStyleSheet("QGroupBox { background-color: #f0f0f0; border: 2px solid #0096D6; }");
+            ui->groupBox_2->setStyleSheet(
+                "QGroupBox { background-color: #f0f0f0; border: 2px solid #0096D6; }");
             break;
         case QEvent::Leave:
             // 鼠标离开时恢复原样
-            ui->groupBox_2->setStyleSheet("QGroupBox { background-color: white; border: 2px solid #A3C1DA; }");
+            ui->groupBox_2->setStyleSheet(
+                "QGroupBox { background-color: white; border: 2px solid #A3C1DA; }");
             break;
         default:
             break;
@@ -69,17 +75,19 @@ bool flightstatus::eventFilter(QObject* obj, QEvent* event)
     }
     // 处理全局的鼠标点击事件，隐藏 pick_widget 和 pick_widget_2
     if (event->type() == QEvent::MouseButtonPress) {
-        if (ui->pick_widget->isVisible() && !ui->pick_widget->geometry().contains(static_cast<QMouseEvent*>(event)->pos())) {
+        if (ui->pick_widget->isVisible()
+            && !ui->pick_widget->geometry().contains(static_cast<QMouseEvent *>(event)->pos())) {
             ui->pick_widget->setVisible(false);
         }
-        if (ui->pick_widget_2->isVisible() && !ui->pick_widget_2->geometry().contains(static_cast<QMouseEvent*>(event)->pos())) {
+        if (ui->pick_widget_2->isVisible()
+            && !ui->pick_widget_2->geometry().contains(static_cast<QMouseEvent *>(event)->pos())) {
             ui->pick_widget_2->setVisible(false);
         }
     }
     // 处理 departureInput 和 destinationInput 的其他事件
     if (obj == ui->departureInput || obj == ui->destinationInput) {
         if (event->type() == QEvent::MouseButtonPress) {
-            QLineEdit* qle = static_cast<QLineEdit*>(obj);
+            QLineEdit *qle = static_cast<QLineEdit *>(obj);
             showPickWidget(qle);
             ui->calendar->setVisible(false);
             return true; // 阻止事件继续传播
@@ -96,12 +104,12 @@ bool flightstatus::eventFilter(QObject* obj, QEvent* event)
     if (obj == ui->dateEdit && event->type() == QEvent::MouseButtonPress) {
         // Toggle calendar visibility on mouse press events inside QLineEdit
         ui->calendar->setVisible(!ui->calendar->isVisible());
-        return true;  // Stop event propagation
+        return true; // Stop event propagation
     } else if (event->type() == QEvent::MouseButtonPress) {
         // Check if the click is outside the QLineEdit and QCalendarWidget
-        if (!ui->dateEdit->geometry().contains(static_cast<QMouseEvent*>(event)->pos()) &&
-            !ui->calendar->geometry().contains(static_cast<QMouseEvent*>(event)->pos()) &&
-            ui->calendar->isVisible()) {
+        if (!ui->dateEdit->geometry().contains(static_cast<QMouseEvent *>(event)->pos())
+            && !ui->calendar->geometry().contains(static_cast<QMouseEvent *>(event)->pos())
+            && ui->calendar->isVisible()) {
             ui->calendar->hide();
         }
     } else if (obj == ui->calendar && event->type() == QEvent::Hide) {
@@ -152,7 +160,6 @@ void flightstatus::on_departureInput_textChanged(const QString &text)
     QStringList filteredCities;
     for (const QString &city : cityList) {
         if (city.contains(text, Qt::CaseInsensitive)) {
-
             filteredCities << city;
         }
     }
@@ -166,13 +173,11 @@ void flightstatus::on_destinationInput_textChanged(const QString &text)
     QStringList filteredCities;
     for (const QString &city : cityList) {
         if (city.contains(text, Qt::CaseInsensitive)) {
-
             filteredCities << city;
         }
     }
     cityListModel->setStringList(filteredCities);
 }
-
 
 void flightstatus::on_pushButton_4_clicked()
 {
@@ -180,13 +185,11 @@ void flightstatus::on_pushButton_4_clicked()
     setActiveSection("ABCDEF");
 }
 
-
 void flightstatus::on_pushButton_5_clicked()
 {
     ui->sw->setCurrentIndex(3);
     setActiveSection("GHIJ");
 }
-
 
 void flightstatus::on_pushButton_6_clicked()
 {
@@ -194,13 +197,11 @@ void flightstatus::on_pushButton_6_clicked()
     setActiveSection("KLMN");
 }
 
-
 void flightstatus::on_pushButton_7_clicked()
 {
     ui->sw->setCurrentIndex(5);
     setActiveSection("PQRST");
 }
-
 
 void flightstatus::on_pushButton_8_clicked()
 {
@@ -208,13 +209,11 @@ void flightstatus::on_pushButton_8_clicked()
     setActiveSection("XYZ");
 }
 
-
 void flightstatus::on_btn_popuplar_clicked()
 {
     ui->sw->setCurrentIndex(1);
     setActiveSection("HOT");
 }
-
 
 void flightstatus::on_btn_domestic_clicked()
 {
@@ -223,7 +222,6 @@ void flightstatus::on_btn_domestic_clicked()
     ui->top_sw->setCurrentIndex(0);
     ui->sw->setCurrentIndex(1);
 }
-
 
 void flightstatus::on_btn_abroad_clicked()
 {
@@ -239,13 +237,11 @@ void flightstatus::on_pushButton_9_clicked()
     setActiveSection_2("ABCDEF");
 }
 
-
 void flightstatus::on_pushButton_10_clicked()
 {
     ui->sw_2->setCurrentIndex(3);
     setActiveSection_2("GHIJ");
 }
-
 
 void flightstatus::on_pushButton_11_clicked()
 {
@@ -253,20 +249,17 @@ void flightstatus::on_pushButton_11_clicked()
     setActiveSection_2("KLMN");
 }
 
-
 void flightstatus::on_pushButton_12_clicked()
 {
     ui->sw_2->setCurrentIndex(5);
     setActiveSection_2("PQRST");
 }
 
-
 void flightstatus::on_pushButton_13_clicked()
 {
     ui->sw_2->setCurrentIndex(6);
     setActiveSection_2("XYZ");
 }
-
 
 void flightstatus::on_btn_popuplar_2_clicked()
 {
@@ -289,20 +282,17 @@ void flightstatus::on_btn_abroad_2_clicked()
     ui->top_sw_2->setCurrentIndex(1);
     ui->sw_2->setCurrentIndex(0);
 }
-void flightstatus::setActiveSection(const QString& section)
+void flightstatus::setActiveSection(const QString &section)
 {
-    for(QPushButton* button : checkableButtons)
-    {
+    for (QPushButton *button : checkableButtons) {
         button->setChecked(false);
     }
-    if(section==" ")
-    {
+    if (section == " ") {
         ui->btn_domestic->setChecked(true);
         ui->btn_popuplar->setChecked(true);
     }
     // 根据分区名称激活对应的按钮
-    if(section=="HOT")
-    {
+    if (section == "HOT") {
         ui->btn_popuplar->setChecked(true);
     }
     if (section == "ABCDEF") {
@@ -311,28 +301,23 @@ void flightstatus::setActiveSection(const QString& section)
         ui->pushButton_5->setChecked(true);
     } else if (section == "KLMN") {
         ui->pushButton_6->setChecked(true);
-    } else if(section == "PQRST")
-    {
+    } else if (section == "PQRST") {
         ui->pushButton_7->setChecked(true);
-    } else if(section == "XYZ")
-    {
+    } else if (section == "XYZ") {
         ui->pushButton_8->setChecked(true);
     }
 }
-void flightstatus::setActiveSection_2(const QString& section)
+void flightstatus::setActiveSection_2(const QString &section)
 {
-    for(QPushButton* button : checkableButtons_2)
-    {
+    for (QPushButton *button : checkableButtons_2) {
         button->setChecked(false);
     }
-    if(section==" ")
-    {
+    if (section == " ") {
         ui->btn_domestic_2->setChecked(true);
         ui->btn_popuplar_2->setChecked(true);
     }
     // 根据分区名称激活对应的按钮
-    if(section=="HOT")
-    {
+    if (section == "HOT") {
         ui->btn_popuplar_2->setChecked(true);
     }
     if (section == "ABCDEF") {
@@ -341,32 +326,32 @@ void flightstatus::setActiveSection_2(const QString& section)
         ui->pushButton_10->setChecked(true);
     } else if (section == "KLMN") {
         ui->pushButton_11->setChecked(true);
-    } else if(section == "PQRST")
-    {
+    } else if (section == "PQRST") {
         ui->pushButton_12->setChecked(true);
-    } else if(section == "XYZ")
-    {
+    } else if (section == "XYZ") {
         ui->pushButton_13->setChecked(true);
     }
 }
 void flightstatus::init()
 {
     calenIni();
-    QList<QPushButton*> allButtons = ui->pick_widget->findChildren<QPushButton*>();
+    QList<QPushButton *> allButtons = ui->pick_widget->findChildren<QPushButton *>();
     // 2. 筛选名字以 "pushbutton" 或 "btn" 开头的控件
-    for (QPushButton* button : allButtons) {
+    for (QPushButton *button : allButtons) {
         QString objectName = button->objectName();
         if (objectName.startsWith("pushButton") || objectName.startsWith("btn_")) {
-            if(objectName.startsWith("btn_p")||objectName.startsWith("pushButton")) checkableButtons.append(button);
+            if (objectName.startsWith("btn_p") || objectName.startsWith("pushButton"))
+                checkableButtons.append(button);
             button->setCheckable(true);
         }
     }
-    QList<QPushButton*> allButtons_2 = ui->pick_widget_2->findChildren<QPushButton*>();
+    QList<QPushButton *> allButtons_2 = ui->pick_widget_2->findChildren<QPushButton *>();
     // 2. 筛选名字以 "pushbutton" 或 "btn" 开头的控件
-    for (QPushButton* button : allButtons_2) {
+    for (QPushButton *button : allButtons_2) {
         QString objectName = button->objectName();
         if (objectName.startsWith("pushButton") || objectName.startsWith("btn_")) {
-            if(objectName.startsWith("btn_p")||objectName.startsWith("pushButton")) checkableButtons_2.append(button);
+            if (objectName.startsWith("btn_p") || objectName.startsWith("pushButton"))
+                checkableButtons_2.append(button);
             button->setCheckable(true);
         }
     }
@@ -386,10 +371,9 @@ QPushButton:hover {
 }
 )";
     ui->pick_widget->setVisible(false);
-    for(int i=0;i<ui->sw->count();i++)
-    {
-        QWidget* widget=ui->sw->widget(i);
-        QList<QPushButton*> buttonsInpage=widget->findChildren<QPushButton*>();
+    for (int i = 0; i < ui->sw->count(); i++) {
+        QWidget *widget = ui->sw->widget(i);
+        QList<QPushButton *> buttonsInpage = widget->findChildren<QPushButton *>();
         for (QPushButton *button : buttonsInpage) {
             button->setStyleSheet(buttonStyle);
             connect(button, &QPushButton::clicked, [button, this]() {
@@ -397,13 +381,12 @@ QPushButton:hover {
                 ui->pick_widget->setVisible(false);
                 ui->label_90->setFocus();
             });
-    }
+        }
     }
     ui->pick_widget_2->setVisible(false);
-    for(int i=0;i<ui->sw_2->count();i++)
-    {
-        QWidget* widget=ui->sw_2->widget(i);
-        QList<QPushButton*> buttonsInpage=widget->findChildren<QPushButton*>();
+    for (int i = 0; i < ui->sw_2->count(); i++) {
+        QWidget *widget = ui->sw_2->widget(i);
+        QList<QPushButton *> buttonsInpage = widget->findChildren<QPushButton *>();
         for (QPushButton *button : buttonsInpage) {
             button->setStyleSheet(buttonStyle);
             connect(button, &QPushButton::clicked, [button, this]() {
@@ -504,10 +487,8 @@ QPushButton:hover {
              << "中山" << "zhongshan"
              << "遵义" << "zunyi";
 
-
     // 设置补全器
     setupCompleter();
-
 }
 
 void flightstatus::calenIni()
@@ -515,66 +496,54 @@ void flightstatus::calenIni()
     ui->lbl_db->setVisible(false);
     ui->calendar->setHidden(true);
     ui->dateEditPushbutton->setStyleSheet("QPushButton {"
-                          "background: transparent;"  // 背景透明
-                          "border: none;"            // 无边框
-                          "}");
-    ui->dateEditPushbutton_2->setStyleSheet("QPushButton {"
-                                          "background: transparent;"  // 背景透明
+                                          "background: transparent;" // 背景透明
                                           "border: none;"            // 无边框
                                           "}");
+    ui->dateEditPushbutton_2->setStyleSheet("QPushButton {"
+                                            "background: transparent;" // 背景透明
+                                            "border: none;"            // 无边框
+                                            "}");
     //ui->dateEdit->setPlaceholderText("选择出发日期");
     //ui->dateEdit_2->setPlaceholderText("选择返回日期");
-    ui->dateEdit->setReadOnly(true);  // 设置为只读
+    ui->dateEdit->setReadOnly(true); // 设置为只读
     ui->frame->setVisible(false);
     ui->dateEdit_2->setVisible(false);
     ui->radioButton->isChecked();
     connect(ui->calendar, &QCalendarWidget::selectionChanged, [this]() {
         QDate selectedDate = ui->calendar->selectedDate();
-        QLocale locale = QLocale(QLocale::Chinese, QLocale::China);  // 设置区域为中国
+        QLocale locale = QLocale(QLocale::Chinese, QLocale::China); // 设置区域为中国
         QString dateString = selectedDate.toString("yyyy-MM-dd");
         QString dayOfWeek = locale.dayName(selectedDate.dayOfWeek());
-        if(ui->calendar->pos()==QPoint(680,131))    ui->dateEdit->setText(dateString + " " + dayOfWeek);
-        else ui->dateEdit_2->setText(dateString + " " + dayOfWeek);
+        if (ui->calendar->pos() == QPoint(680, 131))
+            ui->dateEdit->setText(dateString + " " + dayOfWeek);
+        else
+            ui->dateEdit_2->setText(dateString + " " + dayOfWeek);
         ui->calendar->setHidden(true);
         ui->label_75->setFocus();
     });
     connect(ui->dateEditPushbutton, &QPushButton::clicked, [this]() {
-        ui->calendar->setHidden(!ui->calendar->isHidden());  // 切换日历的显示状态
-        ui->calendar->move(680,131);
+        ui->calendar->setHidden(!ui->calendar->isHidden()); // 切换日历的显示状态
+        ui->calendar->move(680, 131);
         ui->pick_widget->setVisible(false);
         ui->pick_widget_2->setVisible(false);
     });
     connect(ui->dateEditPushbutton_2, &QPushButton::clicked, [this]() {
-        ui->calendar->setHidden(!ui->calendar->isHidden());  // 切换日历的显示状态
-        ui->calendar->move(840,131);
+        ui->calendar->setHidden(!ui->calendar->isHidden()); // 切换日历的显示状态
+        ui->calendar->move(840, 131);
         ui->pick_widget->setVisible(false);
         ui->pick_widget_2->setVisible(false);
     });
-    connect(ui->radioButton,&QRadioButton::clicked,[this](){
+    connect(ui->radioButton, &QRadioButton::clicked, [this]() {
         ui->frame->setVisible(false);
         ui->dateEdit_2->setVisible(false);
         ui->lbl_db->setVisible(false);
     });
-    connect(ui->radioButton_2,&QRadioButton::clicked,[this](){
+    connect(ui->radioButton_2, &QRadioButton::clicked, [this]() {
         ui->frame->setVisible(true);
         ui->dateEdit_2->setVisible(true);
         ui->lbl_db->setVisible(true);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void flightstatus::on_searchButton_clicked()
 {
@@ -588,10 +557,11 @@ void flightstatus::on_searchButton_clicked()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     // 发送 POST 请求
-    QNetworkReply* reply = networkmanager->post(request, QJsonDocument(json).toJson());
+    QNetworkReply *reply = networkmanager->post(request, QJsonDocument(json).toJson());
 
     // 处理响应
-    connect(reply, &QNetworkReply::finished, [reply]() {
+    connect(reply, &QNetworkReply::finished, [reply,this]() {
+        ui->listWidget->clear();
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
@@ -599,8 +569,20 @@ void flightstatus::on_searchButton_clicked()
             if (jsonObject["code"].toInt() == 200) {
                 QJsonArray flights = jsonObject["data"].toArray();
                 for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
                     QJsonObject flightObject = flightValue.toObject();
-                    qDebug() << "Flight Number:" << flightObject["flightNumber"].toString();
+                    listItem* li = new listItem();
+                    flightInfo fliInfo;
+                    fliInfo.fromJson(flightObject);
+                    li->setFlightDetails(fliInfo);
+                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
+                    item->setSizeHint(li->sizeHint());
+                    ui->listWidget->addItem(item);
+                    ui->listWidget->setItemWidget(item, li);
                 }
             } else {
                 qDebug() << "查询错误:" << jsonObject["message"].toString();
@@ -612,4 +594,194 @@ void flightstatus::on_searchButton_clicked()
     });
 }
 
+void flightstatus::on_btn_lowPrice_clicked()
+{
+    // 创建 JSON 对象
+    QJsonObject json;
+    json["departure"] = ui->departureInput->text();
+    json["destination"] = ui->destinationInput->text();
+
+    // 设置请求
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/flights/search"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // 发送 POST 请求
+    QNetworkReply *reply = networkmanager->post(request, QJsonDocument(json).toJson());
+
+    // 处理响应
+    connect(reply, &QNetworkReply::finished, [reply,this]() {
+        ui->listWidget->clear();
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObject = jsonResponse.object();
+            if (jsonObject["code"].toInt() == 200) {
+                QJsonArray flights = jsonObject["data"].toArray();
+                std::vector<QJsonObject> flightList;
+                for (const QJsonValue &value : flights) {
+                    flightList.push_back(value.toObject());
+                }
+
+                std::sort(flightList.begin(), flightList.end(), [](const QJsonObject &a, const QJsonObject &b) {
+                    return a["economyClassPrice"].toDouble() < b["economyClassPrice"].toDouble();
+                });
+
+                // 将排序后的对象重新放入QJsonArray
+                flights = QJsonArray(); // 清空原数组
+                for (const QJsonObject &obj : flightList) {
+                    flights.push_back(obj);
+                }
+                for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
+                    QJsonObject flightObject = flightValue.toObject();
+                    listItem* li = new listItem();
+                    flightInfo fliInfo;
+                    fliInfo.fromJson(flightObject);
+                    li->setFlightDetails(fliInfo);
+                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
+                    item->setSizeHint(li->sizeHint());
+                    ui->listWidget->addItem(item);
+                    ui->listWidget->setItemWidget(item, li);
+                }
+            } else {
+                qDebug() << "查询错误:" << jsonObject["message"].toString();
+            }
+        } else {
+            qDebug() << "查询连接错误:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+}
+
+
+void flightstatus::on_btn_takeoff_early_clicked()
+{
+    // 创建 JSON 对象
+    QJsonObject json;
+    json["departure"] = ui->departureInput->text();
+    json["destination"] = ui->destinationInput->text();
+
+    // 设置请求
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/flights/search"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // 发送 POST 请求
+    QNetworkReply *reply = networkmanager->post(request, QJsonDocument(json).toJson());
+
+    // 处理响应
+    connect(reply, &QNetworkReply::finished, [reply,this]() {
+        ui->listWidget->clear();
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObject = jsonResponse.object();
+            if (jsonObject["code"].toInt() == 200) {
+                QJsonArray flights = jsonObject["data"].toArray();
+                std::vector<QJsonObject> flightList;
+                for (const QJsonValue &value : flights) {
+                    flightList.push_back(value.toObject());
+                }
+
+                std::sort(flightList.begin(), flightList.end(), [](const QJsonObject &a, const QJsonObject &b) {
+                    return a["departureTime"].toDouble() < b["departureTime"].toDouble();
+                });
+
+                // 将排序后的对象重新放入QJsonArray
+                flights = QJsonArray(); // 清空原数组
+                for (const QJsonObject &obj : flightList) {
+                    flights.push_back(obj);
+                }
+                for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
+                    QJsonObject flightObject = flightValue.toObject();
+                    listItem* li = new listItem();
+                    flightInfo fliInfo;
+                    fliInfo.fromJson(flightObject);
+                    li->setFlightDetails(fliInfo);
+                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
+                    item->setSizeHint(li->sizeHint());
+                    ui->listWidget->addItem(item);
+                    ui->listWidget->setItemWidget(item, li);
+                }
+            } else {
+                qDebug() << "查询错误:" << jsonObject["message"].toString();
+            }
+        } else {
+            qDebug() << "查询连接错误:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+}
+
+
+void flightstatus::on_btn_period_short_clicked()
+{
+    // 创建 JSON 对象
+    QJsonObject json;
+    json["departure"] = ui->departureInput->text();
+    json["destination"] = ui->destinationInput->text();
+
+    // 设置请求
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/flights/search"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // 发送 POST 请求
+    QNetworkReply *reply = networkmanager->post(request, QJsonDocument(json).toJson());
+
+    // 处理响应
+    connect(reply, &QNetworkReply::finished, [reply,this]() {
+        ui->listWidget->clear();
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObject = jsonResponse.object();
+            if (jsonObject["code"].toInt() == 200) {
+                QJsonArray flights = jsonObject["data"].toArray();
+                std::vector<QJsonObject> flightList;
+                for (const QJsonValue &value : flights) {
+                    flightList.push_back(value.toObject());
+                }
+
+                std::sort(flightList.begin(), flightList.end(), [](const QJsonObject &a, const QJsonObject &b) {
+                    return a["arrivalTime"].toDouble()-a["departureTime"].toDouble() < b["arrivalTime"].toDouble()-b["departureTime"].toDouble();
+                });
+
+                // 将排序后的对象重新放入QJsonArray
+                flights = QJsonArray(); // 清空原数组
+                for (const QJsonObject &obj : flightList) {
+                    flights.push_back(obj);
+                }
+                for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
+                    QJsonObject flightObject = flightValue.toObject();
+                    listItem* li = new listItem();
+                    flightInfo fliInfo;
+                    fliInfo.fromJson(flightObject);
+                    li->setFlightDetails(fliInfo);
+                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
+                    item->setSizeHint(li->sizeHint());
+                    ui->listWidget->addItem(item);
+                    ui->listWidget->setItemWidget(item, li);
+                }
+            } else {
+                qDebug() << "查询错误:" << jsonObject["message"].toString();
+            }
+        } else {
+            qDebug() << "查询连接错误:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+}
 
