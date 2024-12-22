@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QWidget>
 #include "order.h"
+#include <QEvent>  // 确保包含了 QEvent 头文件
 
 class QLabel;
 
@@ -35,14 +36,15 @@ private:
     Order m_order;
 
     // UI 显示的标签
-    QLabel *m_orderNumberLabel; // 订单号标签
-    QLabel *m_passengerLabel;   // 出行人标签
-    QLabel *m_airlineLabel;     // 航空公司和航班号标签
-    QLabel *m_aircraftLabel;    // 飞机型号和仓位等级标签
-    QLabel *m_timeLabel;        // 起飞和到达时间标签
-    QLabel *m_routeLabel;       // 出发地和目的地标签
-    QLabel *m_amountLabel;      // 金额标签
-    QLabel *m_statusLabel;      // 订单状态标签
+    QLabel *m_orderNumberLabel;      // 订单号标签
+    QLabel *m_passengerLabel;        // 出行人标签
+    QLabel *m_airlineLabel;          // 航空公司和航班号标签
+    QLabel *m_aircraftLabel;         // 飞机型号和仓位等级标签
+    QLabel *m_timeLabel;             // 起飞和到达时间标签
+    QLabel *m_routeLabel;            // 出发地和目的地标签
+    QLabel *m_airportLabel;          // 出发机场和到达机场标签
+    QLabel *m_amountLabel;           // 金额标签
+    QLabel *m_statusLabel;           // 订单状态标签
 
     // 鼠标悬停状态
     bool m_isHovered = false;

@@ -38,11 +38,7 @@ public:
     // 显示订单详情
     void showOrderDetails(const Order &order);
 
-    // 获取订单 ID
-    void fetchOrderIds(int userId);
-
-    // 获取订单详情
-    void fetchOrderDetails(const QList<QString> &flightNumbers);
+    void fetchOrders(int userId);
     //创建每个订单小窗口
     void createOrderWidget(const Order &order, QVBoxLayout *containerLayout);
 

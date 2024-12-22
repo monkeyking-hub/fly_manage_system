@@ -41,14 +41,16 @@ orderwindow::orderwindow(QWidget *parent)
     // 获取当前用户信息
     UserManager *userManager = UserManager::getInstance();
     User currentUser = userManager->getCurrentUser();
-    int userId = 1;//currentUser.id;
+    int userId =1;// currentUser.id;
+    qDebug()<<"拿到用户id了"<<userId;
 
     // 获取所有订单 ID 和航班号，并获取详细信息
-    fetchOrderIds(userId);
+    fetchOrders(userId);
 
     // 创建每个页面
-    QWidget *allOrdersPage = createOrderPage("全部订单");
+
     QWidget *pendingPage = createOrderPage("待支付");
+    QWidget *allOrdersPage = createOrderPage("全部订单");
     QWidget *upcomingPage = createOrderPage("待出行");
     QWidget *canceledPage = createOrderPage("已取消");
 
@@ -89,292 +91,156 @@ orderwindow::~orderwindow()
     delete ui;
 }
 
-//这个用来获取每个订单的id，出行人，航班号，价格
-void orderwindow::fetchOrderIds(int userId)
-{
-    // 假设通过 API 获取订单 ID 列表
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this); // 创建一个局部的 manager
+void orderwindow::fetchOrders(int userId) {
+    // 创建网络访问管理器
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
-    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/orders/search"));
+    // 设置请求 URL
+    QNetworkRequest request(QUrl("http://192.168.110.12:8080/api/orders/search"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    qDebug() << "发送请求获取订单信息";
+
+    // 构建请求体，包含用户 ID
     QJsonObject requestBody;
     requestBody["userId"] = userId;
-    QNetworkReply *reply = manager->post(request, QJsonDocument(requestBody).toJson());
 
+    // 转换为 QByteArray 并发送 POST 请求
+    QByteArray jsonData = QJsonDocument(requestBody).toJson();
+    QNetworkReply *reply = manager->post(request, jsonData);
+
+    // 处理网络请求结果
     connect(reply, &QNetworkReply::finished, this, [this, reply, userId]() {
         if (reply->error() == QNetworkReply::NoError) {
             // 解析返回的订单数据
             QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
             QJsonArray ordersArray = doc.object()["data"].toArray();
-            QList<QString> flightNumbers;
 
-            // 遍历订单数据，初始化每个 Order 对象
-            for (const QJsonValue &value : ordersArray) {
-                QJsonObject orderData = value.toObject();
+            if (ordersArray.isEmpty()) {
+                // 如果没有订单数据，返回
+                qDebug() << "没有找到订单";
+                return;
+            }
 
-                QString orderId = orderData["id"].toString();
+            // 遍历所有订单并处理
+            for (const QJsonValue &orderValue : ordersArray) {
+                QJsonObject orderData = orderValue.toObject();
+                QString orderId = QString::number(orderData["id"].toInt());
                 QString flightNumber = orderData["flightNumber"].toString();
                 double price = orderData["price"].toDouble();
 
+                // 获取航班详细信息
+                QJsonObject flightDetails = orderData["flightDetails"].toObject();
+                QString departure = flightDetails["departure"].toString();
+                QString destination = flightDetails["destination"].toString();
+                QString airline = flightDetails["airlineCompany"].toString();
+                QString departureTime = QDateTime::fromSecsSinceEpoch(flightDetails["departureTime"].toInt()).toString();
+                QString arrivalTime = QDateTime::fromSecsSinceEpoch(flightDetails["arrivalTime"].toInt()).toString();
+                QString aircraftType = flightDetails["aircraftModel"].toString();
+                QString seatClass = flightDetails["seatType"].toString();
+                QString boardingGate = flightDetails["boardingGate"].toString();
+                QString arrivalAirport = flightDetails["arrivalAirport"].toString();
+                QString departureAirport = flightDetails["departureAirport"].toString();
+                int firstClassSeats = flightDetails["firstClassSeats"].toInt();
+                int economyClassSeats = flightDetails["economyClassSeats"].toInt();
+                int businessClassSeats = flightDetails["businessClassSeats"].toInt();
+                double firstClassPrice = flightDetails["firstClassPrice"].toDouble();
+                double economyClassPrice = flightDetails["economyClassPrice"].toDouble();
+                double businessClassPrice = flightDetails["businessClassPrice"].toDouble();
+
+                qDebug() << arrivalTime;
+                // 创建订单对象并填充数据
                 Order order;
                 order.m_orderNumber = orderId;
-                order.m_passenger = QString::number(userId); // 用户 ID 作为乘客姓名
+                order.m_passenger = QString::number(userId);  // 假设用户 ID 为乘客姓名
                 order.m_amount = QString::number(price);
                 order.m_flightNumber = flightNumber;
+                order.m_status = Order::Pending;  // 默认为 Pending
 
-                // 设置订单的状态，默认设为 Pending
-                order.m_status = Order::Pending;
+                // 设置航班信息
+                order.m_departure = departure;
+                order.m_destination = destination;
+                order.m_airline = airline;
+                order.m_departureTime = departureTime;
+                order.m_arrivalTime = arrivalTime;
+                order.m_aircraftType = aircraftType;
+                order.m_seatClass = seatClass;
+                order.m_flightId = QString::number(flightDetails["id"].toInt());
+                order.m_boardingGate = boardingGate;
+                order.m_arrivalAirport = arrivalAirport;
+                order.m_departureAirport = departureAirport;
+                order.m_firstClassSeats = firstClassSeats;
+                order.m_economyClassSeats = economyClassSeats;
+                order.m_businessClassSeats = businessClassSeats;
+                order.m_firstClassPrice = firstClassPrice;
+                order.m_economyClassPrice = economyClassPrice;
+                order.m_businessClassPrice = businessClassPrice;
 
-                // 将初始化的 Order 添加到全局列表
+                // 将订单添加到全局订单列表
                 InterfaceManager::instance()->m_orderList.append(order);
-
-                flightNumbers.append(flightNumber); // 存储航班号
             }
 
-            // 调用第二个函数根据航班号查询详细信息
-            fetchOrderDetails(flightNumbers); // 修改这里，传入 flightNumbers
+            qDebug() << "成功获取并处理所有订单及航班信息";
+        } else {
+            // 错误处理
+            qWarning() << "获取订单失败: " << reply->errorString();
         }
 
-        reply->deleteLater(); // 确保删除 reply，避免内存泄漏
+        // 删除 reply，避免内存泄漏
+        reply->deleteLater();
     });
 }
 
-//这个根据上一个函数获得的航班号获取订单的详细信息
-void orderwindow::fetchOrderDetails(const QList<QString> &flightNumbers)
-{
-    // 获取容器布局，如果需要的话，可以在此函数内创建布局
-    QVBoxLayout *containerLayout = containerLayout; // 这里替换为实际的布局
 
-    // 遍历每个航班号，获取相应的航班详细信息
-    for (const QString &flightNumber : flightNumbers) {
-        // 使用 API 获取航班详细信息填充订单
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QNetworkRequest request(QUrl(QString("http://127.0.0.1:8080/api/flight/details/%1").arg(flightNumber)));
-        QNetworkReply *reply = manager->get(request);
 
-        // 使用 lambda 函数处理网络请求结果
-        connect(reply, &QNetworkReply::finished, this, [this, reply, flightNumber, containerLayout]() {
-            if (reply->error() == QNetworkReply::NoError) {
-                // 解析航班详细信息
-                QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-                QJsonObject flightDetails = doc.object();
-
-                // 查找对应的订单
-                for (Order &order : InterfaceManager::instance()->m_orderList) {
-                    if (order.m_flightNumber == flightNumber) {
-                        // 更新订单详细信息
-                        order.m_departure = flightDetails["departure"].toString();
-                        order.m_destination = flightDetails["destination"].toString();
-                        order.m_airline = flightDetails["airlineCompany"].toString();
-                        order.m_departureTime = flightDetails["departureTime"].toString();
-                        order.m_arrivalTime = flightDetails["arrivalTime"].toString();
-                        order.m_aircraftType = flightDetails["aircraftModel"].toString();
-                        order.m_seatClass = flightDetails["seatType"].toString();
-                        order.m_flightId = flightDetails["id"].toString();
-                        order.m_boardingGate = flightDetails["boardingGate"].toString();
-                        order.m_arrivalAirport = flightDetails["arrivalAirport"].toString();
-                        order.m_departureAirport = flightDetails["departureAirport"].toString();
-                        order.m_firstClassSeats = flightDetails["firstClassSeats"].toInt();
-                        order.m_economyClassSeats = flightDetails["economyClassSeats"].toInt();
-                        order.m_businessClassSeats = flightDetails["businessClassSeats"].toInt();
-                        order.m_firstClassPrice = flightDetails["firstClassPrice"].toDouble();
-                        order.m_economyClassPrice = flightDetails["economyClassPrice"].toDouble();
-                        order.m_businessClassPrice = flightDetails["businessClassPrice"].toDouble();
-                    }
-                }
-            }
-
-            reply->deleteLater(); // 确保删除 reply，避免内存泄漏
-        });
-    }
-}
-
-//这个用来创建每个小订单矩形
-void orderwindow::createOrderWidget(const Order &order, QVBoxLayout *containerLayout)
-{
-    // 创建订单 Widget，传入订单数据
-    OrderWidget *orderWidget = new OrderWidget(order, this);
-
-    // 连接信号槽，当订单被点击时显示订单详情
-    connect(orderWidget, &OrderWidget::orderClicked, this, &orderwindow::showOrderDetails);
-
-    // 将订单 Widget 添加到容器布局中
-    containerLayout->addWidget(orderWidget);
-
-    // 如果不是最后一个订单，添加分割线
-    // 这里修复了对 containerLayout.count() 的判断
-    // 因为我们没有提供 `orderIds` 的上下文信息，因此假设你想通过订单的数量来判断是否添加分割线
-    if (containerLayout->count() != InterfaceManager::instance()->m_orderList.size()) {
-        QWidget *line = new QWidget(this);
-        line->setFixedHeight(2);
-        line->setStyleSheet("background-color: black;");
-        containerLayout->addWidget(line);
-    }
-}
-
-//这个用来创建每个具体的订单界面
-// 创建每个具体的订单页面，并添加筛选框
+// 创建订单页面并展示所有订单
 QWidget *orderwindow::createOrderPage(const QString &type)
 {
     QWidget *page = new QWidget(this);
     QVBoxLayout *pageLayout = new QVBoxLayout(page);
 
-    // 创建筛选框布局
-    QHBoxLayout *filterLayout = new QHBoxLayout();
+    // 设置 pageLayout 布局的间隙
+    pageLayout->setSpacing(20);  // 每个 OrderWidget 之间的空隙
+    pageLayout->setContentsMargins(30, 30, 30, 30); // 设置边距，确保控件不会太靠边
 
-    // 设置布局的间距（增加它们之间的空隙）
-    filterLayout->setSpacing(30); // 增加控件之间的空隙，设置为 30px
+    auto &orderList = InterfaceManager::instance()->m_orderList;
 
-    // 出发地筛选框
-    QComboBox *departureComboBox = new QComboBox(this);
-    departureComboBox->addItem("选择出发地");
-    // 假设你有一个出发地列表，可以通过 API 或本地数据填充
-    departureComboBox->addItem("New York");
-    departureComboBox->addItem("Los Angeles");
-    departureComboBox->addItem("San Francisco");
-    departureComboBox->setMinimumWidth(220); // 设置最小宽度为 220px
-    departureComboBox->setStyleSheet(
-        "QComboBox { height: 40px; font-size: 16px; }"); // 增加高度，设置字体大小
+    // 遍历订单列表，根据订单类型显示订单
+    for (const Order &order : orderList) {
+        // 根据订单类型过滤订单
+        if ((type == "全部订单") ||
+            (type == "待支付" && order.status() == Order::Pending) ||
+            (type == "待出行" && order.status() == Order::Confirmed) ||
+            (type == "已取消" && order.status() == Order::Cancelled)) {
 
-    // 目的地筛选框
-    QComboBox *destinationComboBox = new QComboBox(this);
-    destinationComboBox->addItem("选择目的地");
-    // 假设你有一个目的地列表，可以通过 API 或本地数据填充
-    destinationComboBox->addItem("Los Angeles");
-    destinationComboBox->addItem("San Francisco");
-    destinationComboBox->addItem("New York");
-    destinationComboBox->setMinimumWidth(220); // 设置最小宽度为 220px
-    destinationComboBox->setStyleSheet(
-        "QComboBox { height: 40px; font-size: 16px; }"); // 增加高度，设置字体大小
+            // 创建 OrderWidget 来显示订单
+            OrderWidget *orderWidget = new OrderWidget(order, pageLayout->parentWidget());
 
-    // 航空公司筛选框
-    QComboBox *airlineComboBox = new QComboBox(this);
-    airlineComboBox->addItem("选择航空公司");
-    // 假设你有一个航空公司列表，可以通过 API 或本地数据填充
-    airlineComboBox->addItem("Airline XYZ");
-    airlineComboBox->addItem("Airline ABC");
-    airlineComboBox->addItem("Airline DEF");
-    airlineComboBox->setMinimumWidth(220); // 设置最小宽度为 220px
-    airlineComboBox->setStyleSheet(
-        "QComboBox { height: 40px; font-size: 16px; }"); // 增加高度，设置字体大小
+            // 设置 OrderWidget 的大小策略
+            orderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    // 将筛选框添加到布局，并设置每个 comboBox 的伸缩因子
-    filterLayout->addWidget(departureComboBox, 1);   // 1 表示占据 1 份空间
-    filterLayout->addWidget(destinationComboBox, 1); // 1 表示占据 1 份空间
-    filterLayout->addWidget(airlineComboBox, 1);     // 1 表示占据 1 份空间
+            // 为 OrderWidget 添加样式
+            orderWidget->setStyleSheet(
+                "#OrderWidget {"
+                "   background-color: rgba(255, 255, 255, 200);"
+                "   border: 2px solid #cccccc;"
+                "   border-radius: 8px; "
+                "   margin: 10px;"  // 为每个 OrderWidget 设置 margin
+                "   padding: 8px;"
+                "} "
+                );
 
-    // 将筛选框布局添加到页面布局中
-    pageLayout->addLayout(filterLayout);
+            // 连接点击事件信号和槽
+            connect(orderWidget, &OrderWidget::orderClicked, this, &orderwindow::showOrderDetails);
 
-    // 等待所有订单加载完成后再创建页面内容
-    QTimer::singleShot(
-        1000,
-        this,
-        [this, pageLayout, type, page, departureComboBox, destinationComboBox, airlineComboBox]() {
-            auto &orderList = InterfaceManager::instance()->m_orderList;
-
-            // 连接筛选框的信号槽
-            connect(departureComboBox,
-                    &QComboBox::currentTextChanged,
-                    this,
-                    [this,
-                     pageLayout,
-                     type,
-                     departureComboBox,
-                     destinationComboBox,
-                     airlineComboBox]() {
-                        updateOrderPage(type,
-                                        pageLayout,
-                                        departureComboBox,
-                                        destinationComboBox,
-                                        airlineComboBox);
-                    });
-
-            connect(destinationComboBox,
-                    &QComboBox::currentTextChanged,
-                    this,
-                    [this,
-                     pageLayout,
-                     type,
-                     departureComboBox,
-                     destinationComboBox,
-                     airlineComboBox]() {
-                        updateOrderPage(type,
-                                        pageLayout,
-                                        departureComboBox,
-                                        destinationComboBox,
-                                        airlineComboBox);
-                    });
-
-            connect(airlineComboBox,
-                    &QComboBox::currentTextChanged,
-                    this,
-                    [this,
-                     pageLayout,
-                     type,
-                     departureComboBox,
-                     destinationComboBox,
-                     airlineComboBox]() {
-                        updateOrderPage(type,
-                                        pageLayout,
-                                        departureComboBox,
-                                        destinationComboBox,
-                                        airlineComboBox);
-                    });
-
-            // 初次加载订单列表
-            updateOrderPage(type,
-                            pageLayout,
-                            departureComboBox,
-                            destinationComboBox,
-                            airlineComboBox);
-        });
+            // 将 OrderWidget 添加到布局
+            pageLayout->addWidget(orderWidget);
+        }
+    }
 
     return page;
 }
 
-// 更新订单页面内容，根据筛选条件过滤订单
-void orderwindow::updateOrderPage(const QString &type,
-                                  QVBoxLayout *pageLayout,
-                                  QComboBox *departureComboBox,
-                                  QComboBox *destinationComboBox,
-                                  QComboBox *airlineComboBox)
-{
-    // 清空现有的订单小部件
-    qDeleteAll(pageLayout->children());
 
-    // 获取筛选框的选择值
-    QString departureFilter = departureComboBox->currentText();
-    QString destinationFilter = destinationComboBox->currentText();
-    QString airlineFilter = airlineComboBox->currentText();
-
-    // 遍历订单列表，根据筛选条件过滤订单
-    auto &orderList = InterfaceManager::instance()->m_orderList;
-    for (const Order &order : orderList) {
-        if ((type == "全部订单") || (type == "待支付" && order.status() == Order::Pending)
-            || (type == "待出行" && order.status() == Order::Confirmed)
-            || (type == "已取消" && order.status() == Order::Cancelled)) {
-            // 根据筛选条件过滤订单
-            if ((departureFilter == "选择出发地" || order.m_departure == departureFilter)
-                && (destinationFilter == "选择目的地" || order.m_destination == destinationFilter)
-                && (airlineFilter == "选择航空公司" || order.m_airline == airlineFilter)) {
-                // 创建 OrderWidget
-                OrderWidget *orderWidget = new OrderWidget(order, pageLayout->parentWidget());
-
-                // 为 OrderWidget 添加样式
-                orderWidget->setStyleSheet("#OrderWidget {"
-                                           "   background-color: rgba(255, 255, 255, 200);"
-                                           "   border: 2px solid #cccccc;"
-                                           "   border-radius: 8px;"
-                                           "   margin: 10px;"
-                                           "   padding: 8px;"
-                                           "} ");
-
-                // 将 OrderWidget 添加到布局
-                pageLayout->addWidget(orderWidget);
-            }
-        }
-    }
-}
 
 void orderwindow::showOrderDetails(const Order &order)
 {

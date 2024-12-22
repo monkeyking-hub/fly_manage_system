@@ -15,72 +15,67 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     this->setObjectName("OrderWidget");
     this->setMinimumSize(1000, 300);
 
-    this->setStyleSheet("#OrderWidget {"
-                        "   background-color: rgba(255, 255, 255, 200);"
-                        "   border: 2px solid #cccccc;"
-                        "   border-radius: 8px;"
-                        "   margin: 10px;"
-                        "   padding: 8px;"
-                        "}");
+    this->setStyleSheet(
+        "#OrderWidget {"
+        "   background-color: rgba(255, 255, 255, 200);"
+        "   border: 2px solid #cccccc; "
+        "   border-radius: 8px;"
+        "   margin: 10px;"
+        "   padding: 8px;"
+        "}"
+        );
 
     // 创建垂直布局
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     // 订单号
-    m_orderNumberLabel = new QLabel(QString("订单号: %1").arg(order.orderNumber()), this);
+    m_orderNumberLabel = new QLabel(QString("订单号: %1").arg(order.m_orderNumber), this);
     m_orderNumberLabel->setStyleSheet("font-size: 24px; color: black; font-weight: bold;");
     layout->addWidget(m_orderNumberLabel);
 
     // 出行人
-    QLabel *passengerLabel = new QLabel(QString("出行人: %1").arg(order.passenger()), this);
+    QLabel *passengerLabel = new QLabel(QString("出行人: %1").arg(order.m_passenger), this);
     passengerLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(passengerLabel);
 
     // 航空公司和航班号
     QLabel *airlineLabel = new QLabel(QString("航空公司: %1  航班号: %2")
-                                          .arg(order.airline())
-                                          .arg(order.flightNumber()),
-                                      this);
+                                          .arg(order.m_airline).arg(order.m_flightNumber), this);
     airlineLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(airlineLabel);
 
     // 飞机型号和仓位等级
     QLabel *aircraftLabel = new QLabel(QString("飞机型号: %1  仓位等级: %2")
-                                           .arg(order.aircraftType())
-                                           .arg(order.seatClass()),
-                                       this);
+                                           .arg(order.m_aircraftType).arg(order.m_seatClass), this);
     aircraftLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(aircraftLabel);
 
     // 起飞时间和到达时间
     QLabel *timeLabel = new QLabel(QString("起飞时间: %1  到达时间: %2")
-                                       .arg(order.departureTime())
-                                       .arg(order.arrivalTime()),
-                                   this);
+                                       .arg(order.m_departureTime).arg(order.m_arrivalTime), this);
     timeLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(timeLabel);
 
     // 出发地和目的地
     QLabel *routeLabel = new QLabel(QString("出发地: %1  目的地: %2")
-                                        .arg(order.departure())
-                                        .arg(order.destination()),
-                                    this);
+                                        .arg(order.m_departure).arg(order.m_destination), this);
     routeLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(routeLabel);
 
-    // 舱位等级
-    QLabel *seatClassLabel = new QLabel(QString("舱位等级: %1").arg(order.seatClass()), this);
-    seatClassLabel->setStyleSheet("font-size: 20px; color: black;");
-    layout->addWidget(seatClassLabel);
+    // 出发机场和到达机场
+    QLabel *airportLabel = new QLabel(QString("出发机场: %1  到达机场: %2")
+                                          .arg(order.m_departureAirport).arg(order.m_arrivalAirport), this);
+    airportLabel->setStyleSheet("font-size: 20px; color: black;");
+    layout->addWidget(airportLabel);
 
     // 金额
-    QLabel *amountLabel = new QLabel(QString("金额: %1").arg(order.amount()), this);
+    QLabel *amountLabel = new QLabel(QString("金额: %1").arg(order.m_amount), this);
     amountLabel->setStyleSheet("font-size: 20px; color: green; font-weight: bold;");
     layout->addWidget(amountLabel);
 
     // 状态
     QString statusString;
-    switch (order.status()) {
+    switch (order.m_status) {
     case Order::Pending:
         statusString = "待支付";
         break;
@@ -126,13 +121,15 @@ void OrderWidget::enterEvent(QEnterEvent *event)
 
     m_orderNumberLabel->setStyleSheet("font-size: 24px; color: blue; font-weight: bold;");
 
-    this->setStyleSheet("#OrderWidget {"
-                        "   background-color: rgba(173, 216, 230, 200);"
-                        "   border: 2px solid #cccccc;"
-                        "   border-radius: 8px;"
-                        "   margin: 10px;"
-                        "   padding: 8px;"
-                        "}");
+    this->setStyleSheet(
+        "#OrderWidget {"
+        "   background-color: rgba(173, 216, 230, 200);"
+        "   border: 2px solid #cccccc; "
+        "   border-radius: 8px;"
+        "   margin: 10px;"
+        "   padding: 8px;"
+        "}"
+        );
 
     QWidget::enterEvent(event);
 }
@@ -144,13 +141,15 @@ void OrderWidget::leaveEvent(QEvent *event)
 
     m_orderNumberLabel->setStyleSheet("font-size: 24px; color: black; font-weight: bold;");
 
-    this->setStyleSheet("#OrderWidget {"
-                        "   background-color: rgba(255, 255, 255, 200);"
-                        "   border: 2px solid #cccccc;"
-                        "   border-radius: 8px;"
-                        "   margin: 10px;"
-                        "   padding: 8px;"
-                        "}");
+    this->setStyleSheet(
+        "#OrderWidget {"
+        "   background-color: rgba(255, 255, 255, 200);"
+        "   border: 2px solid #cccccc; "
+        "   border-radius: 8px;"
+        "   margin: 10px;"
+        "   padding: 8px;"
+        "}"
+        );
 
     QWidget::leaveEvent(event);
 }
