@@ -45,7 +45,7 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     layout->addWidget(airlineLabel);
 
     // 飞机型号和仓位等级
-    QLabel *aircraftLabel = new QLabel(QString("飞机型号: %1  仓位等级: %2")
+    QLabel *aircraftLabel = new QLabel(QString("飞机型号: %1  舱位等级: %2")
                                            .arg(order.m_aircraftType).arg(order.m_seatClass), this);
     aircraftLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(aircraftLabel);

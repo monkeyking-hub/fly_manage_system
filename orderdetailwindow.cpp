@@ -144,7 +144,7 @@ void OrderDetailWindow::setupUI(const Order &order)
 
 
     // 评价模块
-    QLabel *evaluationLabel = new QLabel("您对此次出行满意吗？", this);
+    QLabel *evaluationLabel = new QLabel("您对此次出行满意吗？(请点击下方星星进行评价)", this);
     evaluationLabel->setFont(titleFont);
     layout->addWidget(evaluationLabel);
 
@@ -303,7 +303,6 @@ void OrderDetailWindow::setupUI(const Order &order)
         QMessageBox::information(this, "反馈", "感谢反馈，我们会积极改正");
     });
 
-    connect(baggageRuleButton, &QPushButton::clicked, this, [this]() { showBaggageTable(); });
 
     connect(poorExperienceButton, &QPushButton::clicked, this, [this]() {
         QMessageBox::information(this, "反馈", "感谢反馈，我们会积极改正");
