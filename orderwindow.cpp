@@ -96,7 +96,8 @@ void orderwindow::fetchOrders(int userId) {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
     // 设置请求 URL
-    QNetworkRequest request(QUrl("http://192.168.110.12:8080/api/orders/search"));
+    // QNetworkRequest request(QUrl("http://192.168.110.12:8080/api/orders/search"));
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/orders/search"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     qDebug() << "发送请求获取订单信息";
 

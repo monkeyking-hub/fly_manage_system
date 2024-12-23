@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>pay_window</class>
+ <widget class="QWidget" name="pay_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1187</width>
+    <height>623</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>580</y>
+     <width>301</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>增加乘机人</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>111</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>乘机人</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>45</x>
+     <y>151</y>
+     <width>641</width>
+     <height>411</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>160</y>
+     <width>331</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>机票信息</string>
+   </property>
+   <widget class="QLabel" name="lbl_date">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>30</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>日期</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_depar">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>30</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>出发地</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_des">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>30</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>目的地</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_compName">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>航司名称</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_flightNo">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>60</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>航班号</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_flightCate">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>60</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>机型</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_seatCate">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>60</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>舱等</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_deparTime">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>90</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>出发时间</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_arrivalTime">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>90</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>到达时间</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_deparAirport">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>130</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>出发机场</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_arrivalAirport">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>130</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>到达机场</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_compPic">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>航司图片</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>110</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::HLine</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>30</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>-&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_price">
+    <property name="geometry">
+     <rect>
+      <x>239</x>
+      <y>311</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    color: rgb(255, 170, 0);  /* 这是一种鲜亮的蓝色，可以根据需要调整颜色的具体数值 */
+    font-size: 24px;  /* 字体大小，根据图片调整 */
+    font-family: &quot;Segoe UI&quot;;  /* Windows 常用字体，可以换成其他的，如 'Arial' */
+    font-weight: bold;  /* 加粗字体 */
+	background-color:transparent;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>价格</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

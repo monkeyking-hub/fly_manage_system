@@ -11,8 +11,14 @@
 #include <QNetworkRequest>
 #include <QStringList>
 #include <QListWidgetItem>
+#include <QDate>
+#include <QDateEdit>
+#include "pay_window.h"
 #include "ui_flightstatus.h"
+#include "interfacemanager.h"
 #include "listitem.h"
+
+int cnt=0;
 
 flightstatus::flightstatus(QWidget *parent)
     : QMainWindow(parent)
@@ -156,6 +162,10 @@ void flightstatus::setupCompleter()
 // 出发地输入框文本变化时触发
 void flightstatus::on_departureInput_textChanged(const QString &text)
 {
+    ui->dp_airpot_cbx->clear();
+    ui->dp_airpot_cbx->addItem("不限出发机场");
+    ui->flight_company_cbx->clear();
+    ui->flight_company_cbx->addItem("不限航空公司");
     // 使用拼音或中文进行匹配
     QStringList filteredCities;
     for (const QString &city : cityList) {
@@ -169,6 +179,10 @@ void flightstatus::on_departureInput_textChanged(const QString &text)
 // 目的地输入框文本变化时触发
 void flightstatus::on_destinationInput_textChanged(const QString &text)
 {
+    ui->ds_airpot_cbx->clear();
+    ui->ds_airpot_cbx->addItem("不限抵达机场");
+    ui->flight_company_cbx->clear();
+    ui->flight_company_cbx->addItem("不限航空公司");
     // 使用拼音或中文进行匹配
     QStringList filteredCities;
     for (const QString &city : cityList) {
@@ -334,7 +348,10 @@ void flightstatus::setActiveSection_2(const QString &section)
 }
 void flightstatus::init()
 {
+    ui->groupBox_4->setVisible(false);
     calenIni();
+    btnIni();
+    ui->radioButton->setChecked(true);
     QList<QPushButton *> allButtons = ui->pick_widget->findChildren<QPushButton *>();
     // 2. 筛选名字以 "pushbutton" 或 "btn" 开头的控件
     for (QPushButton *button : allButtons) {
@@ -503,13 +520,13 @@ void flightstatus::calenIni()
                                             "background: transparent;" // 背景透明
                                             "border: none;"            // 无边框
                                             "}");
-    //ui->dateEdit->setPlaceholderText("选择出发日期");
-    //ui->dateEdit_2->setPlaceholderText("选择返回日期");
     ui->dateEdit->setReadOnly(true); // 设置为只读
     ui->frame->setVisible(false);
     ui->dateEdit_2->setVisible(false);
     ui->radioButton->isChecked();
     connect(ui->calendar, &QCalendarWidget::selectionChanged, [this]() {
+        emit flightstatus::columnchange();
+        on_searchButton_clicked();
         QDate selectedDate = ui->calendar->selectedDate();
         QLocale locale = QLocale(QLocale::Chinese, QLocale::China); // 设置区域为中国
         QString dateString = selectedDate.toString("yyyy-MM-dd");
@@ -543,10 +560,29 @@ void flightstatus::calenIni()
         ui->dateEdit_2->setVisible(true);
         ui->lbl_db->setVisible(true);
     });
+    connect(ui->flight_company_cbx, &QComboBox::currentTextChanged, [this](){
+        clear_btn_state();
+        on_searchButton_clicked();
+    });
+    connect(ui->dp_airpot_cbx, &QComboBox::currentTextChanged, this, [this](){
+        clear_btn_state();
+        on_searchButton_clicked();
+    });
+    connect(ui->ds_airpot_cbx, &QComboBox::currentTextChanged, this, [this](){
+        clear_btn_state();
+        on_searchButton_clicked();
+    });
+
 }
 
 void flightstatus::on_searchButton_clicked()
 {
+    if(!cnt)
+    {
+        emit flightstatus::columnchange();
+    }
+    if(cnt==1)    ui->groupBox_4->setVisible(true);
+    cnt++;
     // 创建 JSON 对象
     QJsonObject json;
     json["departure"] = ui->departureInput->text();
@@ -567,6 +603,7 @@ void flightstatus::on_searchButton_clicked()
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObject = jsonResponse.object();
             if (jsonObject["code"].toInt() == 200) {
+                QStringList qs,qap1,qap2;
                 QJsonArray flights = jsonObject["data"].toArray();
                 for (const QJsonValue &flightValue : flights) {
                     QString date = ui->dateEdit->text();
@@ -574,15 +611,28 @@ void flightstatus::on_searchButton_clicked()
                     QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
                     QString dateStr = dateTime.toString("yyyy-MM-dd");
                     if(date.mid(0,10) != dateStr) continue;
+                    qs.append(flightValue["airlineCompany"].toString());
+                    qap1.append(flightValue["departureAirport"].toString());
+                    qap2.append(flightValue["arrivalAirport"].toString());
+                }
+                updateAirlineCompanies(qs);
+                updatedpAirports(qap1);
+                updatedsAirports(qap2);
+                for (const QJsonValue &flightValue : flights) {
+                    QString company = ui->flight_company_cbx->currentText();
+                    QString departureAirport = ui->dp_airpot_cbx->currentText();
+                    QString destinationAirport = ui->ds_airpot_cbx->currentText();
+                    QString fcompany = flightValue["airlineCompany"].toString();
+                    QString fdepartureAirport =flightValue["departureAirport"].toString();
+                    QString fdestinationAirport = flightValue["arrivalAirport"].toString();
+                    QString seatclass = ui->flight_class_cbx->currentText();
+                    if(seatclass=="头等舱" && flightValue["firstClassSeats"]==0) continue;
+                    if(seatclass=="经济舱" && flightValue["economyClassSeats"]==0) continue;
+                    if(fcompany!=company && company != "不限航空公司") continue;
+                    if(fdepartureAirport!=departureAirport && departureAirport != "不限出发机场") continue;
+                    if(fdestinationAirport!=destinationAirport && destinationAirport != "不限抵达机场") continue;
                     QJsonObject flightObject = flightValue.toObject();
-                    listItem* li = new listItem();
-                    flightInfo fliInfo;
-                    fliInfo.fromJson(flightObject);
-                    li->setFlightDetails(fliInfo);
-                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
-                    item->setSizeHint(li->sizeHint());
-                    ui->listWidget->addItem(item);
-                    ui->listWidget->setItemWidget(item, li);
+                    addListItem(InterfaceManager::instance()->pw,flightObject);
                 }
             } else {
                 qDebug() << "查询错误:" << jsonObject["message"].toString();
@@ -596,7 +646,6 @@ void flightstatus::on_searchButton_clicked()
 
 void flightstatus::on_btn_lowPrice_clicked()
 {
-    // 创建 JSON 对象
     QJsonObject json;
     json["departure"] = ui->departureInput->text();
     json["destination"] = ui->destinationInput->text();
@@ -616,7 +665,21 @@ void flightstatus::on_btn_lowPrice_clicked()
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObject = jsonResponse.object();
             if (jsonObject["code"].toInt() == 200) {
+                QStringList qs,qap1,qap2;
                 QJsonArray flights = jsonObject["data"].toArray();
+                for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
+                    qs.append(flightValue["airlineCompany"].toString());
+                    qap1.append(flightValue["departureAirport"].toString());
+                    qap2.append(flightValue["arrivalAirport"].toString());
+                }
+                updateAirlineCompanies(qs);
+                updatedpAirports(qap1);
+                updatedsAirports(qap2);
                 std::vector<QJsonObject> flightList;
                 for (const QJsonValue &value : flights) {
                     flightList.push_back(value.toObject());
@@ -632,20 +695,20 @@ void flightstatus::on_btn_lowPrice_clicked()
                     flights.push_back(obj);
                 }
                 for (const QJsonValue &flightValue : flights) {
-                    QString date = ui->dateEdit->text();
-                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
-                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
-                    QString dateStr = dateTime.toString("yyyy-MM-dd");
-                    if(date.mid(0,10) != dateStr) continue;
+                    QString company = ui->flight_company_cbx->currentText();
+                    QString departureAirport = ui->dp_airpot_cbx->currentText();
+                    QString destinationAirport = ui->ds_airpot_cbx->currentText();
+                    QString fcompany = flightValue["airlineCompany"].toString();
+                    QString fdepartureAirport =flightValue["departureAirport"].toString();
+                    QString fdestinationAirport = flightValue["arrivalAirport"].toString();
+                    QString seatclass = ui->flight_class_cbx->currentText();
+                    if(seatclass=="头等舱" && flightValue["firstClassSeats"]==0) continue;
+                    if(seatclass=="经济舱" && flightValue["economyClassSeats"]==0) continue;
+                    if(fcompany!=company && company != "不限航空公司") continue;
+                    if(fdepartureAirport!=departureAirport && departureAirport != "不限出发机场") continue;
+                    if(fdestinationAirport!=destinationAirport && destinationAirport != "不限抵达机场") continue;
                     QJsonObject flightObject = flightValue.toObject();
-                    listItem* li = new listItem();
-                    flightInfo fliInfo;
-                    fliInfo.fromJson(flightObject);
-                    li->setFlightDetails(fliInfo);
-                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
-                    item->setSizeHint(li->sizeHint());
-                    ui->listWidget->addItem(item);
-                    ui->listWidget->setItemWidget(item, li);
+                    addListItem(InterfaceManager::instance()->pw,flightObject);
                 }
             } else {
                 qDebug() << "查询错误:" << jsonObject["message"].toString();
@@ -660,7 +723,6 @@ void flightstatus::on_btn_lowPrice_clicked()
 
 void flightstatus::on_btn_takeoff_early_clicked()
 {
-    // 创建 JSON 对象
     QJsonObject json;
     json["departure"] = ui->departureInput->text();
     json["destination"] = ui->destinationInput->text();
@@ -680,14 +742,28 @@ void flightstatus::on_btn_takeoff_early_clicked()
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObject = jsonResponse.object();
             if (jsonObject["code"].toInt() == 200) {
+                QStringList qs,qap1,qap2;
                 QJsonArray flights = jsonObject["data"].toArray();
+                for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
+                    qs.append(flightValue["airlineCompany"].toString());
+                    qap1.append(flightValue["departureAirport"].toString());
+                    qap2.append(flightValue["arrivalAirport"].toString());
+                }
+                updateAirlineCompanies(qs);
+                updatedpAirports(qap1);
+                updatedsAirports(qap2);
                 std::vector<QJsonObject> flightList;
                 for (const QJsonValue &value : flights) {
                     flightList.push_back(value.toObject());
                 }
 
                 std::sort(flightList.begin(), flightList.end(), [](const QJsonObject &a, const QJsonObject &b) {
-                    return a["departureTime"].toDouble() < b["departureTime"].toDouble();
+                    return a["departureTime"].toInt() < b["departureTime"].toDouble();
                 });
 
                 // 将排序后的对象重新放入QJsonArray
@@ -696,20 +772,20 @@ void flightstatus::on_btn_takeoff_early_clicked()
                     flights.push_back(obj);
                 }
                 for (const QJsonValue &flightValue : flights) {
-                    QString date = ui->dateEdit->text();
-                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
-                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
-                    QString dateStr = dateTime.toString("yyyy-MM-dd");
-                    if(date.mid(0,10) != dateStr) continue;
+                    QString company = ui->flight_company_cbx->currentText();
+                    QString departureAirport = ui->dp_airpot_cbx->currentText();
+                    QString destinationAirport = ui->ds_airpot_cbx->currentText();
+                    QString fcompany = flightValue["airlineCompany"].toString();
+                    QString fdepartureAirport =flightValue["departureAirport"].toString();
+                    QString fdestinationAirport = flightValue["arrivalAirport"].toString();
+                    QString seatclass = ui->flight_class_cbx->currentText();
+                    if(seatclass=="头等舱" && flightValue["firstClassSeats"]==0) continue;
+                    if(seatclass=="经济舱" && flightValue["economyClassSeats"]==0) continue;
+                    if(fcompany!=company && company != "不限航空公司") continue;
+                    if(fdepartureAirport!=departureAirport && departureAirport != "不限出发机场") continue;
+                    if(fdestinationAirport!=destinationAirport && destinationAirport != "不限抵达机场") continue;
                     QJsonObject flightObject = flightValue.toObject();
-                    listItem* li = new listItem();
-                    flightInfo fliInfo;
-                    fliInfo.fromJson(flightObject);
-                    li->setFlightDetails(fliInfo);
-                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
-                    item->setSizeHint(li->sizeHint());
-                    ui->listWidget->addItem(item);
-                    ui->listWidget->setItemWidget(item, li);
+                    addListItem(InterfaceManager::instance()->pw,flightObject);
                 }
             } else {
                 qDebug() << "查询错误:" << jsonObject["message"].toString();
@@ -724,7 +800,6 @@ void flightstatus::on_btn_takeoff_early_clicked()
 
 void flightstatus::on_btn_period_short_clicked()
 {
-    // 创建 JSON 对象
     QJsonObject json;
     json["departure"] = ui->departureInput->text();
     json["destination"] = ui->destinationInput->text();
@@ -744,14 +819,28 @@ void flightstatus::on_btn_period_short_clicked()
             QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObject = jsonResponse.object();
             if (jsonObject["code"].toInt() == 200) {
+                QStringList qs,qap1,qap2;
                 QJsonArray flights = jsonObject["data"].toArray();
+                for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
+                    qs.append(flightValue["airlineCompany"].toString());
+                    qap1.append(flightValue["departureAirport"].toString());
+                    qap2.append(flightValue["arrivalAirport"].toString());
+                }
+                updateAirlineCompanies(qs);
+                updatedpAirports(qap1);
+                updatedsAirports(qap2);
                 std::vector<QJsonObject> flightList;
                 for (const QJsonValue &value : flights) {
                     flightList.push_back(value.toObject());
                 }
 
                 std::sort(flightList.begin(), flightList.end(), [](const QJsonObject &a, const QJsonObject &b) {
-                    return a["arrivalTime"].toDouble()-a["departureTime"].toDouble() < b["arrivalTime"].toDouble()-b["departureTime"].toDouble();
+                    return a["arrivalTime"].toDouble()-a["departureTime"].toDouble()<b["arrivalTime"].toDouble()-b["departureTime"].toDouble();
                 });
 
                 // 将排序后的对象重新放入QJsonArray
@@ -760,20 +849,20 @@ void flightstatus::on_btn_period_short_clicked()
                     flights.push_back(obj);
                 }
                 for (const QJsonValue &flightValue : flights) {
-                    QString date = ui->dateEdit->text();
-                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
-                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
-                    QString dateStr = dateTime.toString("yyyy-MM-dd");
-                    if(date.mid(0,10) != dateStr) continue;
+                    QString company = ui->flight_company_cbx->currentText();
+                    QString departureAirport = ui->dp_airpot_cbx->currentText();
+                    QString destinationAirport = ui->ds_airpot_cbx->currentText();
+                    QString fcompany = flightValue["airlineCompany"].toString();
+                    QString fdepartureAirport =flightValue["departureAirport"].toString();
+                    QString fdestinationAirport = flightValue["arrivalAirport"].toString();
+                    QString seatclass = ui->flight_class_cbx->currentText();
+                    if(seatclass=="头等舱" && flightValue["firstClassSeats"]==0) continue;
+                    if(seatclass=="经济舱" && flightValue["economyClassSeats"]==0) continue;
+                    if(fcompany!=company && company != "不限航空公司") continue;
+                    if(fdepartureAirport!=departureAirport && departureAirport != "不限出发机场") continue;
+                    if(fdestinationAirport!=destinationAirport && destinationAirport != "不限抵达机场") continue;
                     QJsonObject flightObject = flightValue.toObject();
-                    listItem* li = new listItem();
-                    flightInfo fliInfo;
-                    fliInfo.fromJson(flightObject);
-                    li->setFlightDetails(fliInfo);
-                    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
-                    item->setSizeHint(li->sizeHint());
-                    ui->listWidget->addItem(item);
-                    ui->listWidget->setItemWidget(item, li);
+                    addListItem(InterfaceManager::instance()->pw,flightObject);
                 }
             } else {
                 qDebug() << "查询错误:" << jsonObject["message"].toString();
@@ -784,4 +873,152 @@ void flightstatus::on_btn_period_short_clicked()
         reply->deleteLater();
     });
 }
+
+void flightstatus::addListItem(pay_window* payWin,QJsonObject flightObject)
+{
+    listItem* li = new listItem();
+    flightInfo fliInfo;
+    fliInfo.fromJson(flightObject);
+    li->setFlightDetails(fliInfo);
+    QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
+    item->setSizeHint(li->sizeHint());
+    ui->listWidget->addItem(item);
+    ui->listWidget->setItemWidget(item, li);
+
+    // 确保传递正确的 pay_window 实例
+    connect(li, &listItem::bookClicked, payWin, &pay_window::loadFliInfo);
+}
+
+
+void flightstatus::btnIni()
+{
+    const QString normalStyle = "QPushButton {"
+                                "    background-color: transparent;"
+                                "    border: none;"
+                                "    color: black;"
+                                "}"
+                                "QPushButton:hover {"
+                                "    cursor: pointer;"
+                                "    background-color: #E5F1FB;"
+                                "    color: #0078D7;"
+                                "}";
+
+    const QString selectedStyle = "QPushButton {"
+                                  "    background-color: transparent;"
+                                  "    border: none;"
+                                  "    color: #0078D7;"
+                                  "}";
+    connect(ui->btn_lowPrice, &QPushButton::clicked, [this,normalStyle,selectedStyle]() {
+        ui->btn_lowPrice->setStyleSheet(selectedStyle);
+        ui->btn_takeoff_early->setStyleSheet(normalStyle);
+        ui->btn_period_short->setStyleSheet(normalStyle);
+    });
+    connect(ui->btn_period_short, &QPushButton::clicked,[this,normalStyle,selectedStyle]() {
+        ui->btn_period_short->setStyleSheet(selectedStyle);
+        ui->btn_takeoff_early->setStyleSheet(normalStyle);
+        ui->btn_lowPrice->setStyleSheet(normalStyle);
+    });
+    connect(ui->btn_takeoff_early, &QPushButton::clicked, [this,normalStyle,selectedStyle]() {
+        ui->btn_takeoff_early->setStyleSheet(selectedStyle);
+        ui->btn_period_short->setStyleSheet(normalStyle);
+        ui->btn_lowPrice->setStyleSheet(normalStyle);
+    });
+    updateDateButtons();
+}
+
+void flightstatus::updateDateButtons() {
+    QFont font;
+    font.setPointSize(10);  // 设置字体大小为10点
+    QPushButton* dateButtons[] = {ui->day1, ui->day2, ui->day3, ui->day4, ui->day5, ui->day6, ui->day7};
+
+    for (int i = 0; i < 7; ++i) {
+        dateButtons[i]->setFont(font);
+        dateButtons[i]->setMinimumHeight(50); // 设置最小高度
+        dateButtons[i]->setCheckable(true);
+        connect(dateButtons[i], &QPushButton::clicked, [this, i, dateButtons] {
+            clear_btn_state();
+            dateButtons[i]->setChecked(true);
+            for(int j=0;j<7;j++)
+            {
+                if(j==i) continue;
+                dateButtons[j]->setChecked(false);
+            }
+            QLocale chineseLocale(QLocale::Chinese, QLocale::China);
+            QDate date = QDate::fromString(dateButtons[i]->text().left(5), "MM-dd");
+            QString formattedDate = date.toString("MM-dd");
+            if(formattedDate.left(2)=="12") formattedDate="2024-"+formattedDate;
+            else formattedDate="2025-"+formattedDate;
+            QString dayOfWeek = chineseLocale.toString(date, "dddd");
+            ui->dateEdit->setText(formattedDate + " " + dayOfWeek);  // 设置 dateEdit 的文本
+            on_searchButton_clicked();
+        });
+    }
+    connect(this, &flightstatus::columnchange, this, [this, dateButtons]() {
+        QLocale chineseLocale(QLocale::Chinese, QLocale::China);
+        QDate date = ui->calendar->selectedDate();
+        for (int i = 0; i < 7; ++i) {
+            dateButtons[i]->setText(date.addDays(i - 3).toString("MM-dd") + " " + chineseLocale.toString(date.addDays(i - 3), "dddd"));
+            dateButtons[i]->setChecked(false);
+        }
+        dateButtons[3]->setChecked(true);
+    });
+
+}
+
+void flightstatus::updateAirlineCompanies(const QStringList &companies) {
+    for (const QString &company : companies) {
+        if (!comboBoxContains(ui->flight_company_cbx, company)) {
+            ui->flight_company_cbx->addItem(company);
+        }
+    }
+}
+
+void flightstatus::updatedpAirports(const QStringList &airports) {
+    for (const QString &airport : airports) {
+        if (!comboBoxContains(ui->dp_airpot_cbx, airport)) {
+            ui->dp_airpot_cbx->addItem(airport);
+        }
+    }
+}
+
+void flightstatus::updatedsAirports(const QStringList &airports) {
+    for (const QString &airport : airports) {
+        if (!comboBoxContains(ui->ds_airpot_cbx, airport)) {
+            ui->ds_airpot_cbx->addItem(airport);
+        }
+    }
+}
+
+bool flightstatus::comboBoxContains(QComboBox *comboBox, const QString &text) {
+    for (int index = 0; index < comboBox->count(); index++) {
+        if (comboBox->itemText(index) == text) {
+            return true; // 发现已存在
+        }
+    }
+    return false; // 不存在
+}
+
+void flightstatus:: clear_btn_state()
+{
+    const QString normalStyle = "QPushButton {"
+                                "    background-color: transparent;"
+                                "    border: none;"
+                                "    color: black;"
+                                "}"
+                                "QPushButton:hover {"
+                                "    cursor: pointer;"
+                                "    background-color: #E5F1FB;"
+                                "    color: #0078D7;"
+                                "}";
+    ui->btn_lowPrice->setStyleSheet(normalStyle);
+    ui->btn_period_short->setStyleSheet(normalStyle);
+    ui->btn_takeoff_early->setStyleSheet(normalStyle);
+}
+
+
+
+
+
+
+
 

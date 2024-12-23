@@ -19,6 +19,7 @@
 #include "userwindow.h"
 #include "xitawindow.h"
 #include "yipuxilong.h"
+#include "pay_window.h"
 
 System::System()
     : m_mainInterface(nullptr)
@@ -40,6 +41,8 @@ void System::start()
     newLoginWindow *newLogin = new newLoginWindow();       //新用户登录界面
     loginHandler *loginHand = new loginHandler(); //loginHand用于用户登录界面的登录按钮信号与槽连接
     newRegisterWindow *newSignUpWindow = new newRegisterWindow(); //新注册界面
+    pay_window *pw =new pay_window();
+    InterfaceManager::instance()->pw=pw;
     registerHandler *registerHand
         = new registerHandler(); //registerHand用于用户注册界面的注册按钮信号与槽连接
     adminLoginWindow *adminLogin = new adminLoginWindow(); //管理员登录界面
@@ -107,7 +110,8 @@ void System::start()
 
     InterfaceManager::instance()->registerPage("lxt_newRegisterWindow",
                                                newSignUpWindow); //新注册界面
-
+    InterfaceManager::instance()->registerPage("pay_window",
+                                               pw); //新注册界面
     InterfaceManager::instance()->registerPage("lxt_adminLoginWindow", adminLogin); //管理员登录界面
 
     InterfaceManager::instance()->registerPage("lxt_adminMainInterface",
@@ -123,7 +127,7 @@ void System::start()
     //注册伊普西隆
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong", yipuxilong);
 
-    //InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
 
     //InterfaceManager::instance()->switchToPage("lxt_mainInterface");
     // InterfaceManager::instance()->switchToPage("lxt_adminMainInterface");

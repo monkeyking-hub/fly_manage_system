@@ -4951,9 +4951,6 @@ QPushButton:focus {
       <string notr="true">QPushButton {
     border: 1px solid transparent; /* 去掉边框 */
     color: black; /* 默认状态下的文字颜色为黑色 */
-    padding: 10px; /* 内边距 */
-    font-size: 16px; /* 字体大小 */
-    text-align: center; /* 文本居中 */
     border-radius: 5px; /* 圆角矩形的半径 */
    background-color: #f0f0f0; /* 浅灰色背景 */
 }
@@ -9909,39 +9906,6 @@ QLineEdit:hover {
 </string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
-     <property name="geometry">
-      <rect>
-       <x>950</x>
-       <y>10</y>
-       <width>92</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <item>
-      <property name="text">
-       <string>不限舱等</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>经济舱</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>商务舱</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>头等舱</string>
-      </property>
-     </item>
-    </widget>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
@@ -10277,17 +10241,34 @@ QCalendarWidget QHeaderView::section { /* 头部星期显示 */
 </string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
-      <x>45</x>
-      <y>231</y>
-      <width>1071</width>
-      <height>281</height>
+      <x>0</x>
+      <y>170</y>
+      <width>1131</width>
+      <height>371</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QListView{
+     <string notr="true"> QGroupBox {
+        background-color: transparent;
+    }</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QListWidget" name="listWidget">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>60</y>
+       <width>1031</width>
+       <height>291</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QListView{
 Background-cp;pr:red;//背景色
 Alternate-background-color:yellow;//行与行之间交替的颜色setAlternatingRowColors(true);
 Show-decoration-selected:1;设置是否选中时，整行都高亮显示
@@ -10313,85 +10294,312 @@ QListView::item::selected:!active{
 QListView::item::hover{
 }
 </string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_3">
-    <property name="geometry">
-     <rect>
-      <x>390</x>
-      <y>500</y>
-      <width>51</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>190</y>
-      <width>1061</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QComboBox" name="comboBox_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>61</width>
-       <height>21</height>
-      </rect>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_4">
+    <widget class="QPushButton" name="day1">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>10</y>
-       <width>60</width>
-       <height>21</height>
+       <x>0</x>
+       <y>60</y>
+       <width>81</width>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>5</pointsize>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_5">
+    <widget class="QPushButton" name="day2">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>10</y>
-       <width>61</width>
-       <height>21</height>
+       <x>0</x>
+       <y>100</y>
+       <width>81</width>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_6">
+    <widget class="QPushButton" name="day3">
      <property name="geometry">
       <rect>
-       <x>340</x>
-       <y>10</y>
-       <width>61</width>
+       <x>0</x>
+       <y>140</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="day4">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>180</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="day5">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>220</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="day6">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>260</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="day7">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>300</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+        background-color: transparent;
+        color: black;
+        border: none;
+        border-radius: 5px; /* 设置边框为5像素的圆角 */
+    }
+    QPushButton:hover {
+        color: lightblue;
+        border-radius: 5px; /* 同样设置悬浮状态下的圆角 */
+    }
+    QPushButton:checked {
+        background-color: rgb(85, 170, 255);
+        color: rgb(255, 255, 255);
+        border-radius: 5px; /* 选中状态下也应用圆角 */
+    }</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="flight_company_cbx">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>20</y>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
+     <item>
+      <property name="text">
+       <string>不限航空公司</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="dp_airpot_cbx">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>20</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>不限出发机场</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="ds_airpot_cbx">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>20</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>不限抵达机场</string>
+      </property>
+     </item>
     </widget>
     <widget class="QPushButton" name="btn_lowPrice">
      <property name="geometry">
       <rect>
-       <x>750</x>
-       <y>10</y>
+       <x>720</x>
+       <y>20</y>
        <width>61</width>
        <height>21</height>
       </rect>
      </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
-      <string notr="true">PushButton{
-    background-color: transparent;
-    border: none;
-}
-</string>
+      <string notr="true">QPushButton {
+                                    background-color: transparent;
+                                    border: none;
+                                    color: black;
+                                }
+                                QPushButton:hover {
+                                    cursor: pointer;
+                                    background-color: #E5F1FB;
+                                    color: #0078D7;
+                                }</string>
      </property>
      <property name="text">
       <string>低价优先</string>
@@ -10400,11 +10608,26 @@ QListView::item::hover{
     <widget class="QPushButton" name="btn_period_short">
      <property name="geometry">
       <rect>
-       <x>840</x>
-       <y>10</y>
-       <width>71</width>
+       <x>810</x>
+       <y>20</y>
+       <width>91</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                                    background-color: transparent;
+                                    border: none;
+                                    color: black;
+                                }
+                                QPushButton:hover {
+                                    cursor: pointer;
+                                    background-color: #E5F1FB;
+                                    color: #0078D7;
+                                }</string>
      </property>
      <property name="text">
       <string>飞行时间短-长</string>
@@ -10414,24 +10637,70 @@ QListView::item::hover{
      <property name="geometry">
       <rect>
        <x>930</x>
-       <y>10</y>
-       <width>71</width>
+       <y>20</y>
+       <width>91</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                                    background-color: transparent;
+                                    border: none;
+                                    color: black;
+                                }
+                                QPushButton:hover {
+                                    cursor: pointer;
+                                    background-color: #E5F1FB;
+                                    color: #0078D7;
+                                }</string>
      </property>
      <property name="text">
       <string>起飞时间早-晚</string>
      </property>
     </widget>
+    <widget class="QComboBox" name="flight_class_cbx">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>20</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <item>
+      <property name="text">
+       <string>不限舱等</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>经济舱</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>商务舱</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>头等舱</string>
+      </property>
+     </item>
+    </widget>
    </widget>
-   <zorder>groupBox_3</zorder>
-   <zorder>listWidget</zorder>
+   <zorder>groupBox_4</zorder>
    <zorder>groupBox</zorder>
    <zorder>searchButton</zorder>
    <zorder>pick_widget</zorder>
    <zorder>pick_widget_2</zorder>
    <zorder>calendar</zorder>
-   <zorder>comboBox_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

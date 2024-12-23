@@ -1,16 +1,56 @@
-#include "listitem.h"
-#include "ui_listitem.h"
-#include "flightinfo.h"
 #include "pay_window.h"
-#include <interfacemanager.h>
-listItem::listItem(QWidget *parent)
+#include "ui_pay_window.h"
+#include "boarderitem.h"
+#include "interfacemanager.h"
+#include "flightinfo.h"
+#include "listitem.h"
+#include <QListWidgetItem>
+#include <QListWidget>
+
+pay_window::pay_window(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::listItem)
+    , ui(new Ui::pay_window)
 {
     ui->setupUi(this);
 }
 
-QPixmap listItem:: getPic(const QString &name)
+pay_window::~pay_window()
+{
+    delete ui;
+}
+
+void pay_window::on_pushButton_clicked()
+{
+    boarderItem* li = new boarderItem();
+    QListWidgetItem *item = new QListWidgetItem(ui->listWidget); // 假设你的列表控件叫 listWidget
+    item->setSizeHint(li->sizeHint());
+    ui->listWidget->addItem(item);
+    ui->listWidget->setItemWidget(item, li);
+}
+
+void pay_window:: loadFliInfo()
+{
+    flightInfo fli= InterfaceManager::instance()->Info;
+    ui->lbl_compName->setText(fli.airlineCompany);
+    const QPixmap airlogo=getPic(fli.airlineCompany);
+    ui->lbl_compPic->setPixmap(airlogo);
+    ui->lbl_depar->setText(fli.departure);
+    ui->lbl_des->setText(fli.destination);
+    ui->lbl_flightCate->setText(fli.aircraftModel);
+    ui->lbl_flightNo->setText(fli.flightNumber);
+    QDateTime departureDateTime = QDateTime::fromSecsSinceEpoch(fli.departureTime);
+    QDateTime arrivalDateTime = QDateTime::fromSecsSinceEpoch(fli.arrivalTime);
+    ui->lbl_deparTime->setText(departureDateTime.toString("hh:mm"));
+    ui->lbl_arrivalTime->setText(arrivalDateTime.toString("hh:mm"));
+    QLocale chineseLocale(QLocale::Chinese, QLocale::China);
+    QString dayofweek=chineseLocale.toString(departureDateTime, "dddd");
+    ui->lbl_date->setText(departureDateTime.toString("MM-dd")+" "+dayofweek);
+    ui->lbl_deparAirport->setText(fli.departureAirport);
+    ui->lbl_arrivalAirport->setText(fli.arrivalAirport);
+    ui->lbl_price->setText("¥" + QString::number(static_cast<int>(fli.economyClassPrice)));
+}
+
+const QPixmap pay_window:: getPic(const QString &name)
 {
     QPixmap airlineLogo;
     if(name=="四川航空") airlineLogo.load("://sc.png");
@@ -46,58 +86,5 @@ QPixmap listItem:: getPic(const QString &name)
     if(name=="湖南航空") airlineLogo.load("://hunan.png");
     airlineLogo = airlineLogo.scaled(QSize(51, 51), Qt::KeepAspectRatio);
     return airlineLogo;
-}
-
-void listItem::setFlightDetails(const flightInfo &flight)
-{
-    Info=flight;
-    // 转换时间戳为可读格式
-    QDateTime departureDateTime = QDateTime::fromSecsSinceEpoch(flight.departureTime);
-    QDateTime arrivalDateTime = QDateTime::fromSecsSinceEpoch(flight.arrivalTime);
-
-    // 设置航空公司商标图片
-    QPixmap airlineLogo = getPic(flight.airlineCompany);
-    ui->lbl_compPic->setPixmap(airlineLogo);
-
-    // 设置出发时间和抵达时间，仅显示小时和分钟
-    ui->lbl_deparTime->setText(departureDateTime.toString("hh:mm"));
-    ui->lbl_arrTime->setText(arrivalDateTime.toString("hh:mm"));
-
-    // 计算不为零的最小价格
-    double minPrice = std::numeric_limits<double>::max();  // 初始设置为最大值
-    if (flight.economyClassPrice > 0)
-        minPrice = std::min(minPrice, flight.economyClassPrice);
-    if (flight.businessClassPrice > 0)
-        minPrice = std::min(minPrice, flight.businessClassPrice);
-    if (flight.firstClassPrice > 0)
-        minPrice = std::min(minPrice, flight.firstClassPrice);
-
-    // 如果所有价格都为0，可能需要一个默认值或错误处理
-    if (minPrice == std::numeric_limits<double>::max())
-        minPrice = 0; // 或其他逻辑
-
-    // 设置价格标签（仅显示整数部分）
-    ui->lbl_price->setText("¥" + QString::number(static_cast<int>(minPrice)));
-
-    // 设置其余标签的文本
-    ui->lbl_compName->setText(flight.airlineCompany);
-    ui->lbl_dpAirPot->setText(flight.departureAirport);
-    ui->lbl_desAirPot->setText(flight.arrivalAirport);
-    ui->lbl_fliNo->setText(flight.flightNumber);
-    ui->lbl_fliCate->setText(flight.aircraftModel);
-}
-
-
-
-listItem::~listItem()
-{
-    delete ui;
-}
-
-void listItem::on_btn_book_clicked()
-{
-    InterfaceManager::instance()->Info=this->Info;
-    emit bookClicked();
-    InterfaceManager::instance()->switchToPage("pay_window");
 }
 

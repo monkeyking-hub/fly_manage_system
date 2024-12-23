@@ -7,7 +7,11 @@
 #include <QMainWindow>
 #include <QNetworkAccessManager>
 #include <QPushButton>
+#include <QComboBox>
 #include <QStringListModel>
+#include <pay_window.h>
+#include <listitem.h>
+#include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,7 +30,8 @@ public:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
-
+signals:
+    void columnchange();
 private slots:
     void on_departureInput_textChanged(const QString &text);
 
@@ -77,6 +82,8 @@ private slots:
     void on_btn_period_short_clicked();
 
 private:
+    QTimer *updateTimer;
+    QString lastInput;
     void init();
     QNetworkAccessManager *networkmanager;
     Ui::flightstatus *ui;
@@ -95,6 +102,22 @@ private:
     void setActiveSection_2(const QString &section);
     void calenIni();
     void lblIni();
+    void btnIni();
+    void updateDateButtons();
+    bool btnAClicked=false;
+    bool btnBClicked=false;
+    bool btnCClicked=false;
+    void updateDateButtons(QDate date, QPushButton* dateButtons[7]);
+    void setupDateButtons();
+    void updateAirlineCompanies(const QStringList &companies);
+    void updatedpAirports(const QStringList &airports);
+    void updatedsAirports(const QStringList &airports);
+    bool comboBoxContains(QComboBox *comboBox, const QString &text);
+    void clear_btn_state();
+    void updateComboBoxes();
+    void addListItem(pay_window* payWin,QJsonObject flightObject);
+
+
 };
 
 #endif // FLIGHTSTATUS_H
