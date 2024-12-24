@@ -58,7 +58,7 @@ adminMainInterface::adminMainInterface(QWidget *parent)
 
     // 一级菜单项： 首页, 用户管理, 订单管理, 航班管理
     homeItem = new QTreeWidgetItem(menuTree, QStringList() << "首页");
-    kefuItem = new QTreeWidgetItem(menuTree, QStringList() << "客服中心");
+    kefuItem = new QTreeWidgetItem(menuTree, QStringList() << "处理用户投诉");
     usersItem = new QTreeWidgetItem(menuTree, QStringList() << "用户管理");
     ordersItem = new QTreeWidgetItem(menuTree, QStringList() << "订单管理");
     flightsItem = new QTreeWidgetItem(menuTree, QStringList() << "航班管理");

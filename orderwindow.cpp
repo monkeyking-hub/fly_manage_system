@@ -211,7 +211,7 @@ void orderwindow::fetchOrders(int userId) {
                 order.m_amount = QString::number(orderData["price"].toDouble());
                 order.m_flightNumber = orderData["flightNumber"].toString();
                 order.m_status = orderData["status"].toString();
-
+                if(orderData["status"].toString()=="Pending payment")order.m_status ="已支付";
                 // 设置航班信息
                 order.m_departure = orderData["departure"].toString();
                 order.m_destination = orderData["destination"].toString();

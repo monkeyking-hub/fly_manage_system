@@ -11,6 +11,7 @@
 #include <QNetworkRequest>
 #include <QTimer> // 引入 QTimer
 #include <interfacemanager.h>
+#include <usermanager.h>
 
 ChatWindow::ChatWindow(bool isclient, QWidget *parent)
     : isClient(isclient)
@@ -183,17 +184,17 @@ void ChatWindow::fetchChatHistory()
                     {
                         if (userId == 1) //客户的人工消息
                         {
-                            userPrefix = "-🤖人工客服🤖:";
+                            userPrefix = "-🤖人工客服🤖";
                         } else {
-                            userPrefix = "-用户2👨‍💼:";
+                            userPrefix = "-👨‍💼";
                         }
                     } else //如果是客服
                     {
                         if (userId == 1) {
-                            userPrefix = "-🤖人工客服🤖:";
+                            userPrefix = "-🤖人工客服🤖";
                         } //客服自己的
                         else {
-                            userPrefix = "-用户2👨‍💼:";
+                            userPrefix = "-👨‍💼";
                         }
                     }
                     // 拼接显示的消息内容，使用 HTML 格式化
@@ -239,17 +240,17 @@ void ChatWindow::sendMessage(int userId, const QString &message)
     {
         if (userId == 1) //客户的人工消息
         {
-            userPrefix = "-🤖人工客服🤖:";
+            userPrefix = "-🤖人工客服🤖";
         } else {
-            userPrefix = "-用户2👨‍💼:";
+            userPrefix = "-👨‍💼";
         }
     } else //如果是客服
     {
         if (userId == 1) {
-            userPrefix = "-🤖人工客服🤖:";
+            userPrefix = "-🤖人工客服🤖";
         } //客服自己的
         else {
-            userPrefix = "-用户2👨‍💼:";
+            userPrefix = "-👨‍💼";
         }
     }
 
@@ -317,10 +318,10 @@ void ChatWindow::onSendMessage()
         QMessageBox::warning(this, "输入为空", "请输入要发送的消息");
         return;
     }
-
+    QString username=UserManager::getInstance()->getCurrentUser().username;
     // 清空输入框
     messageInput->clear();
 
     // 发送消息
-    sendMessage(isClient ? 2 : 1, message);
+    sendMessage(isClient ? 2 : 1, username+":"+message);
 }
