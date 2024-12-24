@@ -26,8 +26,9 @@ public:
     int luggageSizeLimit;
     int businessClassSeats;
     double businessClassPrice;
+    QString chosenSeat;
 
-    void fromJson(const QJsonObject &jsonObject);
+    void fromJson(const QJsonObject &jsonObject,QString seat);
 public:
     flightInfo();
 };

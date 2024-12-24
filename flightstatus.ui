@@ -10675,11 +10675,6 @@ QListView::item::hover{
      </property>
      <item>
       <property name="text">
-       <string>不限舱等</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>经济舱</string>
       </property>
      </item>

@@ -572,7 +572,10 @@ void flightstatus::calenIni()
         clear_btn_state();
         on_searchButton_clicked();
     });
-
+    connect(ui->flight_class_cbx, &QComboBox::currentTextChanged, this, [this](){
+        clear_btn_state();
+        on_searchButton_clicked();
+    });
 }
 
 void flightstatus::on_searchButton_clicked()
@@ -763,7 +766,7 @@ void flightstatus::on_btn_takeoff_early_clicked()
                 }
 
                 std::sort(flightList.begin(), flightList.end(), [](const QJsonObject &a, const QJsonObject &b) {
-                    return a["departureTime"].toInt() < b["departureTime"].toDouble();
+                    return a["departureTime"].toInt() < b["departureTime"].toInt();
                 });
 
                 // 将排序后的对象重新放入QJsonArray
@@ -878,7 +881,7 @@ void flightstatus::addListItem(pay_window* payWin,QJsonObject flightObject)
 {
     listItem* li = new listItem();
     flightInfo fliInfo;
-    fliInfo.fromJson(flightObject);
+    fliInfo.fromJson(flightObject,ui->flight_class_cbx->currentText());
     li->setFlightDetails(fliInfo);
     QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
     item->setSizeHint(li->sizeHint());

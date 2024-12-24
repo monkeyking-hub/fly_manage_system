@@ -87,5 +87,7 @@
         <file>cahk.png</file>
         <file>sdhk.png</file>
         <file>tj.png</file>
+        <file>insurance.png</file>
+        <file>QRcode.png</file>
     </qresource>
 </RCC>

@@ -17,7 +17,6 @@ public:
     QSize sizeHint() const {
         return QSize(641, 245);  // 根据需要调整宽度和高度
     }
-    int num=1;
 private:
     Ui::boarderItem *ui;
 };

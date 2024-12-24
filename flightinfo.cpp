@@ -1,7 +1,7 @@
 #include "flightinfo.h"
 
 flightInfo::flightInfo(){}
-void flightInfo:: fromJson(const QJsonObject &jsonObject)
+void flightInfo:: fromJson(const QJsonObject &jsonObject,QString seat)
 {
     id = jsonObject["id"].toInt();
     flightNumber = jsonObject["flightNumber"].toString();
@@ -9,6 +9,7 @@ void flightInfo:: fromJson(const QJsonObject &jsonObject)
     destination = jsonObject["destination"].toString();
     departureTime = jsonObject["departureTime"].toInt();
     arrivalTime = jsonObject["arrivalTime"].toInt();
+    chosenSeat=seat;
     firstClassSeats = jsonObject["firstClassSeats"].toInt();
     economyClassSeats = jsonObject["economyClassSeats"].toInt();
     firstClassPrice = jsonObject["firstClassPrice"].toDouble();
