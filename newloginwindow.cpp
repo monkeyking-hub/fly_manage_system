@@ -327,6 +327,7 @@ void loginHandler::handleLogin(const QString &email, const QString &password)
                             // 完整用户信息获取成功
                             QJsonObject luData = luresponseObject["data"].toObject();
                             User loginUser;
+                            loginUser.id=luData["id"].toInt();
                             loginUser.username = luData["username"].toString();
                             loginUser.email = luData["email"].toString();
                             loginUser.phonenumber = luData["phone"].toString();

@@ -88,7 +88,18 @@ maininterface::maininterface(QWidget *parent)
     newHomeWindow *w1 = new newHomeWindow();
     stackedWidget->addWidget(w1);                   //首页界面
     stackedWidget->addWidget(new flightstatus());   //航班动态界面
-    stackedWidget->addWidget(new orderwindow());    //订单界面
+    orderwindow* orderWin = new orderwindow();
+    stackedWidget->addWidget(orderWin);    // 订单界面
+
+    connect(w1, &newHomeWindow::commandLinkButton5Clicked, this, [this, orderWin]() {
+        // 切换到订单界面
+        stackedWidget->setCurrentIndex(2);
+        menuList->setCurrentRow(2);
+        // 触发订单窗口的刷新函数
+        orderWin->onRefreshButtonClicked();
+    });
+
+
     stackedWidget->addWidget(new homeWindow());     //特惠机票界面
     stackedWidget->addWidget(new ChatWindow(true)); //客服中心
 
@@ -115,6 +126,7 @@ maininterface::maininterface(QWidget *parent)
         // 切换到订单界面
         stackedWidget->setCurrentIndex(2);
         menuList->setCurrentRow(2);
+
     });
 
     connect(w1, &newHomeWindow::commandLinkButton6Clicked, this, [this]() {

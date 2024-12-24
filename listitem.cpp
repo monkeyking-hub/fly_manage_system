@@ -1,7 +1,8 @@
 #include "listitem.h"
 #include "ui_listitem.h"
 #include "flightinfo.h"
-
+#include "pay_window.h"
+#include <interfacemanager.h>
 listItem::listItem(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::listItem)
@@ -49,6 +50,7 @@ QPixmap listItem:: getPic(const QString &name)
 
 void listItem::setFlightDetails(const flightInfo &flight)
 {
+    Info=flight;
     // 转换时间戳为可读格式
     QDateTime departureDateTime = QDateTime::fromSecsSinceEpoch(flight.departureTime);
     QDateTime arrivalDateTime = QDateTime::fromSecsSinceEpoch(flight.arrivalTime);
@@ -61,22 +63,8 @@ void listItem::setFlightDetails(const flightInfo &flight)
     ui->lbl_deparTime->setText(departureDateTime.toString("hh:mm"));
     ui->lbl_arrTime->setText(arrivalDateTime.toString("hh:mm"));
 
-    // 计算不为零的最小价格
-    double minPrice = std::numeric_limits<double>::max();  // 初始设置为最大值
-    if (flight.economyClassPrice > 0)
-        minPrice = std::min(minPrice, flight.economyClassPrice);
-    if (flight.businessClassPrice > 0)
-        minPrice = std::min(minPrice, flight.businessClassPrice);
-    if (flight.firstClassPrice > 0)
-        minPrice = std::min(minPrice, flight.firstClassPrice);
-
-    // 如果所有价格都为0，可能需要一个默认值或错误处理
-    if (minPrice == std::numeric_limits<double>::max())
-        minPrice = 0; // 或其他逻辑
-
-    // 设置价格标签（仅显示整数部分）
-    ui->lbl_price->setText("¥" + QString::number(static_cast<int>(minPrice)));
-
+    if(flight.chosenSeat=="经济舱")    ui->lbl_price->setText("¥" + QString::number(static_cast<int>(flight.economyClassPrice)));
+    else if(flight.chosenSeat=="头等舱")   ui->lbl_price->setText("¥" + QString::number(static_cast<int>(flight.firstClassPrice)));
     // 设置其余标签的文本
     ui->lbl_compName->setText(flight.airlineCompany);
     ui->lbl_dpAirPot->setText(flight.departureAirport);
@@ -91,3 +79,11 @@ listItem::~listItem()
 {
     delete ui;
 }
+
+void listItem::on_btn_book_clicked()
+{
+    InterfaceManager::instance()->Info=this->Info;
+    emit bookClicked();
+    InterfaceManager::instance()->switchToPage("pay_window");
+}
+

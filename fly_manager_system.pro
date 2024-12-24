@@ -18,6 +18,7 @@ SOURCES += \
     adminmaininterface.cpp \
     adminupdateflightwindow.cpp \
     animatedinputfield.cpp \
+    boarderitem.cpp \
     chatwindow.cpp \
     flightinfo.cpp \
     flightstatus.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     orderwidget.cpp \
     newregisterwindow.cpp \
     orderwindow.cpp \
+    pay_window.cpp \
     registerwindow.cpp \
     system.cpp \
     user.cpp \
@@ -54,6 +56,7 @@ HEADERS += \
     adminmaininterface.h \
     adminupdateflightwindow.h \
     animatedInputField.h \
+    boarderitem.h \
     chatwindow.h \
     flightinfo.h \
     flightstatus.h \
@@ -73,6 +76,7 @@ HEADERS += \
     orderwidget.h \
     newregisterwindow.h \
     orderwindow.h \
+    pay_window.h \
     registerwindow.h \
     system.h \
     user.h \
@@ -88,6 +92,7 @@ FORMS += \
     adminloginwindow.ui \
     adminmaininterface.ui \
     adminupdateflightwindow.ui \
+    boarderitem.ui \
     flightstatus.ui \
     gamawindow.ui \
     homewindow.ui \
@@ -101,6 +106,7 @@ FORMS += \
     newregisterwindow.ui \
     orderdetailwindow.ui \
     orderwindow.ui \
+    pay_window.ui \
     registerwindow.ui \
     userwindow.ui \
     xitawindow.ui \

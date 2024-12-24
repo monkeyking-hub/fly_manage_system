@@ -25,29 +25,65 @@
 #include "ui_orderwindow.h"
 #include "usermanager.h"
 #include <interfacemanager.h>
+#include <QMainWindow>
+#include <QPushButton>    // 添加这行
+#include <QToolBar>       // 添加这行
+#include <QTabWidget>
 
-// orderwindow 构造函数
 orderwindow::orderwindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::order_2) // 这里应该是 Ui::order_2，而不是 Ui::orderwindow
+    , ui(new Ui::order_2)
 {
     ui->setupUi(this);
-
     ui->cs->setObjectName("centralWidget");
 
-    // 动态创建 QTabWidget
-    QTabWidget *tabWidget = new QTabWidget(this);
-    setCentralWidget(tabWidget); // 将 tabWidget 作为主窗口的中央控件
+    // 创建并初始化 tabWidget
+    tabWidget = new QTabWidget(this);
+    setCentralWidget(tabWidget);
+
+    // 创建刷新按钮
+    refreshButton = new QPushButton("刷新订单", this);
+    refreshButton->setStyleSheet(R"(
+        QPushButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 8px;
+        }
+        QPushButton:hover {
+            background-color: #45a049;
+        }
+    )");
+
+    // 创建工具栏并添加刷新按钮
+    QToolBar *toolbar = addToolBar("工具栏");
+    toolbar->addWidget(refreshButton);
+
+    // 连接刷新按钮的信号
+    connect(refreshButton, &QPushButton::clicked,
+            this, &orderwindow::onRefreshButtonClicked);
+}
+
+// 将原来的 onCommandLinkButton5Clicked 函数内容移到这个新函数中
+void orderwindow::onRefreshButtonClicked()
+{
+    qDebug() << "刷新订单界面";
+
+    // 清除现有的标签页
+    tabWidget->clear();
 
     // 获取当前用户信息
-    UserManager *userManager = UserManager::getInstance();
-    User currentUser = userManager->getCurrentUser();
-    int userId =currentUser.id;
-    m_passengerName = currentUser.username;
-
+    int userId = UserManager::getInstance()->getCurrentUser().id;
+    m_passengerName = UserManager::getInstance()->getCurrentUser().username;
 
     // 获取所有订单 ID 和航班号，并获取详细信息
     fetchOrders(userId);
+
 
     // 创建每个页面
     QWidget *allOrdersPage = createOrderPage("全部订单");
@@ -64,28 +100,30 @@ orderwindow::orderwindow(QWidget *parent)
     // 设置 tab 的样式
     QString tabStyle = R"(
         QTabBar::tab {
-            min-height: 50px;                /* 按钮高度 */
-            min-width: 266px;               /* 按钮宽度 */
-            font-size: 24px;                /* 字体大小 */
-            font-weight: bold;              /* 字体加粗 */
-            color: black;                   /* 文字颜色 */
-            padding: 5px;                   /* 内边距 */
-            border: 2px solid #000;         /* 边框 */
-            border-radius: 15px;            /* 圆角 */
-            background-color: rgba(255, 255, 255, 200); /* 背景色 */
+            min-height: 50px;
+            min-width: 266px;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            padding: 5px;
+            border: 2px solid #000;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 200);
         }
         QTabBar::tab:hover {
-            background-color: rgba(0, 0, 255, 50); /* 悬停背景色 */
-            color: white;                          /* 悬停文字颜色 */
+            background-color: rgba(0, 0, 255, 50);
+            color: white;
         }
         QTabBar::tab:selected {
-            background-color: rgba(0, 0, 255, 100); /* 选中背景色 */
-            color: white;                           /* 选中文字颜色 */
+            background-color: rgba(0, 0, 255, 100);
+            color: white;
         }
     )";
     tabWidget->tabBar()->setStyleSheet(tabStyle);
-    tabWidget->tabBar()->setIconSize(QSize(40, 40)); // 设置图标大小
+    tabWidget->tabBar()->setIconSize(QSize(40, 40));
+
 }
+
 
 orderwindow::~orderwindow()
 {
@@ -94,104 +132,119 @@ orderwindow::~orderwindow()
 
 void orderwindow::fetchOrders(int userId) {
 
-
+    InterfaceManager::instance()->m_orderList.clear();
+     QEventLoop eventLoop;
     // 创建网络访问管理器
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
 
     // 设置请求 URL
-    QNetworkRequest request(QUrl("http://192.168.110.12:8080/api/orders/search"));
+    // QNetworkRequest request(QUrl("http://192.168.110.12:8080/api/orders/search"));
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/orders/search"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     qDebug() << "发送请求获取订单信息";
 
     // 构建请求体，包含用户 ID
     QJsonObject requestBody;
     requestBody["userId"] = userId;
+    qDebug() << userId;
 
     // 转换为 QByteArray 并发送 POST 请求
     QByteArray jsonData = QJsonDocument(requestBody).toJson();
     QNetworkReply *reply = manager->post(request, jsonData);
+    // 连接事件循环到网络请求完成信号
+    connect(reply, &QNetworkReply::finished, this, [&eventLoop]() {
+        // 创建一个单次触发的定时器
+        QTimer::singleShot(1000, &eventLoop, &QEventLoop::quit);  // 1000毫秒 = 1秒
+    });
 
     // 处理网络请求结果
     connect(reply, &QNetworkReply::finished, this, [this, reply, userId]() {
         if (reply->error() == QNetworkReply::NoError) {
-            // 解析返回的订单数据
-            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-            QJsonArray ordersArray = doc.object()["data"].toArray();
+            // 读取所有响应数据
+            QByteArray responseData = reply->readAll();
+            qDebug() << "Raw response:" << QString(responseData);
 
-            if (ordersArray.isEmpty()) {
-                // 如果没有订单数据，返回
-                qDebug() << "没有找到订单";
+            // 解析返回的JSON数据
+            QJsonDocument doc = QJsonDocument::fromJson(responseData);
+            QJsonObject rootObj = doc.object();
+
+            // 检查响应状态
+            int code = rootObj["code"].toInt();
+            if (code != 200) {
+                qWarning() << "API返回错误:" << rootObj["message"].toString();
                 return;
             }
 
-            // 遍历所有订单并处理
+            // 获取data数组
+            QJsonArray ordersArray = rootObj["data"].toArray();
+            if (ordersArray.isEmpty()) {
+                qDebug() << "没有找到订单, 用户ID:" << userId;
+                return;
+            }
+
+            // 遍历所有订单
             for (const QJsonValue &orderValue : ordersArray) {
                 QJsonObject orderData = orderValue.toObject();
-                QString orderId = QString::number(orderData["id"].toInt());
-                QString flightNumber = orderData["flightNumber"].toString();
-                double price = orderData["price"].toDouble();
 
-                // 获取航班详细信息
-                QJsonObject flightDetails = orderData["flightDetails"].toObject();
-                QString departure = flightDetails["departure"].toString();
-                QString destination = flightDetails["destination"].toString();
-                QString airline = flightDetails["airlineCompany"].toString();
-                QString departureTime = QDateTime::fromSecsSinceEpoch(flightDetails["departureTime"].toInt()).toString();
-                QString arrivalTime = QDateTime::fromSecsSinceEpoch(flightDetails["arrivalTime"].toInt()).toString();
-                QString aircraftType = flightDetails["aircraftModel"].toString();
-                QString seatClass = flightDetails["seatType"].toString();
-                QString boardingGate = flightDetails["boardingGate"].toString();
-                QString arrivalAirport = flightDetails["arrivalAirport"].toString();
-                QString departureAirport = flightDetails["departureAirport"].toString();
-                int firstClassSeats = flightDetails["firstClassSeats"].toInt();
-                int economyClassSeats = flightDetails["economyClassSeats"].toInt();
-                int businessClassSeats = flightDetails["businessClassSeats"].toInt();
-                double firstClassPrice = flightDetails["firstClassPrice"].toDouble();
-                double economyClassPrice = flightDetails["economyClassPrice"].toDouble();
-                double businessClassPrice = flightDetails["businessClassPrice"].toDouble();
+                qDebug() << "\n=== 订单详细信息 ===";
+                qDebug() << "订单ID:" << orderData["id"].toInt();
+                qDebug() << "航班号:" << orderData["flightNumber"].toString();
+                qDebug() << "价格:" << orderData["price"].toDouble();
+                qDebug() << "状态:" << orderData["status"].toString();
 
-                qDebug() << arrivalTime;
-                // 创建订单对象并填充数据
+                // 直接从订单数据中获取航班信息（不需要flightDetails子对象）
+                qDebug() << "\n--- 航班详细信息 ---";
+                qDebug() << "出发地:" << orderData["departure"].toString();
+                qDebug() << "目的地:" << orderData["destination"].toString();
+                qDebug() << "航空公司:" << orderData["airlineCompany"].toString();
+                qDebug() << "起飞时间:" << QDateTime::fromSecsSinceEpoch(orderData["departureTime"].toInt()).toString();
+                qDebug() << "到达时间:" << QDateTime::fromSecsSinceEpoch(orderData["arrivalTime"].toInt()).toString();
+                qDebug() << "机型:" << orderData["aircraftModel"].toString();
+                qDebug() << "座位类型:" << orderData["seatType"].toString();
+                qDebug() << "登机口:" << orderData["boardingGate"].toString();
+
+                // 创建订单对象
                 Order order;
-                order.m_orderNumber = orderId;
-                order.m_passenger = m_passengerName;  // 假设用户 ID 为乘客姓名
-                order.m_amount = QString::number(price);
-                order.m_flightNumber = flightNumber;
-                order.m_status = "";
-
+                order.m_orderNumber = QString::number(orderData["id"].toInt());
+                order.m_passenger = m_passengerName;
+                order.m_amount = QString::number(orderData["price"].toDouble());
+                order.m_flightNumber = orderData["flightNumber"].toString();
+                order.m_status = orderData["status"].toString();
+                if(orderData["status"].toString()=="Pending payment")order.m_status ="已支付";
                 // 设置航班信息
-                order.m_departure = departure;
-                order.m_destination = destination;
-                order.m_airline = airline;
-                order.m_departureTime = departureTime;
-                order.m_arrivalTime = arrivalTime;
-                order.m_aircraftType = aircraftType;
-                order.m_seatClass = seatClass;
-                order.m_flightId = QString::number(flightDetails["id"].toInt());
-                order.m_boardingGate = boardingGate;
-                order.m_arrivalAirport = arrivalAirport;
-                order.m_departureAirport = departureAirport;
-                order.m_firstClassSeats = firstClassSeats;
-                order.m_economyClassSeats = economyClassSeats;
-                order.m_businessClassSeats = businessClassSeats;
-                order.m_firstClassPrice = firstClassPrice;
-                order.m_economyClassPrice = economyClassPrice;
-                order.m_businessClassPrice = businessClassPrice;
+                order.m_departure = orderData["departure"].toString();
+                order.m_destination = orderData["destination"].toString();
+                order.m_airline = orderData["airlineCompany"].toString();
+                order.m_departureTime = QDateTime::fromSecsSinceEpoch(orderData["departureTime"].toInt()).toString();
+                order.m_arrivalTime = QDateTime::fromSecsSinceEpoch(orderData["arrivalTime"].toInt()).toString();
+                order.m_aircraftType = orderData["aircraftModel"].toString();
+                order.m_seatClass = orderData["seatType"].toString();
+                order.m_flightId = QString::number(orderData["flightId"].toInt());
+                order.m_boardingGate = orderData["boardingGate"].toString();
+                order.m_arrivalAirport = orderData["arrivalAirport"].toString();
+                order.m_departureAirport = orderData["departureAirport"].toString();
+                order.m_firstClassSeats = orderData["firstClassSeats"].toInt();
+                order.m_economyClassSeats = orderData["economyClassSeats"].toInt();
+                order.m_businessClassSeats = orderData["businessClassSeats"].toInt();
+                order.m_firstClassPrice = orderData["firstClassPrice"].toDouble();
+                order.m_economyClassPrice = orderData["economyClassPrice"].toDouble();
+                order.m_businessClassPrice = orderData["businessClassPrice"].toDouble();
 
                 // 将订单添加到全局订单列表
                 InterfaceManager::instance()->m_orderList.append(order);
             }
 
-            qDebug() << "成功获取并处理所有订单及航班信息";
+            qDebug() << "成功获取并处理所有订单信息";
+            qDebug() << "订单总数:" << InterfaceManager::instance()->m_orderList.size();
         } else {
-            // 错误处理
-            qWarning() << "获取订单失败: " << reply->errorString();
+            qWarning() << "网络请求失败:" << reply->errorString();
         }
 
-        // 删除 reply，避免内存泄漏
+        // 确保释放reply对象
         reply->deleteLater();
     });
+    eventLoop.exec();
 }
 
 
@@ -251,18 +304,18 @@ QWidget *orderwindow::createOrderPage(const QString &type)
     destinationComboBox->addItem("所有目的地");
     airlineComboBox->addItem("所有航空公司");
 
-    // 模拟订单数据
-    InterfaceManager::instance()->m_orderList.clear();
-    InterfaceManager::instance()->m_orderList.append(Order{
-        "101", "张三", "2000", "上海", "北京", "南方航空", "CZ123", "2024-01-01 08:00",
-        "2024-01-01 10:00", "空客A320", "经济舱", "已支付", "FL123", "A1", "首都机场",
-        "浦东机场", 10, 50, 20, 3500.0, 1200.0, 2200.0
-    });
-    InterfaceManager::instance()->m_orderList.append(Order{
-        "102", "李四", "1500", "广州", "深圳", "厦门航空", "MF456", "2024-01-02 09:00",
-        "2024-01-02 10:30", "波音737", "商务舱", "未支付", "FL456", "B3", "宝安机场",
-        "白云机场", 5, 60, 15, 5000.0, 2000.0, 3000.0
-    });
+    // // 模拟订单数据
+    // InterfaceManager::instance()->m_orderList.clear();
+    // InterfaceManager::instance()->m_orderList.append(Order{
+    //     "101", "张三", "2000", "上海", "北京", "南方航空", "CZ123", "2024-01-01 08:00",
+    //     "2024-01-01 10:00", "空客A320", "经济舱", "已支付", "FL123", "A1", "首都机场",
+    //     "浦东机场", 10, 50, 20, 3500.0, 1200.0, 2200.0
+    // });
+    // InterfaceManager::instance()->m_orderList.append(Order{
+    //     "102", "李四", "1500", "广州", "深圳", "厦门航空", "MF456", "2024-01-02 09:00",
+    //     "2024-01-02 10:30", "波音737", "商务舱", "未支付", "FL456", "B3", "宝安机场",
+    //     "白云机场", 5, 60, 15, 5000.0, 2000.0, 3000.0
+    // });
 
     // 动态获取目的地、出发地和航空公司选项
     QSet<QString> departureSet, destinationSet, airlineSet;

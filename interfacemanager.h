@@ -5,6 +5,8 @@
 #include <QStackedWidget>
 #include <QWidget>
 #include <order.h>
+#include <flightinfo.h>
+#include "pay_window.h"
 //界面调度类
 class InterfaceManager : private QObject
 {
@@ -21,6 +23,9 @@ public:
     // 切换到指定页面
     void switchToPage(const QString &fullPath);
     QList<Order> m_orderList; // 用于存储订单的列表
+
+    flightInfo Info;
+    pay_window* pw;
     //QList<Order> & olist=
     QStackedWidget *m_stackedWidget; // 堆叠控件
 private:
@@ -30,7 +35,6 @@ private:
     // 禁止拷贝和赋值
     InterfaceManager(const InterfaceManager &) = delete;
     InterfaceManager &operator=(const InterfaceManager &) = delete;
-
 private:
     static InterfaceManager *m_instance; // 单例实例
 

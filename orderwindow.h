@@ -135,6 +135,12 @@ public:
 private:
     Ui::order_2 *ui;
     QString m_passengerName;
+    QTabWidget *tabWidget;
+
+    QPushButton *refreshButton;  // 添加刷新按钮
+
+public slots:
+    void onRefreshButtonClicked();
 };
 
 #endif // ORDERWINDOW_H

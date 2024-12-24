@@ -12,7 +12,38 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QScrollArea>
+#include <interfacemanager.h>
 #include <QWidget>
+#include "orderwindow.h"
+#include <QComboBox>
+#include <QDebug>
+#include <QFontDatabase> // 用于加载自定义字体 // 引入 inorder 界面
+#include <QHeaderView>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLabel>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QPalette>
+#include <QPixmap>
+#include <QResource>
+#include <QScrollArea>
+#include <QTabWidget>
+#include <QTableWidget>
+#include <QTimer>
+#include <QVBoxLayout>
+#include "order.h"
+#include "orderwidget.h"
+#include <interfacemanager.h>
+#include <QMainWindow>
+#include <QPushButton>    // 添加这行
+#include <QToolBar>       // 添加这行
+#include <QTabWidget>
+#include <QEventLoop>
+
 
 MFindOrderWindow::MFindOrderWindow(QWidget *parent)
     : QWidget(parent)
@@ -111,12 +142,20 @@ MFindOrderWindow::MFindOrderWindow(QWidget *parent)
 
     // 连接按钮点击事件
     connect(searchButton, &QPushButton::clicked, this, &MFindOrderWindow::onSearchButtonClicked);
+
+
+
 }
 
 MFindOrderWindow::~MFindOrderWindow() {}
 
 void MFindOrderWindow::onSearchButtonClicked()
 {
+    QWidget *resultWidget = new QWidget();
+    resultLayout = new QVBoxLayout(resultWidget);  // 这里将resultLayout移到类成员变量
+    resultWidget->setLayout(resultLayout);
+     QEventLoop eventLoop;
+    InterfaceManager::instance()->m_orderList.clear();
     QString userId = userIdLineEdit->text();
     if (userId.isEmpty()) {
         QMessageBox::warning(this, "用户名不能为空", "请输入有效的ID.");
@@ -132,67 +171,122 @@ void MFindOrderWindow::onSearchButtonClicked()
 
     // 设置请求
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QNetworkRequest request(QUrl("http://yourapiurl/api/orders/search"));
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/orders/search"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply *reply = manager->post(request, requestData);
-
-    // 响应处理
-    connect(reply, &QNetworkReply::finished, [this, reply]() {
+    connect(reply, &QNetworkReply::finished, this, [&eventLoop]() {
+        // 创建一个单次触发的定时器
+        QTimer::singleShot(1000, &eventLoop, &QEventLoop::quit);  // 1000毫秒 = 1秒
+    });
+ qDebug() << "发送请求" ;
+    // 处理网络请求结果
+    connect(reply, &QNetworkReply::finished, this, [this, reply, userId]() {
         if (reply->error() == QNetworkReply::NoError) {
+            // 读取所有响应数据
             QByteArray responseData = reply->readAll();
-            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
-            QJsonObject responseObj = responseDoc.object();
+            qDebug() << "Raw response:" << QString(responseData);
 
-            int code = responseObj["code"].toInt();
-            if (code == 200) {
-                // 查询成功，处理返回的数据
-                QJsonArray data = responseObj["data"].toArray();
-                if (data.isEmpty()) {
-                    QMessageBox::information(this, "No Orders", "No orders found for this user.");
-                } else {
-                    // 清空之前的结果
-                    for (QObject *item : resultLayout->children()) {
-                        QWidget *widget = qobject_cast<QWidget*>(item);  // 将 QObject 转换为 QWidget
-                        if (widget) {
-                            delete widget;  // 删除子 Widget
-                        }
-                    }
+            // 解析返回的JSON数据
+            QJsonDocument doc = QJsonDocument::fromJson(responseData);
+            QJsonObject rootObj = doc.object();
 
-                    // 添加每个订单的信息
-                    for (const QJsonValue &value : data) {
-                        QJsonObject orderObj = value.toObject();
-
-                        // 创建新的结果显示 Widget
-                        QWidget *orderWidget = new QWidget(this);
-                        QVBoxLayout *orderLayout = new QVBoxLayout(orderWidget);
-
-                        // 显示航班号
-                        QLabel *flightLabel = new QLabel(QString("Flight: %1").arg(orderObj["flightNumber"].toString()), this);
-                        orderLayout->addWidget(flightLabel);
-
-                        // 显示舱位等级
-                        QLabel *seatLabel = new QLabel(QString("Seat Type: %1").arg(orderObj["seatType"].toString()), this);
-                        orderLayout->addWidget(seatLabel);
-
-                        // 显示价格
-                        QLabel *priceLabel = new QLabel(QString("Price: %1").arg(orderObj["price"].toDouble()), this);
-                        orderLayout->addWidget(priceLabel);
-
-                        // 显示订单状态
-                        QLabel *statusLabel = new QLabel(QString("Status: %1").arg(orderObj["status"].toString()), this);
-                        orderLayout->addWidget(statusLabel);
-
-                        // 将订单显示 widget 添加到 layout 中
-                        resultLayout->addWidget(orderWidget);
-                    }
-                }
-            } else {
-                QMessageBox::warning(this, "Query Failed", responseObj["message"].toString());
+            // 检查响应状态
+            int code = rootObj["code"].toInt();
+            if (code != 200) {
+                qWarning() << "API返回错误:" << rootObj["message"].toString();
+                return;
             }
+
+            // 获取data数组
+            QJsonArray ordersArray = rootObj["data"].toArray();
+            if (ordersArray.isEmpty()) {
+                qDebug() << "没有找到订单, 用户ID:" << userId;
+                return;
+            }
+
+            // 遍历所有订单
+            for (const QJsonValue &orderValue : ordersArray) {
+                QJsonObject orderData = orderValue.toObject();
+
+                qDebug() << "\n=== 订单详细信息 ===";
+                qDebug() << "订单ID:" << orderData["id"].toInt();
+                qDebug() << "航班号:" << orderData["flightNumber"].toString();
+                qDebug() << "价格:" << orderData["price"].toDouble();
+                qDebug() << "状态:" << orderData["status"].toString();
+
+                // 直接从订单数据中获取航班信息（不需要flightDetails子对象）
+                qDebug() << "\n--- 航班详细信息 ---";
+                qDebug() << "出发地:" << orderData["departure"].toString();
+                qDebug() << "目的地:" << orderData["destination"].toString();
+                qDebug() << "航空公司:" << orderData["airlineCompany"].toString();
+                qDebug() << "起飞时间:" << QDateTime::fromSecsSinceEpoch(orderData["departureTime"].toInt()).toString();
+                qDebug() << "到达时间:" << QDateTime::fromSecsSinceEpoch(orderData["arrivalTime"].toInt()).toString();
+                qDebug() << "机型:" << orderData["aircraftModel"].toString();
+                qDebug() << "座位类型:" << orderData["seatType"].toString();
+                qDebug() << "登机口:" << orderData["boardingGate"].toString();
+
+                // 创建订单对象
+                Order order;
+                order.m_orderNumber = QString::number(orderData["id"].toInt());
+                order.m_passenger = "用户"+order.m_orderNumber;
+                order.m_amount = QString::number(orderData["price"].toDouble());
+                order.m_flightNumber = orderData["flightNumber"].toString();
+
+                order.m_status = orderData["status"].toString();
+                if(orderData["status"].toString()=="Pending payment")
+                {
+                    order.m_status="已支付" ;
+                }
+
+                // 设置航班信息
+                order.m_departure = orderData["departure"].toString();
+                order.m_destination = orderData["destination"].toString();
+                order.m_airline = orderData["airlineCompany"].toString();
+                order.m_departureTime = QDateTime::fromSecsSinceEpoch(orderData["departureTime"].toInt()).toString();
+                order.m_arrivalTime = QDateTime::fromSecsSinceEpoch(orderData["arrivalTime"].toInt()).toString();
+                order.m_aircraftType = orderData["aircraftModel"].toString();
+                order.m_seatClass = orderData["seatType"].toString();
+                order.m_flightId = QString::number(orderData["flightId"].toInt());
+                order.m_boardingGate = orderData["boardingGate"].toString();
+                order.m_arrivalAirport = orderData["arrivalAirport"].toString();
+                order.m_departureAirport = orderData["departureAirport"].toString();
+                order.m_firstClassSeats = orderData["firstClassSeats"].toInt();
+                order.m_economyClassSeats = orderData["economyClassSeats"].toInt();
+                order.m_businessClassSeats = orderData["businessClassSeats"].toInt();
+                order.m_firstClassPrice = orderData["firstClassPrice"].toDouble();
+                order.m_economyClassPrice = orderData["economyClassPrice"].toDouble();
+                order.m_businessClassPrice = orderData["businessClassPrice"].toDouble();
+
+                // 将订单添加到全局订单列表
+                InterfaceManager::instance()->m_orderList.append(order);
+            }
+
+            qDebug() << "成功获取并处理所有订单信息";
+            qDebug() << "订单总数:" << InterfaceManager::instance()->m_orderList.size();
         } else {
-            QMessageBox::warning(this, "Network Error", "Failed to query orders.");
+            qWarning() << "网络请求失败:" << reply->errorString();
         }
+
+        for (const Order &order : InterfaceManager::instance()->m_orderList)
+            {
+
+            OrderWidget *orderWidget = new OrderWidget(order, this);
+            orderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            orderWidget->setStyleSheet(
+                "#OrderWidget {"
+                "   background-color: rgba(255, 255, 255, 200);"
+                "   border: 2px solid #cccccc; "
+                "   border-radius: 8px; "
+                "   margin: 5px;"  // 为每个 OrderWidget 设置 margin
+                "   padding: 8px;"
+                "} "
+                );
+             qDebug() << "放置order";
+            resultLayout->addWidget(orderWidget);
+        }
+        // 确保释放reply对象
         reply->deleteLater();
     });
+     eventLoop.exec();
 }

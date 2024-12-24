@@ -2,6 +2,7 @@
 #define SYSTEM_H
 #include <QObject>
 #include "maininterface.h"
+#include <orderwindow.h>
 
 class System : public QObject
 {
