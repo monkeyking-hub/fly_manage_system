@@ -13,7 +13,7 @@ Order::Order()
     , m_arrivalTime("")
     , m_aircraftType("")
     , m_seatClass("")
-    , m_status(Pending)
+    , m_status("")
     , m_flightId("")
     , m_boardingGate("")
     , m_arrivalAirport("")
@@ -38,7 +38,7 @@ Order::Order(const QString &orderNumber,
              const QString &arrivalTime,
              const QString &aircraftType,
              const QString &seatClass,
-             Status status,
+             const QString status,
              const QString &flightId,
              const QString &boardingGate,
              const QString &arrivalAirport,
@@ -129,7 +129,7 @@ QString Order::seatClass() const
     return m_seatClass;
 }
 
-Order::Status Order::status() const
+QString Order::status() const
 {
     return m_status;
 }
