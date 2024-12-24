@@ -24,6 +24,7 @@ SOURCES += \
     flightstatus.cpp \
     gamawindow.cpp \
     homewindow.cpp \
+    icondelegate.cpp \
     interfacemanager.cpp \
     listitem.cpp \
     main.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     flightstatus.h \
     gamawindow.h \
     homewindow.h \
+    icondelegate.h \
     interfacemanager.h \
     listitem.h \
     maininterface.h \

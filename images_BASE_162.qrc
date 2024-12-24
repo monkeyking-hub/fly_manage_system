@@ -87,14 +87,5 @@
         <file>cahk.png</file>
         <file>sdhk.png</file>
         <file>tj.png</file>
-        <file>insurance.png</file>
-        <file>QRcode.png</file>
-        <file>newicon/plane.png</file>
-        <file>newicon/qidian.png</file>
-        <file>newicon/zdian.png</file>
-        <file>newicon/fuser.png</file>
-        <file>newicon/fsearch.png</file>
-        <file>newicon/newqincai.jpg</file>
-        <file>newicon/newxiangzi.jpg</file>
     </qresource>
 </RCC>
