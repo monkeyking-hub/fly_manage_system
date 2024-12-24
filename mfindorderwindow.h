@@ -27,6 +27,7 @@ private slots:
 private:
     QLineEdit *userIdLineEdit; // 用户ID输入框
     QPushButton *searchButton; // 搜索按钮
+    QVBoxLayout *resultLayout; // 用于存储搜索结果的布局
 };
 
 #endif // M_FIND_ORDER_WINDOW_H

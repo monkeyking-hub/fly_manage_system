@@ -6,7 +6,6 @@
 class Order
 {
 public:
-    enum Status { Pending, Confirmed, Completed, Cancelled };
 
     // 默认构造函数
     Order();
@@ -23,7 +22,7 @@ public:
           const QString &arrivalTime,
           const QString &aircraftType,
           const QString &seatClass,
-          Status status,
+          const QString status,
           const QString &flightId,
           const QString &boardingGate,
           const QString &arrivalAirport,
@@ -47,7 +46,7 @@ public:
     QString arrivalTime() const;
     QString aircraftType() const;
     QString seatClass() const;
-    Status status() const;
+    QString status() const;
 
     // 新增航班信息相关的 getter 方法
     QString flightId() const;
@@ -73,7 +72,7 @@ public:
     QString m_arrivalTime;
     QString m_aircraftType;
     QString m_seatClass;
-    Status m_status;
+    QString m_status;
 
     // 新增的航班信息字段
     QString m_flightId;
