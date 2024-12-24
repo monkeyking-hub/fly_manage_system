@@ -10,6 +10,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QTimer> // 引入 QTimer
+#include <interfacemanager.h>
 
 ChatWindow::ChatWindow(bool isclient, QWidget *parent)
     : isClient(isclient)
@@ -19,11 +20,20 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent)
     setWindowTitle("ChatWindow");
     setWindowState(Qt::WindowMaximized); // 窗口最大化
 
-    // 设置主窗口的背景图片
-    setStyleSheet("QWidget { background-image: url(:/blue.png); background-position: center; }");
-
     // 创建一个 QWidget 作为主窗口的中心控件
     centralWidget = new QWidget(this);
+
+    // 给 centralWidget 设置 objectName
+    centralWidget->setObjectName("centralWidget");
+
+    // 设置中心控件的样式表，添加背景图片
+    centralWidget->setStyleSheet("#centralWidget { "
+                                 "background-image: url(:/blue.png); "
+                                 "background-position: center; "
+                                 "background-repeat: no-repeat; "
+                                 "}");
+
+    // 将中心控件设置为主窗口的中央控件
     setCentralWidget(centralWidget);
 
     // 主布局
@@ -84,8 +94,38 @@ ChatWindow::ChatWindow(bool isclient, QWidget *parent)
     connect(timer, &QTimer::timeout, this, &ChatWindow::fetchChatHistory);
     timer->start(3000); // 每3秒刷新一次
 
+
+
+
+
     // 发送消息按钮点击事件
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::onSendMessage);
+
+    // 创建右上角按钮
+    QPushButton *closeButton = new QPushButton("返回", this);
+    closeButton->setFixedSize(80, 40);
+    closeButton->setStyleSheet(
+        "QPushButton { "
+        "   background-color: #ff5722; "
+        "   color: white; "
+        "   border-radius: 5px; "
+        "   font-size: 14px; "
+        "} "
+        "QPushButton:hover { "
+        "   background-color: #ff784e; " // 鼠标悬停时改变背景色
+        "   border: 2px solid #ff5722; "  // 可选：改变边框
+        "}"
+        );
+
+
+    // 放置按钮在右上角
+    closeButton->move(this->width() - closeButton->width() - -1050, 27);
+
+    // 设置按钮点击事件
+    connect(closeButton, &QPushButton::clicked, this, [this]() {
+        qDebug() << "Button clicked, switching to page...";
+        InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+    });
 }
 
 ChatWindow::~ChatWindow()

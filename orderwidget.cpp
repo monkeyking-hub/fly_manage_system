@@ -45,7 +45,7 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     layout->addWidget(airlineLabel);
 
     // 飞机型号和仓位等级
-    QLabel *aircraftLabel = new QLabel(QString("飞机型号: %1  仓位等级: %2")
+    QLabel *aircraftLabel = new QLabel(QString("飞机型号: %1  舱位等级: %2")
                                            .arg(order.m_aircraftType).arg(order.m_seatClass), this);
     aircraftLabel->setStyleSheet("font-size: 20px; color: black;");
     layout->addWidget(aircraftLabel);
@@ -74,21 +74,7 @@ OrderWidget::OrderWidget(const Order &order, QWidget *parent)
     layout->addWidget(amountLabel);
 
     // 状态
-    QString statusString;
-    switch (order.m_status) {
-    case Order::Pending:
-        statusString = "待支付";
-        break;
-    case Order::Confirmed:
-        statusString = "已确认";
-        break;
-    case Order::Completed:
-        statusString = "已完成";
-        break;
-    case Order::Cancelled:
-        statusString = "已取消";
-        break;
-    }
+    QString statusString=order.m_status;
 
     QLabel *statusLabel = new QLabel(QString("订单状态: %1").arg(statusString), this);
     statusLabel->setStyleSheet("font-size: 20px; color: red;");
