@@ -229,3 +229,18 @@ void pay_window::on_pushButton_3_clicked()
 }
 
 
+
+void pay_window::on_pushButton_4_clicked()
+{
+    int now_index=ui->stackedWidget->currentIndex();
+    if(now_index != 0)
+    {
+        ui->stackedWidget->setCurrentIndex(now_index-1);
+        ui->stackedWidget_2->setCurrentIndex(now_index-1);
+    }
+    else
+    {
+        InterfaceManager::instance()->switchToPage("lxt_mainInterface");
+    }
+}
+

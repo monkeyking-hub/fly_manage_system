@@ -17,6 +17,7 @@ SOURCES += \
     adminloginwindow.cpp \
     adminmaininterface.cpp \
     adminupdateflightwindow.cpp \
+    adminusermanagerwindow.cpp \
     animatedinputfield.cpp \
     boarderitem.cpp \
     chatwindow.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
     adminloginwindow.h \
     adminmaininterface.h \
     adminupdateflightwindow.h \
+    adminusermanagerwindow.h \
     animatedInputField.h \
     boarderitem.h \
     chatwindow.h \
@@ -92,6 +94,7 @@ FORMS += \
     adminloginwindow.ui \
     adminmaininterface.ui \
     adminupdateflightwindow.ui \
+    adminusermanagerwindow.ui \
     boarderitem.ui \
     flightstatus.ui \
     gamawindow.ui \

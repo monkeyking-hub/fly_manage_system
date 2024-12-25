@@ -10,6 +10,9 @@
 #include "chatwindow.h"
 #include "interfacemanager.h"
 #include "mfindorderwindow.h"
+#include "userwindow.h"
+#include "usermanager.h"
+#include "adminusermanagerwindow.h"
 #include "ui_adminmaininterface.h"
 #include <mreorder.h>
 
@@ -64,9 +67,6 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     flightsItem = new QTreeWidgetItem(menuTree, QStringList() << "航班管理");
 
     // 二级菜单项： 用户增删查改, 订单增删查改, 航班增删查改
-    userSearchItem = new QTreeWidgetItem(usersItem, QStringList() << "查询用户信息");
-    userRemoveItem = new QTreeWidgetItem(usersItem, QStringList() << "删除用户信息");
-    userUpdateItem = new QTreeWidgetItem(usersItem, QStringList() << "修改用户信息");
     orderSearchItem = new QTreeWidgetItem(ordersItem, QStringList() << "查找订单信息");
     orderUpdateItem = new QTreeWidgetItem(ordersItem, QStringList() << "修改订单信息");
     flightRemoveItem = new QTreeWidgetItem(flightsItem, QStringList() << "删除航班信息");
@@ -87,13 +87,9 @@ adminMainInterface::adminMainInterface(QWidget *parent)
     //右侧内容区
     stackedWidget = new QStackedWidget(this);
     stackedWidget->addWidget(new adminHomeWindow());
-    stackedWidget->addWidget(new QLabel("用户管理"));
+    stackedWidget->addWidget(new adminUserManagerWindow());
     stackedWidget->addWidget(new QLabel("航班管理"));
     stackedWidget->addWidget(new QLabel("订单管理"));
-
-    stackedWidget->addWidget(new QLabel("查询用户信息"));
-    stackedWidget->addWidget(new QLabel("删除用户信息"));
-    stackedWidget->addWidget(new QLabel("修改用户信息"));
 
     stackedWidget->addWidget(new MFindOrderWindow);
     stackedWidget->addWidget(new MReorderWindow);
@@ -213,7 +209,7 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
         stackedWidget->setCurrentIndex(0);
     } else if (item == menuTree->topLevelItem(1)) //客服中心
     {
-        stackedWidget->setCurrentIndex(12);
+        stackedWidget->setCurrentIndex(9);
     } else if (item == menuTree->topLevelItem(2)) // "用户管理"
     {
         stackedWidget->setCurrentIndex(1);
@@ -223,28 +219,16 @@ void adminMainInterface::onItemClicked(QTreeWidgetItem *item, int column)
     } else if (item == menuTree->topLevelItem(4)) // "航班管理"
     {
         stackedWidget->setCurrentIndex(3);
-    } else if (item == usersItem->child(0)) //"查询用户信息"
-    {
+    }else if (item == ordersItem->child(0)) {
         stackedWidget->setCurrentIndex(4);
-    } else if (item == usersItem->child(1)) //"删除用户信息"
-    {
-        stackedWidget->setCurrentIndex(5);
-    } else if (item == usersItem->child(2)) //"修改用户信息"
-    {
-        stackedWidget->setCurrentIndex(6);
-    } else if (item == usersItem->child(0)) //"查询用户信息"
-    {
-        stackedWidget->setCurrentIndex(6);
-    } else if (item == ordersItem->child(0)) {
-        stackedWidget->setCurrentIndex(7);
     } else if (item == ordersItem->child(1)) {
-        stackedWidget->setCurrentIndex(8);
+        stackedWidget->setCurrentIndex(5);
     } else if (item == flightsItem->child(0)) {
-        stackedWidget->setCurrentIndex(9);
+        stackedWidget->setCurrentIndex(6);
     } else if (item == flightsItem->child(1)) {
-        stackedWidget->setCurrentIndex(10);
+        stackedWidget->setCurrentIndex(7);
     } else if (item == flightsItem->child(2)) {
-        stackedWidget->setCurrentIndex(11);
+        stackedWidget->setCurrentIndex(8);
     }
 }
 

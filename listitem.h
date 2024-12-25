@@ -29,7 +29,7 @@ private:
     flightInfo Info;
 signals:
     void bookClicked();
-
+    void switchPageSignal();
 };
 
 #endif // LISTITEM_H

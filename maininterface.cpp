@@ -82,7 +82,6 @@ maininterface::maininterface(QWidget *parent)
 
     //将左侧菜单栏添加到主布局mainLayout
     mainLayout->addWidget(menuList);
-
     //右侧内容区
     stackedWidget = new QStackedWidget(this);
     newHomeWindow *w1 = new newHomeWindow();
