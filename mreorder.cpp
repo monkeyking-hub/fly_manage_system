@@ -1,80 +1,113 @@
-#include <QComboBox>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QLabel>
-#include <QLineEdit>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QPushButton>
+#include "mreorder.h"
+
 #include <QVBoxLayout>
-#include <QWidget>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QMessageBox>
+#include <QLabel>
+#include <QDateTime>
+#include <QNetworkRequest>
 
-class MReorderWindow : public QWidget
-{
-    Q_OBJECT
+// 析构函数
+MReorderWindow::~MReorderWindow() {}
 
-public:
-    MReorderWindow(QWidget *parent = nullptr);
-    ~MReorderWindow();
-
-private slots:
-    void onSubmitClicked();
-    void onReplyFinished(QNetworkReply *reply);
-
-private:
-    QLineEdit *orderIdEdit;
-    QComboBox *statusCombo;
-    QLineEdit *paymentTimeEdit;
-    QPushButton *submitButton;
-    QNetworkAccessManager *networkManager;
-};
-
+// 构造函数
 MReorderWindow::MReorderWindow(QWidget *parent)
     : QWidget(parent)
 {
+    // 设置主窗口背景颜色
+    this->setStyleSheet("background-color: #f0f0f0;");
+
+    // 创建控件
     orderIdEdit = new QLineEdit(this);
-    orderIdEdit->setPlaceholderText("Enter Order ID");
+    orderIdEdit->setPlaceholderText("请输入 ID");
+    orderIdEdit->setFixedWidth(300); // 固定宽度
+    orderIdEdit->setStyleSheet("border: 2px solid #ccc; border-radius: 10px; padding: 5px;");
 
     statusCombo = new QComboBox(this);
-    statusCombo->addItem("Paid");
-    statusCombo->addItem("Refunded");
-    statusCombo->addItem("Pending");
+    statusCombo->addItem("已支付");
+    statusCombo->addItem("未支付");
+    statusCombo->addItem("已退款");
+    statusCombo->setFixedWidth(300); // 固定宽度
+    statusCombo->setStyleSheet("border: 2px solid #ccc; border-radius: 10px; padding: 5px;");
 
-    paymentTimeEdit = new QLineEdit(this);
-    paymentTimeEdit->setPlaceholderText("Enter Payment Time (Unix Timestamp)");
+    dateEdit = new QDateEdit(QDate::currentDate(), this);
+    dateEdit->setCalendarPopup(true);
+    dateEdit->setDisplayFormat("yyyy-MM-dd");
+    dateEdit->setFixedWidth(300); // 固定宽度
+    dateEdit->setStyleSheet("border: 2px solid #ccc; border-radius: 10px; padding: 5px;");
 
-    submitButton = new QPushButton("Submit", this);
+    submitButton = new QPushButton("提交", this);
+    submitButton->setFixedWidth(300); // 固定宽度
+    submitButton->setStyleSheet(
+        "background-color: #007BFF; color: white; font-weight: bold; "
+        "border: none; border-radius: 10px; padding: 10px;"
+        );
 
+    // 布局
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(new QLabel("Order ID:"));
+    layout->setAlignment(Qt::AlignCenter); // 居中对齐
+    layout->setSpacing(20); // 设置控件之间的间距
+
+    // 用户 ID 标签和输入框
+    QLabel *userIdLabel = new QLabel("用户 ID:", this);
+    userIdLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
+    layout->addWidget(userIdLabel);
+
+    orderIdEdit->setStyleSheet("background-color:#E8F5E9; border: 2px solid #66BB6A; border-radius: 10px; padding: 5px;");
     layout->addWidget(orderIdEdit);
-    layout->addWidget(new QLabel("Status:"));
+
+    // 订单状态标签和下拉框
+    QLabel *statusLabel = new QLabel("订单状态:", this);
+    statusLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
+    layout->addWidget(statusLabel);
+
+    statusCombo->setStyleSheet("background-color: #E8F5E9; border: 2px solid #66BB6A; border-radius: 10px; padding: 5px;");
     layout->addWidget(statusCombo);
-    layout->addWidget(new QLabel("Payment Time:"));
-    layout->addWidget(paymentTimeEdit);
+
+    // 修改日期标签和日期选择框
+    QLabel *dateLabel = new QLabel("请选择修改日期:", this);
+    dateLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
+    layout->addWidget(dateLabel);
+
+    dateEdit->setStyleSheet("background-color: #E8F5E9; border: 2px solid #66BB6A; border-radius: 10px; padding: 5px;");
+    layout->addWidget(dateEdit);
+
+    // 提交按钮
+    submitButton->setStyleSheet(
+        "background-color: #2196F3; color: white; font-weight: bold; "
+        "border: none; border-radius: 10px; padding: 10px;"
+        "font-size: 18px"
+        );
     layout->addWidget(submitButton);
 
+
+    // 设置布局
     setLayout(layout);
 
+    // 设置网络管理器
     networkManager = new QNetworkAccessManager(this);
 
-    connect(submitButton, &QPushButton::clicked, this, &MReorderWindow::onSubmitClicked);
+    // 信号和槽
+    connect(submitButton, &QPushButton::clicked, [this]() {
+        onSubmitClicked(dateEdit->date());
+    });
 }
 
-MReorderWindow::~MReorderWindow() {}
 
-void MReorderWindow::onSubmitClicked()
+void MReorderWindow::onSubmitClicked(const QDate &selectedDate)
 {
-    int orderId = orderIdEdit->text().toInt();
-    QString status = statusCombo->currentText();
-    int paymentTime = paymentTimeEdit->text().toInt();
-
-    if (orderId == 0 || paymentTime == 0) {
-        QMessageBox::warning(this, "Input Error", "Please enter valid Order ID and Payment Time.");
+    bool ok;
+    int orderId = orderIdEdit->text().toInt(&ok);
+    if (!ok || orderId <= 0) {
+        QMessageBox::warning(this, "Input Error", "请输入正确的订单号（正整数）。");
         return;
     }
+
+    QString status = statusCombo->currentText();
+    QTime currentTime = QTime::currentTime();
+    QDateTime dateTime(selectedDate, currentTime);
+    int paymentTime = dateTime.toSecsSinceEpoch();
 
     QJsonObject json;
     json["orderId"] = orderId;
@@ -84,18 +117,18 @@ void MReorderWindow::onSubmitClicked()
     QJsonDocument doc(json);
     QByteArray data = doc.toJson();
 
-    QNetworkRequest request(QUrl("http://your-api-url/api/orders/update"));
+    QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/orders/update"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
+    submitButton->setEnabled(false);
+    connect(networkManager, &QNetworkAccessManager::finished, this, &MReorderWindow::onReplyFinished);
     networkManager->post(request, data);
-    connect(networkManager,
-            &QNetworkAccessManager::finished,
-            this,
-            &MReorderWindow::onReplyFinished);
 }
 
 void MReorderWindow::onReplyFinished(QNetworkReply *reply)
 {
+    submitButton->setEnabled(true);
+
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray response = reply->readAll();
         QJsonDocument doc = QJsonDocument::fromJson(response);
@@ -107,7 +140,8 @@ void MReorderWindow::onReplyFinished(QNetworkReply *reply)
             QMessageBox::warning(this, "Error", jsonResponse["message"].toString());
         }
     } else {
-        QMessageBox::warning(this, "Network Error", "Failed to update order.");
+        QMessageBox::warning(this, "Network Error",
+                             QString("Error: %1").arg(reply->errorString()));
     }
 
     reply->deleteLater();

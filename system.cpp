@@ -21,6 +21,7 @@
 #include "yipuxilong.h"
 #include "pay_window.h"
 
+
 System::System()
     : m_mainInterface(nullptr)
 {}
