@@ -1,37 +1,32 @@
 #ifndef MREORDERWINDOW_H
 #define MREORDERWINDOW_H
 
-#include <QComboBox>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QLabel>
+#include <QWidget>
 #include <QLineEdit>
-#include <QMessageBox>
+#include <QComboBox>
+#include <QDateEdit>
+#include <QPushButton>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QWidget>
 
 class MReorderWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MReorderWindow(QWidget *parent = nullptr);
+    MReorderWindow(QWidget *parent = nullptr);
     ~MReorderWindow();
 
 private slots:
-    void onSubmitClicked();                     // 提交按钮点击事件
-    void onReplyFinished(QNetworkReply *reply); // 网络请求完成事件
+    void onSubmitClicked(const QDate &selectedDate);
+    void onReplyFinished(QNetworkReply *reply);
 
 private:
-    QLineEdit *orderIdEdit;                // 订单ID输入框
-    QComboBox *statusCombo;                // 订单状态下拉框
-    QLineEdit *paymentTimeEdit;            // 支付时间输入框
-    QPushButton *submitButton;             // 提交按钮
-    QNetworkAccessManager *networkManager; // 网络管理器，用于发送请求
+    QLineEdit *orderIdEdit;
+    QComboBox *statusCombo;
+    QDateEdit *dateEdit;
+    QPushButton *submitButton;
+    QNetworkAccessManager *networkManager;
 };
 
 #endif // MREORDERWINDOW_H

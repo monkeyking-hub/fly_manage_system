@@ -6,69 +6,59 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QLabel>
-#include <QPixmap>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QScrollArea>
-#include <interfacemanager.h>
-#include <QWidget>
-#include "orderwindow.h"
-#include <QComboBox>
+#include <QSpacerItem>
 #include <QDebug>
-#include <QFontDatabase> // 用于加载自定义字体 // 引入 inorder 界面
-#include <QHeaderView>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QLabel>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QPalette>
-#include <QPixmap>
-#include <QResource>
-#include <QScrollArea>
-#include <QTabWidget>
-#include <QTableWidget>
-#include <QTimer>
-#include <QVBoxLayout>
 #include "order.h"
 #include "orderwidget.h"
 #include <interfacemanager.h>
-#include <QMainWindow>
-#include <QPushButton>    // 添加这行
-#include <QToolBar>       // 添加这行
-#include <QTabWidget>
-#include <QEventLoop>
-
 
 MFindOrderWindow::MFindOrderWindow(QWidget *parent)
     : QWidget(parent)
     , userIdLineEdit(new QLineEdit(this))
-    , searchButton(new QPushButton("Search", this))
+    , searchButton(new QPushButton("搜索", this))
+    , resultWidget(new QWidget(this))
+    , resultLayout(new QVBoxLayout(resultWidget))
 {
     // 设置界面布局
     QVBoxLayout *layout = new QVBoxLayout(this);
+    // 创建一个水平布局
+    QHBoxLayout *messageLayout1 = new QHBoxLayout();
+    messageLayout1->setContentsMargins(0, 0, 0, 0); // 去除布局的边距
 
-    // 第一张图片小一点，文字和图片紧贴
+    // 创建第一张图片
     QLabel *messageLabel1 = new QLabel(this);
     QPixmap boxIcon(":/newicon/newxiangzi.jpg");
     boxIcon = boxIcon.scaled(100, 100, Qt::KeepAspectRatio); // 缩小图片
     messageLabel1->setPixmap(boxIcon);
 
+    // 创建第一段文字
     QLabel *textLabel1 = new QLabel("良好的态度是客服的第一要义", this);
     textLabel1->setAlignment(Qt::AlignCenter);  // 使文字居中
     textLabel1->setStyleSheet("font-size: 12px;");
+    textLabel1->setFixedWidth(500); // 直接设置固定宽度
 
-    QHBoxLayout *messageLayout1 = new QHBoxLayout();
-    messageLayout1->addWidget(messageLabel1);
-    messageLayout1->addWidget(textLabel1);
+    // 创建弹簧，将它们放在布局的两端
+    QSpacerItem *leftSpacer = new QSpacerItem(20, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *rightSpacer = new QSpacerItem(20, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // 添加弹簧、图片和文字到布局
+    messageLayout1->addItem(leftSpacer);      // 左边的弹簧
+    messageLayout1->addWidget(messageLabel1); // 第一张图片
+    messageLayout1->addWidget(textLabel1);    // 文字
+    messageLayout1->addItem(rightSpacer);     // 右边的弹簧
+
+    // 将布局添加到主布局中
     layout->addLayout(messageLayout1);
 
-    // 第二张图片和文字调整为一样大小，文字居中
+    // 第二张图片和文字，采用类似的布局方式
+    QHBoxLayout *messageLayout2 = new QHBoxLayout();
+    messageLayout2->setContentsMargins(0, 0, 0, 0); // 去除布局的边距
+
     QLabel *messageLabel2 = new QLabel(this);
     QPixmap smileIcon(":/newicon/newqincai.jpg");
     smileIcon = smileIcon.scaled(100, 100, Qt::KeepAspectRatio); // 调整为相同大小
@@ -77,38 +67,73 @@ MFindOrderWindow::MFindOrderWindow(QWidget *parent)
     QLabel *textLabel2 = new QLabel("不好的态度会导致不必要的冲突哦", this);
     textLabel2->setAlignment(Qt::AlignCenter);  // 使文字居中
     textLabel2->setStyleSheet("font-size: 14px;");
+    textLabel2->setFixedWidth(500); // 直接设置固定宽度
 
-    QHBoxLayout *messageLayout2 = new QHBoxLayout();
-    messageLayout2->addWidget(messageLabel2);
-    messageLayout2->addWidget(textLabel2);
+    // 再次添加弹簧到布局
+    QSpacerItem *leftSpacer2 = new QSpacerItem(20, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *rightSpacer2 = new QSpacerItem(20, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    messageLayout2->addItem(leftSpacer2);      // 左边的弹簧
+    messageLayout2->addWidget(messageLabel2);  // 第二张图片
+    messageLayout2->addWidget(textLabel2);     // 文字
+    messageLayout2->addItem(rightSpacer2);     // 右边的弹簧
+
+    // 将第二个布局添加到主布局中
     layout->addLayout(messageLayout2);
+
+
 
     // 为提示框加上背景颜色和圆角效果
     QString messageStyle = "background-color: orange; "
                            "border-radius: 15px; "
-                           "padding:15px; "
-                           "font-size: 16px; "
-                           "width: 300px;";
+                           "padding: 15px; "
+                           "font-size: 20px; ";
+
     textLabel1->setStyleSheet(messageStyle);
     textLabel2->setStyleSheet(messageStyle);
 
-    // 添加搜索框
+
+
+
+
+    // 创建一个水平布局
     QHBoxLayout *idLayout = new QHBoxLayout();
-    QLabel *idLabel = new QLabel("User ID: ", this);
+    QLabel *idLabel = new QLabel("用户ID: ", this);
+    idLabel->setFixedSize(40,40);
 
     // 调整 userIcon 图片大小
     QPixmap userIcon(":/newicon/fuser.png");
-    userIcon = userIcon.scaled(20, 20, Qt::KeepAspectRatio); // 缩小图片
+    userIcon = userIcon.scaled(40, 40, Qt::KeepAspectRatio); // 缩小图片
     QLabel *userIconLabel = new QLabel(this);
     userIconLabel->setPixmap(userIcon);
 
+    // 创建弹簧来将控件紧密排列
+    QSpacerItem *spacer = new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // 将图片、标签和输入框加入布局
+    idLayout->addItem(spacer);
     idLayout->addWidget(userIconLabel);
     idLayout->addWidget(idLabel);
     idLayout->addWidget(userIdLineEdit);
+    idLayout->addItem(spacer);
+
+    // 设置输入框样式（圆角）并控制输入框的宽度
+    userIdLineEdit->setStyleSheet("QLineEdit {"
+                                  "border-radius: 8px; "
+                                  "border: 1px solid #ccc; "
+                                  "padding: 5px; "
+                                  "width: 50px; "  // 设置输入框宽度为50px
+                                  "}");
+    userIdLineEdit->setFixedWidth(300); // 直接设置固定宽度
+    userIdLineEdit->setFixedHeight(40);
+
+    // 将布局添加到主布局中
     layout->addLayout(idLayout);
 
-    // 设置输入框样式（圆角）
-    userIdLineEdit->setStyleSheet("QLineEdit { border-radius: 8px; border: 1px solid #ccc; padding: 5px; width: 200px; }");
+
+
+
+
 
     // 设置按钮样式
     searchButton->setStyleSheet("QPushButton {"
@@ -116,46 +141,40 @@ MFindOrderWindow::MFindOrderWindow(QWidget *parent)
                                 "background-color: #4CAF50; "
                                 "color: white; "
                                 "padding: 5px 10px; "
-                                "font-size: 12px; "
-                                "width: 100px;"
+                                "font-size: 22px; "
+                                "width: 150px;"
+                                "height: 50px"
                                 "} "
                                 "QPushButton:hover {"
                                 "background-color: #45a049; "
                                 "} ");
     layout->addWidget(searchButton, 0, Qt::AlignHCenter);  // 将按钮放在中心
 
-    // 创建一个用于显示查询结果的区域
-    QWidget *resultWidget = new QWidget();
-    resultLayout = new QVBoxLayout(resultWidget);  // 这里将resultLayout移到类成员变量
+    // 设置结果显示区域样式
     resultWidget->setLayout(resultLayout);
+    resultWidget->setStyleSheet(
+        "border-radius: 15px; "
+        "border: 4px solid #3498db; "
+        "padding: 0px; "
+        );
 
-    // 设置滑动区域
+    // 滑动区域
     QScrollArea *scrollArea = new QScrollArea(this);
     scrollArea->setWidget(resultWidget);
     scrollArea->setWidgetResizable(true);
     layout->addWidget(scrollArea);
 
-    // 添加提示词
-    QLabel *orderHeader = new QLabel("Search Results:", this);
-    orderHeader->setStyleSheet("font-size: 16px; font-weight: bold;");
-    resultLayout->addWidget(orderHeader);
-
-    // 连接按钮点击事件
+    // 连接搜索按钮点击事件
     connect(searchButton, &QPushButton::clicked, this, &MFindOrderWindow::onSearchButtonClicked);
-
-
-
 }
 
 MFindOrderWindow::~MFindOrderWindow() {}
 
 void MFindOrderWindow::onSearchButtonClicked()
 {
-    QWidget *resultWidget = new QWidget();
-    resultLayout = new QVBoxLayout(resultWidget);  // 这里将resultLayout移到类成员变量
-    resultWidget->setLayout(resultLayout);
-     QEventLoop eventLoop;
-    InterfaceManager::instance()->m_orderList.clear();
+    // 清空之前的结果
+    clearResults();
+
     QString userId = userIdLineEdit->text();
     if (userId.isEmpty()) {
         QMessageBox::warning(this, "用户名不能为空", "请输入有效的ID.");
@@ -164,129 +183,82 @@ void MFindOrderWindow::onSearchButtonClicked()
 
     // 创建请求体
     QJsonObject requestObj;
-    requestObj["userId"] = userId.toInt(); // 传递用户ID
+    requestObj["userId"] = userId.toInt(); // 用户ID
 
     QJsonDocument requestDoc(requestObj);
     QByteArray requestData = requestDoc.toJson();
 
-    // 设置请求
+    // 网络请求
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkRequest request(QUrl("http://127.0.0.1:8080/api/orders/search"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply *reply = manager->post(request, requestData);
-    connect(reply, &QNetworkReply::finished, this, [&eventLoop]() {
-        // 创建一个单次触发的定时器
-        QTimer::singleShot(1000, &eventLoop, &QEventLoop::quit);  // 1000毫秒 = 1秒
-    });
- qDebug() << "发送请求" ;
-    // 处理网络请求结果
     connect(reply, &QNetworkReply::finished, this, [this, reply, userId]() {
         if (reply->error() == QNetworkReply::NoError) {
-            // 读取所有响应数据
             QByteArray responseData = reply->readAll();
-            qDebug() << "Raw response:" << QString(responseData);
-
-            // 解析返回的JSON数据
             QJsonDocument doc = QJsonDocument::fromJson(responseData);
             QJsonObject rootObj = doc.object();
 
             // 检查响应状态
             int code = rootObj["code"].toInt();
             if (code != 200) {
-                qWarning() << "API返回错误:" << rootObj["message"].toString();
+                QMessageBox::warning(this, "错误", rootObj["message"].toString());
+                reply->deleteLater();
                 return;
             }
 
-            // 获取data数组
+            // 获取订单数据
             QJsonArray ordersArray = rootObj["data"].toArray();
             if (ordersArray.isEmpty()) {
-                qDebug() << "没有找到订单, 用户ID:" << userId;
+                QMessageBox::information(this, "查询结果", "未找到相关订单。");
+                reply->deleteLater();
                 return;
             }
 
-            // 遍历所有订单
+            // 添加订单到结果显示区域
             for (const QJsonValue &orderValue : ordersArray) {
                 QJsonObject orderData = orderValue.toObject();
 
-                qDebug() << "\n=== 订单详细信息 ===";
-                qDebug() << "订单ID:" << orderData["id"].toInt();
-                qDebug() << "航班号:" << orderData["flightNumber"].toString();
-                qDebug() << "价格:" << orderData["price"].toDouble();
-                qDebug() << "状态:" << orderData["status"].toString();
-
-                // 直接从订单数据中获取航班信息（不需要flightDetails子对象）
-                qDebug() << "\n--- 航班详细信息 ---";
-                qDebug() << "出发地:" << orderData["departure"].toString();
-                qDebug() << "目的地:" << orderData["destination"].toString();
-                qDebug() << "航空公司:" << orderData["airlineCompany"].toString();
-                qDebug() << "起飞时间:" << QDateTime::fromSecsSinceEpoch(orderData["departureTime"].toInt()).toString();
-                qDebug() << "到达时间:" << QDateTime::fromSecsSinceEpoch(orderData["arrivalTime"].toInt()).toString();
-                qDebug() << "机型:" << orderData["aircraftModel"].toString();
-                qDebug() << "座位类型:" << orderData["seatType"].toString();
-                qDebug() << "登机口:" << orderData["boardingGate"].toString();
-
-                // 创建订单对象
                 Order order;
                 order.m_orderNumber = QString::number(orderData["id"].toInt());
-                order.m_passenger = "用户"+order.m_orderNumber;
-                order.m_amount = QString::number(orderData["price"].toDouble());
                 order.m_flightNumber = orderData["flightNumber"].toString();
-
+                order.m_amount = QString::number(orderData["price"].toDouble());
                 order.m_status = orderData["status"].toString();
-                if(orderData["status"].toString()=="Pending payment")
-                {
-                    order.m_status="已支付" ;
-                }
 
-                // 设置航班信息
-                order.m_departure = orderData["departure"].toString();
-                order.m_destination = orderData["destination"].toString();
-                order.m_airline = orderData["airlineCompany"].toString();
-                order.m_departureTime = QDateTime::fromSecsSinceEpoch(orderData["departureTime"].toInt()).toString();
-                order.m_arrivalTime = QDateTime::fromSecsSinceEpoch(orderData["arrivalTime"].toInt()).toString();
-                order.m_aircraftType = orderData["aircraftModel"].toString();
-                order.m_seatClass = orderData["seatType"].toString();
-                order.m_flightId = QString::number(orderData["flightId"].toInt());
-                order.m_boardingGate = orderData["boardingGate"].toString();
-                order.m_arrivalAirport = orderData["arrivalAirport"].toString();
-                order.m_departureAirport = orderData["departureAirport"].toString();
-                order.m_firstClassSeats = orderData["firstClassSeats"].toInt();
-                order.m_economyClassSeats = orderData["economyClassSeats"].toInt();
-                order.m_businessClassSeats = orderData["businessClassSeats"].toInt();
-                order.m_firstClassPrice = orderData["firstClassPrice"].toDouble();
-                order.m_economyClassPrice = orderData["economyClassPrice"].toDouble();
-                order.m_businessClassPrice = orderData["businessClassPrice"].toDouble();
+                OrderWidget *orderWidget = new OrderWidget(order, this);
+                orderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                orderWidget->setStyleSheet(
+                    "#OrderWidget {"
+                    "   background-color: rgba(255, 255, 255, 200);"
+                    "   border: 2px solid #cccccc; "
+                    "   border-radius: 8px; "
+                    "   margin: 5px;"
+                    "   padding: 8px;"
+                    "} "
+                    );
 
-                // 将订单添加到全局订单列表
-                InterfaceManager::instance()->m_orderList.append(order);
+                resultLayout->addWidget(orderWidget);
             }
-
-            qDebug() << "成功获取并处理所有订单信息";
-            qDebug() << "订单总数:" << InterfaceManager::instance()->m_orderList.size();
         } else {
-            qWarning() << "网络请求失败:" << reply->errorString();
+            QMessageBox::warning(this, "网络错误", reply->errorString());
         }
 
-        for (const Order &order : InterfaceManager::instance()->m_orderList)
-            {
-
-            OrderWidget *orderWidget = new OrderWidget(order, this);
-            orderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-            orderWidget->setStyleSheet(
-                "#OrderWidget {"
-                "   background-color: rgba(255, 255, 255, 200);"
-                "   border: 2px solid #cccccc; "
-                "   border-radius: 8px; "
-                "   margin: 5px;"  // 为每个 OrderWidget 设置 margin
-                "   padding: 8px;"
-                "} "
-                );
-             qDebug() << "放置order";
-            resultLayout->addWidget(orderWidget);
-        }
-        // 确保释放reply对象
         reply->deleteLater();
     });
-     eventLoop.exec();
+}
+
+void MFindOrderWindow::clearResults()
+{
+    // 清空布局中的所有子控件
+    QLayoutItem *child;
+    while ((child = resultLayout->takeAt(0)) != nullptr) {
+        if (child->widget()) {
+            delete child->widget();
+        }
+        delete child;
+    }
+
+    // 清空全局订单列表
+    InterfaceManager::instance()->m_orderList.clear();
 }
