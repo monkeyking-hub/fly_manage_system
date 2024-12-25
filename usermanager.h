@@ -95,6 +95,7 @@ signals:
     void currentUserChanged(const User &user);
     void loginSuccess(); // 登录成功的信号
     void profileChanged();
+    void adminLogin();
 };
 
 #endif // USERMANAGER_H

@@ -10,6 +10,7 @@ public:
     QString phonenumber;
     int age;
     int id;
+    int level;
     QString sex;
     QString avatarUrl;
     User() {}

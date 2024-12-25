@@ -1,55 +1,76 @@
-#include "userwindow.h"
-#include <QFileDialog>
-#include <QImage>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QPixmap>
-#include "UserManager.h"
-#include "interfacemanager.h"
-#include "maininterface.h"
-#include "ui_userwindow.h"
+#include "adminusermanagerwindow.h"
+#include "ui_adminusermanagerwindow.h"
+#include "QNetworkAccessManager"
+#include "usermanager.h"
+#include "QMessageBox"
+#include "QJsonObject"
+#include "QJsonDocument"
+#include "QFileDialog"
 
-Userwindow::Userwindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::Userwindow)
+adminUserManagerWindow::adminUserManagerWindow(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::adminUserManagerWindow)
 {
     ui->setupUi(this);
-    connect(UserManager::getInstance(),
-            &UserManager::currentUserChanged,
-            this,
-            &Userwindow::updateUserInfo);
-    connect(UserManager::getInstance(), &UserManager::loginSuccess, this, &Userwindow::loadUserInfo);
-    // 每次打开界面时获取最新用户信息
-    fetchUserInfoFromServer();
+    ui->personInfoBox->setVisible(false);
 }
 
-void Userwindow::loadUserInfo()
+adminUserManagerWindow::~adminUserManagerWindow()
 {
-    User currentUser = UserManager::getInstance()->getCurrentUser();
-    ui->useNameLabel->setText(currentUser.username);
-    ui->mailLabel_2->setText(currentUser.email);
-    ui->phoneNumberLabel->setText(currentUser.phonenumber);
-    ui->agelabel->setText(QString::number(currentUser.age));
-    //ui->levelLbl->setText(QString::number(currentUser.level));
-    currentUser.sex == "M" ? ui->sexLabel->setText("男") : ui->sexLabel->setText("女");
-
-    QPixmap avatar;
-    qDebug() << "当前头像路径" << currentUser.avatarUrl;
-    if (avatar.load(currentUser.avatarUrl)) {
-        ui->profileLbl->setPixmap(
-            avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        qDebug("加载头像成功");
-    } else {
-        ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
-        qDebug("加载头像不成功,使用默认头像");
-    }
+    delete ui;
 }
 
-void Userwindow::updateUserInfo(const User &user)
+void adminUserManagerWindow:: getUserProfile()
+{
+    QString email = user.email;
+    QUrl url("http://127.0.0.1:5000/download-avatar/" + QUrl::toPercentEncoding(email));
+    QNetworkRequest request(url);
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    QNetworkReply *reply = manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, email]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+
+            // Ensure the directory exists
+            QString directoryPath = "./avatars";
+            QDir dir(directoryPath);
+            if (!dir.exists()) {
+                dir.mkpath("."); // Try to create the directory
+            }
+
+            // Set up the file path
+            QString imagePath = directoryPath + "/" + email + ".jpg";
+            QFile file(imagePath);
+            if (file.open(QIODevice::WriteOnly)) {
+                file.write(responseData);
+                file.close();
+                user.avatarUrl = imagePath;
+                QPixmap avatar;
+                qDebug() << "fetch头像获取成功" << imagePath;
+                if (avatar.load(user.avatarUrl)) {
+                    ui->profileLbl->setPixmap(
+                        avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                    qDebug("加载头像成功");
+                } else {
+                    ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
+                    qDebug("加载头像不成功,使用默认头像");
+                }
+            } else {
+                qDebug() << "Fetch头像获取失败" << file.errorString();
+                user.avatarUrl
+                    = ":/images/default_avatar.png"; // Use default avatar on failure
+            }
+        } else {
+            qDebug() << "fetch avartar 头像连接失败" << reply->errorString();
+            user.avatarUrl = "://defaultedProfile.jpg"; // Use default avatar on failure
+        }
+        reply->deleteLater();
+    });
+}
+
+
+void adminUserManagerWindow::updateUserInfo(const User &user)
 {
     ui->userNameSetBox->setText(user.username);
     ui->mailSetBox->setText(user.email);
@@ -59,10 +80,10 @@ void Userwindow::updateUserInfo(const User &user)
         ui->famelButton->setChecked(true);
     } else
         ui->maleButton->setChecked(true);
-    User currentUser = UserManager::getInstance()->getCurrentUser();
+    ui->spinBox->setValue(user.level);
     QPixmap avatar;
-    qDebug() << "当前头像路径" << currentUser.avatarUrl;
-    if (avatar.load(currentUser.avatarUrl)) {
+    qDebug() << "当前头像路径" << user.avatarUrl;
+    if (avatar.load(user.avatarUrl)) {
         ui->profileLbl->setPixmap(
             avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         qDebug("加载头像成功");
@@ -72,12 +93,7 @@ void Userwindow::updateUserInfo(const User &user)
     }
 }
 
-Userwindow::~Userwindow()
-{
-    delete ui;
-}
-
-void Userwindow::fetchUserInfoFromServer()
+void adminUserManagerWindow:: fetchUserInfoFromServer()
 {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url("http://localhost:8080/api/users/get");
@@ -85,7 +101,7 @@ void Userwindow::fetchUserInfoFromServer()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     // 获取当前用户的邮箱
-    QString email = UserManager::getInstance()->getCurrentUser().email;
+    QString email = ui->le_userEmail->text();
     QJsonObject json;
     json["email"] = email;
 
@@ -99,14 +115,13 @@ void Userwindow::fetchUserInfoFromServer()
             if (responseObject["code"].toInt() == 200) {
                 // 更新用户信息
                 QJsonObject data = responseObject["data"].toObject();
-                User currentUser;
-                currentUser.username = data["username"].toString();
-                currentUser.email = data["email"].toString();
-                currentUser.phonenumber = data["phone"].toString();
-                currentUser.age = data["age"].toInt();
-                currentUser.level=data["userLevel"].toInt();
-                data["gender"].toString() == "M" ? currentUser.sex = "M" : currentUser.sex = "F";
-                UserManager::getInstance()->setCurrentUser(currentUser);
+                user.username = data["username"].toString();
+                user.email = data["email"].toString();
+                user.phonenumber = data["phone"].toString();
+                user.age = data["age"].toInt();
+                user.level=data["userLevel"].toInt();
+                data["gender"].toString() == "M" ? user.sex = "M" : user.sex = "F";
+                getUserProfile();
                 loadUserInfo(); // 更新界面显示
             } else {
                 //QMessageBox::warning(this, "Error", "Failed to fetch user information.");
@@ -118,20 +133,30 @@ void Userwindow::fetchUserInfoFromServer()
     });
 }
 
-void Userwindow::on_pushButton_clicked()
+void adminUserManagerWindow::on_btn_userSearch_clicked()
 {
+    fetchUserInfoFromServer();
+    updateUserInfo(user);
+    loadUserInfo();
+    ui->personInfoBox->setVisible(true);
+}
+void adminUserManagerWindow::on_pushButton_clicked()
+{
+    updateUserInfo(user);
     ui->userNameStackedWidget->setCurrentIndex(1);
+    ui->mailStackedWidget->setCurrentIndex(1);
     ui->phoneNumberStackedWidget->setCurrentIndex(1);
     ui->sexStackedWidget->setCurrentIndex(1);
     ui->oiStackedWidget->setCurrentIndex(1);
     ui->ProfileStackedWidget->setCurrentIndex(1);
     ui->ageStackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
-void Userwindow::on_saveButton_clicked()
+void adminUserManagerWindow::on_saveButton_clicked()
 {
     // 获取当前用户的信息
-    User currentUser = UserManager::getInstance()->getCurrentUser();
+    User currentUser = user;
 
     // 获取用户输入的修改信息
     QString username = ui->userNameSetBox->text();
@@ -141,10 +166,11 @@ void Userwindow::on_saveButton_clicked()
     QString gender = ui->maleButton->isChecked()
                          ? "M"
                          : (ui->famelButton->isChecked() ? "F" : "UnSelected");
+    int lvl=ui->spinBox->value();
     // 检查是否有任何信息发生变化
     if (username == currentUser.username && email == currentUser.email
         && phone == currentUser.phonenumber && age == currentUser.age
-        && gender == currentUser.sex) {
+        && gender == currentUser.sex && ui->levelLabel->text()==QString::number(user.level)) {
         // 如果没有任何修改，直接返回
         ui->userNameStackedWidget->setCurrentIndex(0);
         ui->mailStackedWidget->setCurrentIndex(0);
@@ -169,7 +195,7 @@ void Userwindow::on_saveButton_clicked()
     json["phone"] = phone;
     json["age"] = age;
     json["gender"] = gender;
-
+    json["userLevel"] = lvl;
     QNetworkReply *reply = manager->post(request, QJsonDocument(json).toJson());
     connect(reply, &QNetworkReply::finished, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
@@ -196,6 +222,7 @@ void Userwindow::on_saveButton_clicked()
                 ui->oiStackedWidget->setCurrentIndex(0);
                 ui->ProfileStackedWidget->setCurrentIndex(0);
                 ui->ageStackedWidget->setCurrentIndex(0);
+                ui->stackedWidget->setCurrentIndex(0);
             } else {
                 QMessageBox::warning(this, "Error", "Failed to update user information.");
             }
@@ -206,7 +233,7 @@ void Userwindow::on_saveButton_clicked()
     });
 }
 
-void Userwindow::on_uploadProfileButton_clicked()
+void adminUserManagerWindow::on_uploadProfileButton_clicked()
 {
     QString filePath = QFileDialog::getOpenFileName(this,
                                                     "选择头像",
@@ -239,7 +266,7 @@ void Userwindow::on_uploadProfileButton_clicked()
                   "Content-Disposition: form-data; name=\"avatar\"; filename=\"%3\"\r\n"
                   "Content-Type: image/jpeg\r\n\r\n")
               .arg(boundary)
-              .arg(UserManager::getInstance()->getCurrentUser().email)
+              .arg(user.email)
               .arg(QFileInfo(file.fileName()).fileName())
               .toUtf8();
     finalData += fileContent;
@@ -266,21 +293,31 @@ void Userwindow::on_uploadProfileButton_clicked()
         reply->deleteLater();
     });
 }
-
-void Userwindow::on_logOutButton_clicked()
+void adminUserManagerWindow::loadUserInfo()
 {
-    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    ui->useNameLabel->setText(user.username);
+    ui->mailLabel_2->setText(user.email);
+    ui->phoneNumberLabel->setText(user.phonenumber);
+    ui->agelabel->setText(QString::number(user.age));
+    user.sex == "M" ? ui->sexLabel->setText("男") : ui->sexLabel->setText("女");
+    ui->levelLbl->setText(QString::number(user.level));
+    QPixmap avatar;
+    qDebug() << "当前头像路径" << user.avatarUrl;
+    if (avatar.load(user.avatarUrl)) {
+        ui->profileLbl->setPixmap(
+            avatar.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        qDebug("加载头像成功");
+    } else {
+        ui->profileLbl->setPixmap(QPixmap("://defaultedProfile.jpg")); // 加载默认头像
+        qDebug("加载头像不成功,使用默认头像");
+    }
 }
 
-void Userwindow::on_returnButton_clicked()
-{
-    InterfaceManager::instance()->switchToPage("lxt_mainInterface");
-}
 
-void Userwindow::on_logOffButton_clicked()
+void adminUserManagerWindow::on_logoff_button_clicked()
 {
     // 获取当前用户的邮箱
-    QString email = UserManager::getInstance()->getCurrentUser().email;
+    QString email = user.email;
 
     if (email.isEmpty()) {
         QMessageBox::warning(this, "Error", "Cannot log out: No user is currently logged in.");
@@ -306,13 +343,7 @@ void Userwindow::on_logOffButton_clicked()
             QJsonObject responseObject = jsonResponse.object();
 
             if (responseObject["code"].toInt() == 200) {
-                QMessageBox::information(this, "Success", "Logout successful.");
-
-                // 清除当前用户数据
-                UserManager::getInstance()->clearCurrentUser();
-
-                // 跳转到登录界面
-                InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+                QMessageBox::information(this, "Success", "注销成功.");
             } else {
                 QMessageBox::warning(this, "Error", responseObject["message"].toString());
             }
@@ -321,4 +352,7 @@ void Userwindow::on_logOffButton_clicked()
         }
         reply->deleteLater();
     });
+    ui->personInfoBox->setVisible(false);
+    ui->le_userEmail->clear();
 }
+

@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>adminUserManagerWindow</class>
+ <widget class="QWidget" name="adminUserManagerWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="btn_userSearch">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>120</y>
+     <width>161</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>查询客户信息</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>70</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>用户邮箱 : </string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="le_userEmail">
+   <property name="geometry">
+    <rect>
+     <x>302</x>
+     <y>80</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="personInfoBox">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>150</y>
+     <width>801</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+   </property>
+   <property name="title">
+    <string>个人信息设置</string>
+   </property>
+   <widget class="QLabel" name="profileLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>头像</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="xingMingLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>30</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>姓名</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mailLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>70</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>邮箱</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="phondeNumberLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>120</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>手机号</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="SexLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>160</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>性别</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="levelLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>260</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>用户等级</string>
+    </property>
+   </widget>
+   <widget class="QStackedWidget" name="userNameStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>30</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QLabel" name="useNameLabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>0</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请设置姓名</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2">
+     <widget class="QLineEdit" name="userNameSetBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="phoneNumberStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>120</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_9">
+     <widget class="QLabel" name="phoneNumberLabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>0</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请绑定手机号</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_10">
+     <widget class="QLineEdit" name="phoneNumberSetBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="sexStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>150</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_11">
+     <widget class="QLabel" name="sexLabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请选择性别</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_12">
+     <widget class="QRadioButton" name="maleButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>121</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>男</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="famelButton">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>10</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>女</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="oiStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>290</y>
+      <width>211</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_13">
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>181</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>-1</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 按钮默认样式 */
+QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+    color: #2c3e50; /* 深灰蓝色文字 */
+    border: 1px solid rgba(44, 62, 80, 0.5); /* 半透明深蓝灰色边框 */
+    border-radius: 8px; /* 圆角按钮 */
+    padding: 8px 16px; /* 按钮内边距 */
+    font-size: 18px; /* 字体大小 */
+    font-family: &quot;Segoe UI&quot;, Arial, sans-serif; /* 字体样式 */
+    font-weight: bold; /* 加粗字体 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影 */
+}
+
+/* 鼠标悬停效果 */
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* 更亮的白色背景 */
+    color: #34495e; /* 深一点的文字颜色 */
+    border: 1px solid rgba(44, 62, 80, 0.8); /* 更明显的边框 */
+}
+
+/* 按下效果 */
+QPushButton:pressed {
+    background-color: rgba(230, 230, 230, 0.9); /* 按下时灰白背景 */
+    box-shadow: none; /* 按下时移除阴影 */
+    color: #2c3e50; /* 保持文字颜色 */
+}
+
+/* 禁用按钮 */
+QPushButton:disabled {
+    background-color: rgba(200, 200, 200, 0.7); /* 禁用按钮灰色背景 */
+    color: rgba(120, 120, 120, 0.8); /* 灰色文字 */
+    border: 1px solid rgba(120, 120, 120, 0.5); /* 灰色边框 */
+    box-shadow: none; /* 无阴影 */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>编辑信息</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_14">
+     <widget class="QPushButton" name="saveButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>181</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">/* 按钮默认样式 */
+QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+    color: #2c3e50; /* 深灰蓝色文字 */
+    border: 1px solid rgba(44, 62, 80, 0.5); /* 半透明深蓝灰色边框 */
+    border-radius: 8px; /* 圆角按钮 */
+    padding: 8px 16px; /* 按钮内边距 */
+    font-size: 18px; /* 字体大小 */
+    font-family: &quot;Segoe UI&quot;, Arial, sans-serif; /* 字体样式 */
+    font-weight: bold; /* 加粗字体 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影 */
+}
+
+/* 鼠标悬停效果 */
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* 更亮的白色背景 */
+    color: #34495e; /* 深一点的文字颜色 */
+    border: 1px solid rgba(44, 62, 80, 0.8); /* 更明显的边框 */
+}
+
+/* 按下效果 */
+QPushButton:pressed {
+    background-color: rgba(230, 230, 230, 0.9); /* 按下时灰白背景 */
+    box-shadow: none; /* 按下时移除阴影 */
+    color: #2c3e50; /* 保持文字颜色 */
+}
+
+/* 禁用按钮 */
+QPushButton:disabled {
+    background-color: rgba(200, 200, 200, 0.7); /* 禁用按钮灰色背景 */
+    color: rgba(120, 120, 120, 0.8); /* 灰色文字 */
+    border: 1px solid rgba(120, 120, 120, 0.5); /* 灰色边框 */
+    box-shadow: none; /* 无阴影 */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>保存</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="ProfileStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>60</y>
+      <width>221</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_15">
+     <widget class="QLabel" name="profileLbl">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>221</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_16">
+     <widget class="QPushButton" name="uploadProfileButton">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>221</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>上传头像</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>210</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+    </property>
+    <property name="text">
+     <string>年龄</string>
+    </property>
+   </widget>
+   <widget class="QStackedWidget" name="ageStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>210</y>
+      <width>191</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_7">
+     <widget class="QLabel" name="agelabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>0</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请输入年龄</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_8">
+     <widget class="QLineEdit" name="ageSetBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="mailStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>60</y>
+      <width>291</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_5">
+     <widget class="QLabel" name="mailLabel_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>501</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请绑定邮箱</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_6">
+     <widget class="QLineEdit" name="mailSetBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>240</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page_3">
+     <widget class="QLabel" name="levelLbl">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"> font-family: &quot;Segoe UI&quot;, Arial, sans-serif;</string>
+      </property>
+      <property name="text">
+       <string>LV.1</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_4">
+     <widget class="QSpinBox" name="spinBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>5</number>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="logoff_button">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>310</y>
+      <width>181</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>-1</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">/* 按钮默认样式 */
+QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+    color: #2c3e50; /* 深灰蓝色文字 */
+    border: 1px solid rgba(44, 62, 80, 0.5); /* 半透明深蓝灰色边框 */
+    border-radius: 8px; /* 圆角按钮 */
+    padding: 8px 16px; /* 按钮内边距 */
+    font-size: 18px; /* 字体大小 */
+    font-family: &quot;Segoe UI&quot;, Arial, sans-serif; /* 字体样式 */
+    font-weight: bold; /* 加粗字体 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影 */
+}
+
+/* 鼠标悬停效果 */
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* 更亮的白色背景 */
+    color: #34495e; /* 深一点的文字颜色 */
+    border: 1px solid rgba(44, 62, 80, 0.8); /* 更明显的边框 */
+}
+
+/* 按下效果 */
+QPushButton:pressed {
+    background-color: rgba(230, 230, 230, 0.9); /* 按下时灰白背景 */
+    box-shadow: none; /* 按下时移除阴影 */
+    color: #2c3e50; /* 保持文字颜色 */
+}
+
+/* 禁用按钮 */
+QPushButton:disabled {
+    background-color: rgba(200, 200, 200, 0.7); /* 禁用按钮灰色背景 */
+    color: rgba(120, 120, 120, 0.8); /* 灰色文字 */
+    border: 1px solid rgba(120, 120, 120, 0.5); /* 灰色边框 */
+    box-shadow: none; /* 无阴影 */
+}
+</string>
+    </property>
+    <property name="text">
+     <string>注销</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -50,7 +50,7 @@ MReorderWindow::MReorderWindow(QWidget *parent)
     layout->setSpacing(20); // 设置控件之间的间距
 
     // 用户 ID 标签和输入框
-    QLabel *userIdLabel = new QLabel("用户 ID:", this);
+    QLabel *userIdLabel = new QLabel("订单 ID:", this);
     userIdLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
     layout->addWidget(userIdLabel);
 

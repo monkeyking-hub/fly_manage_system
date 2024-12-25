@@ -7,11 +7,28 @@
     <x>0</x>
     <y>0</y>
     <width>1187</width>
-    <height>696</height>
+    <height>670</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 只对主窗口应用背景图 */
+QWidget#pay_window {  /* 或使用你的主窗口对象名 */
+    background-image: url(&quot;://bcgrd.jpg&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* 为其他控件设置独立的背景 */
+QStackedWidget, QGroupBox {
+    background-color: white;  /* 或其他颜色 */
+    /* 可以设置透明度 */
+    background-color: rgba(255, 255, 255, 0.9);
+}
+</string>
   </property>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
@@ -398,7 +415,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>50</y>
+     <y>40</y>
      <width>671</width>
      <height>461</height>
     </rect>
@@ -658,9 +675,28 @@ background-color:lightgray;
     </widget>
    </widget>
   </widget>
+  <widget class="QPushButton" name="pushButton_4">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>600</y>
+     <width>81</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>返回</string>
+   </property>
+  </widget>
   <zorder>groupBox</zorder>
   <zorder>stackedWidget_2</zorder>
   <zorder>stackedWidget</zorder>
+  <zorder>pushButton_4</zorder>
  </widget>
  <resources>
   <include location="images.qrc"/>
