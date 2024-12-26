@@ -1,6 +1,6 @@
 #include "boarderitem.h"
 #include "ui_boarderitem.h"
-int num=1;
+int boarderItem:: num=1;
 boarderItem::boarderItem(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::boarderItem)
