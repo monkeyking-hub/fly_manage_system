@@ -18,60 +18,152 @@ MReorderWindow::MReorderWindow(QWidget *parent)
     // 设置主窗口背景颜色
     this->setStyleSheet("background-color: #f0f0f0;");
 
+    // 通用字体设置
+    QFont largerFont("Arial", 12); // 设置字体族和大小
+
     // 创建控件
     orderIdEdit = new QLineEdit(this);
     orderIdEdit->setPlaceholderText("请输入 ID");
-    orderIdEdit->setFixedWidth(300); // 固定宽度
-    orderIdEdit->setStyleSheet("border: 2px solid #ccc; border-radius: 10px; padding: 5px;");
+    orderIdEdit->setFixedSize(300, 45); // 设置固定宽度和高度
+    orderIdEdit->setFont(largerFont);
+    orderIdEdit->setStyleSheet(
+        "QLineEdit {"
+        "   border: 2px solid #ccc;"
+        "   border-radius: 10px;"
+        "   padding: 5px 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
+        );
 
     statusCombo = new QComboBox(this);
     statusCombo->addItem("已支付");
     statusCombo->addItem("未支付");
     statusCombo->addItem("已退款");
-    statusCombo->setFixedWidth(300); // 固定宽度
-    statusCombo->setStyleSheet("border: 2px solid #ccc; border-radius: 10px; padding: 5px;");
+    statusCombo->setFixedSize(300, 45);
+    statusCombo->setFont(largerFont);
+    statusCombo->setStyleSheet(
+        "QComboBox {"
+        "   border: 2px solid #ccc;"
+        "   border-radius: 10px;"
+        "   padding: 5px 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
+        );
 
     dateEdit = new QDateEdit(QDate::currentDate(), this);
     dateEdit->setCalendarPopup(true);
     dateEdit->setDisplayFormat("yyyy-MM-dd");
-    dateEdit->setFixedWidth(300); // 固定宽度
-    dateEdit->setStyleSheet("border: 2px solid #ccc; border-radius: 10px; padding: 5px;");
-
-    submitButton = new QPushButton("提交", this);
-    submitButton->setFixedWidth(300); // 固定宽度
-    submitButton->setStyleSheet(
-        "background-color: #007BFF; color: white; font-weight: bold; "
-        "border: none; border-radius: 10px; padding: 10px;"
+    dateEdit->setFixedSize(300, 45);
+    dateEdit->setFont(largerFont);
+    dateEdit->setStyleSheet(
+        "QDateEdit {"
+        "   border: 2px solid #ccc;"
+        "   border-radius: 10px;"
+        "   padding: 5px 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
         );
 
-    // 布局
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setAlignment(Qt::AlignCenter); // 居中对齐
-    layout->setSpacing(20); // 设置控件之间的间距
+    submitButton = new QPushButton("提交", this);
+    submitButton->setFixedSize(300, 45);
+    submitButton->setFont(largerFont);
+    submitButton->setStyleSheet(
+        "QPushButton {"
+        "   background-color: #007BFF;"
+        "   color: white;"
+        "   font-weight: bold;"
+        "   border: none;"
+        "   border-radius: 10px;"
+        "   padding: 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: #0056b3;"
+        "}"
+        );
 
-    // 用户 ID 标签和输入框
+    // 布局部分
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setAlignment(Qt::AlignCenter);
+    layout->setSpacing(20);
+
+    // 标签样式也相应调整
     QLabel *userIdLabel = new QLabel("订单 ID:", this);
-    userIdLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
+    userIdLabel->setFont(largerFont);
+    userIdLabel->setStyleSheet(
+        "QLabel {"
+        "   background-color: #E8F5E9;"
+        "   padding: 8px;"
+        "   border-radius: 5px;"
+        "   font-size: 12pt;"
+        "}"
+        );
     layout->addWidget(userIdLabel);
 
-    orderIdEdit->setStyleSheet("background-color:#E8F5E9; border: 2px solid #66BB6A; border-radius: 10px; padding: 5px;");
+    orderIdEdit->setStyleSheet(
+        "QLineEdit {"
+        "   background-color: #E8F5E9;"
+        "   border: 2px solid #66BB6A;"
+        "   border-radius: 10px;"
+        "   padding: 5px 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
+        );
     layout->addWidget(orderIdEdit);
 
-    // 订单状态标签和下拉框
     QLabel *statusLabel = new QLabel("订单状态:", this);
-    statusLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
+    statusLabel->setFont(largerFont);
+    statusLabel->setStyleSheet(
+        "QLabel {"
+        "   background-color: #E8F5E9;"
+        "   padding: 8px;"
+        "   border-radius: 5px;"
+        "   font-size: 12pt;"
+        "}"
+        );
     layout->addWidget(statusLabel);
 
-    statusCombo->setStyleSheet("background-color: #E8F5E9; border: 2px solid #66BB6A; border-radius: 10px; padding: 5px;");
+    statusCombo->setStyleSheet(
+        "QComboBox {"
+        "   background-color: #E8F5E9;"
+        "   border: 2px solid #66BB6A;"
+        "   border-radius: 10px;"
+        "   padding: 5px 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
+        );
     layout->addWidget(statusCombo);
 
-    // 修改日期标签和日期选择框
     QLabel *dateLabel = new QLabel("请选择修改日期:", this);
-    dateLabel->setStyleSheet("background-color: #E8F5E9; padding: 5px; border-radius: 5px;");
+    dateLabel->setFont(largerFont);
+    dateLabel->setStyleSheet(
+        "QLabel {"
+        "   background-color: #E8F5E9;"
+        "   padding: 8px;"
+        "   border-radius: 5px;"
+        "   font-size: 12pt;"
+        "}"
+        );
     layout->addWidget(dateLabel);
 
-    dateEdit->setStyleSheet("background-color: #E8F5E9; border: 2px solid #66BB6A; border-radius: 10px; padding: 5px;");
+    dateEdit->setStyleSheet(
+        "QDateEdit {"
+        "   background-color: #E8F5E9;"
+        "   border: 2px solid #66BB6A;"
+        "   border-radius: 10px;"
+        "   padding: 5px 10px;"
+        "   font-size: 12pt;"
+        "   min-height: 45px;"
+        "}"
+        );
     layout->addWidget(dateEdit);
+
 
     // 提交按钮
     submitButton->setStyleSheet(

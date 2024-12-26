@@ -35,6 +35,9 @@ flightstatus::flightstatus(QWidget *parent)
     connect(ui->destinationInput, &QLineEdit::textChanged, this, [this]() {
         ui->pick_widget_2->setVisible(false);
     });
+    ui->radioButton->setVisible(false);
+    ui->radioButton_2->setVisible(false);
+    ui->dateEditPushbutton_2->setVisible(false);
     this->installEventFilter(this);
 
     // 安装事件过滤器，处理点击 pick_widget 以外的区域隐藏 pick_widget
@@ -162,10 +165,15 @@ void flightstatus::setupCompleter()
 // 出发地输入框文本变化时触发
 void flightstatus::on_departureInput_textChanged(const QString &text)
 {
-    ui->dp_airpot_cbx->clear();
-    ui->dp_airpot_cbx->addItem("不限出发机场");
-    ui->flight_company_cbx->clear();
-    ui->flight_company_cbx->addItem("不限航空公司");
+    ui->dp_airpot_cbx->setCurrentIndex(0);
+    ui->ds_airpot_cbx->setCurrentIndex(0);
+    ui->flight_company_cbx->setCurrentIndex(0);
+    while (ui->dp_airpot_cbx->count() > 1) {
+        ui->dp_airpot_cbx->removeItem(ui->dp_airpot_cbx->count() - 1);
+    }
+    while (ui->flight_company_cbx->count() > 1) {
+        ui->flight_company_cbx->removeItem(ui->flight_company_cbx->count() - 1);
+    }
     // 使用拼音或中文进行匹配
     QStringList filteredCities;
     for (const QString &city : cityList) {
@@ -179,10 +187,15 @@ void flightstatus::on_departureInput_textChanged(const QString &text)
 // 目的地输入框文本变化时触发
 void flightstatus::on_destinationInput_textChanged(const QString &text)
 {
-    ui->ds_airpot_cbx->clear();
-    ui->ds_airpot_cbx->addItem("不限抵达机场");
-    ui->flight_company_cbx->clear();
-    ui->flight_company_cbx->addItem("不限航空公司");
+    ui->dp_airpot_cbx->setCurrentIndex(0);
+    ui->ds_airpot_cbx->setCurrentIndex(0);
+    ui->flight_company_cbx->setCurrentIndex(0);
+    while (ui->ds_airpot_cbx->count() > 1) {
+        ui->ds_airpot_cbx->removeItem(ui->ds_airpot_cbx->count() - 1);
+    }
+    while (ui->flight_company_cbx->count() > 1) {
+        ui->flight_company_cbx->removeItem(ui->flight_company_cbx->count() - 1);
+    }
     // 使用拼音或中文进行匹配
     QStringList filteredCities;
     for (const QString &city : cityList) {
@@ -414,95 +427,245 @@ QPushButton:hover {
         }
     }
     // 初始化城市列表
-    cityList << "安庆" << "anqing"
-             << "安阳" << "anyang"
-             << "北京" << "beijing"
-             << "包头" << "baotou"
-             << "北平" << "beipin"
-             << ""
-             << "成都" << "chengdu"
-             << "重庆" << "chongqing"
-             << "长沙" << "changsha"
-             << "长春" << "changchun"
-             << "常州" << "changzhou"
-             << "大连" << "dalian"
-             << "东莞" << "dongguan"
-             << "丹东" << "dandong"
-             << "敦煌" << "dunhuang"
-             << "大理" << "dali"
-             << "鄂尔多斯" << "eerduosi"
-             << "恩施" << "enshi"
-             << "福州" << "fuzhou"
-             << "阜阳" << "fuyang"
-             << "佛山" << "foshan"
-             << "广州" << "guangzhou"
-             << "桂林" << "guilin"
-             << "贵阳" << "guiyang"
-             << "赣州" << "ganzhou"
-             << "杭州" << "hangzhou"
-             << "合肥" << "hefei"
-             << "哈尔滨" << "haerbin"
-             << "呼和浩特" << "huhehaote"
-             << "海口" << "haikou"
-             << "邯郸" << "handan"
-             << "惠州" << "huizhou"
-             << "黄山" << "huangshan"
-             << "济南" << "jinan"
-             << "吉林" << "jilin"
-             << "锦州" << "jianzhou"
-             << "嘉峪关" << "jiayuguan"
-             << "景德镇" << "jingdezhen"
-             << "昆明" << "kunming"
-             << "喀什" << "kashi"
-             << "克拉玛依" << "kelamayi"
-             << "兰州" << "lanzhou"
-             << "洛阳" << "luoyang"
-             << "丽江" << "lijian"
-             << "柳州" << "liuzhou"
-             << "临沂" << "linyi"
-             << "绵阳" << "mianyang"
-             << "梅州" << "meizhou"
-             << "南京" << "nanjing"
-             << "南昌" << "nanchang"
-             << "南宁" << "nanning"
-             << "宁波" << "ningbo"
-             << "南阳" << "nanyang"
-             << "攀枝花" << "panzhihua"
-             << "青岛" << "qingdao"
-             << "秦皇岛" << "qinhaungdao"
-             << "齐齐哈尔" << "qiqihaer"
-             << "衢州" << "quzhou"
-             << "上海" << "shanghai"
-             << "深圳" << "shenzhen"
-             << "石家庄" << "shijiazhuang"
-             << "汕头" << "shantou"
-             << "三亚" << "sanya"
-             << "苏州" << "suzhou"
-             << "绍兴" << "shaoxing"
-             << "天津" << "tianjin"
-             << "太原" << "taiyuan"
-             << "通辽" << "tongliao"
-             << "台州" << "taizhou"
-             << "武汉" << "wuhan"
-             << "无锡" << "wuxi"
-             << "温州" << "wenzhou"
-             << "威海" << "weihai"
-             << "乌鲁木齐" << "wulumuqi"
-             << "西安" << "xian"
-             << "厦门" << "xiamen"
-             << "西宁" << "xining"
-             << "徐州" << "xuzhou"
-             << "襄阳" << "xiangyang"
-             << "延吉" << "yanji"
-             << "银川" << "yinchuan"
-             << "宜昌" << "yichang"
-             << "烟台" << "yantai"
-             << "运城" << "yuncheng"
-             << "郑州" << "zhengzhou"
-             << "珠海" << "zhuhai"
-             << "张家界" << "zhangjiajie"
-             << "中山" << "zhongshan"
-             << "遵义" << "zunyi";
+    cityList  << "阿尔山" << "aershan"
+        << "阿勒泰" << "aletai"
+        << "阿拉尔" << "alaer"
+        << "安康" << "ankang"
+        << "阿克苏" << "akesu"
+        << "鞍山" << "anshan"
+        << "安庆" << "anqing"
+        << "阿拉善左旗" << "alashanzuoqi"
+        << "毕节" << "bijie"
+        << "北海" << "beihai"
+        << "博乐" << "bole"
+        << "保山" << "baoshan"
+        << "巴中" << "bazhong"
+        << "布尔津" << "buerjin"
+        << "北京" << "beijing"
+        << "白山" << "baishan"
+        << "百色" << "baise"
+        << "巴彦淖尔" << "bayannaoer"
+        << "包头" << "baotou"
+        << "成都" << "chengdu"
+        << "常德" << "changde"
+        << "长春" << "changchun"
+        << "朝阳" << "chaoyang"
+        << "赤峰" << "chifeng"
+        << "长治" << "changzhi"
+        << "重庆" << "chongqing"
+        << "长沙" << "changsha"
+        << "常州" << "changzhou"
+        << "承德" << "chengde"
+        << "郴州" << "chenzhou"
+        << "池州" << "chizhou"
+        << "大同" << "datong"
+        << "丹东" << "dandong"
+        << "迪庆" << "diqing"
+        << "大连" << "dalian"
+        << "大理" << "dali"
+        << "敦煌" << "dunhuang"
+        << "东营" << "dongying"
+        << "大庆" << "daqing"
+        << "达州" << "dazhou"
+        << "德令哈" << "delingha"
+        << "鄂州" << "ezhou"
+        << "恩施" << "enshi"
+        << "二连浩特" << "erlianhaote"
+        << "福州" << "fuzhou"
+        << "阜阳" << "fuyang"
+        << "佛山" << "foshan"
+        << "抚远" << "fuyuan"
+        << "富蕴" << "fuyun"
+        << "广州" << "guangzhou"
+        << "果洛" << "guoluo"
+        << "格尔木" << "geermu"
+        << "广元" << "guangyuan"
+        << "固原" << "guyuan"
+        << "赣州" << "ganzhou"
+        << "贵阳" << "guiyang"
+        << "桂林" << "guilin"
+        << "黄山" << "huangshan"
+        << "合肥" << "hefei"
+        << "海口" << "haikou"
+        << "河池" << "hechi"
+        << "邯郸" << "handan"
+        << "黑河" << "heihe"
+        << "呼和浩特" << "huhehaote"
+        << "杭州" << "hangzhou"
+        << "淮安" << "huaian"
+        << "怀化" << "huaihua"
+        << "海拉尔" << "hailaer"
+        << "哈密" << "hami"
+        << "衡阳" << "hengyang"
+        << "哈尔滨" << "haerbin"
+        << "和田" << "hetian"
+        << "惠州" << "huizhou"
+        << "菏泽" << "heze"
+        << "汉中" << "hanzhong"
+        << "荆州" << "jingzhou"
+        << "揭阳" << "jieyang"
+        << "济南" << "jinan"
+        << "景德镇" << "jingdezhen"
+        << "加格达奇" << "jiagedaqi"
+        << "嘉峪关" << "jiayuguan"
+        << "井冈山" << "jinggangshan"
+        << "金昌" << "jinchang"
+        << "九江" << "jiujiang"
+        << "佳木斯" << "jiamusi"
+        << "济宁" << "jining"
+        << "锦州" << "jinzhou"
+        << "鸡西" << "jixi"
+        << "九寨沟" << "jiuzhaigou"
+        << "库车" << "kuche"
+        << "康定" << "kangding"
+        << "喀什" << "kashi"
+        << "昆明" << "kunming"
+        << "库尔勒" << "kuerle"
+        << "克拉玛依" << "kelamayi"
+        << "临汾" << "linfen"
+        << "兰州" << "lanzhou"
+        << "丽江" << "lijiang"
+        << "荔波" << "libo"
+        << "吕梁" << "lvliang"
+        << "临沧" << "lincang"
+        << "六盘水" << "liupanshui"
+        << "洛阳" << "luoyang"
+        << "连云港" << "lianyungang"
+        << "临沂" << "linyi"
+        << "阆中" << "langzhong"
+        << "柳州" << "liuzhou"
+        << "泸州" << "luzhou"
+        << "牡丹江" << "mudanjiang"
+        << "绵阳" << "mianyang"
+        << "梅州" << "meizhou"
+        << "满洲里" << "manzhouli"
+        << "漠河" << "mohe"
+        << "南昌" << "nanchang"
+        << "林芝" << "linzhi"
+        << "南充" << "nanchong"
+        << "宁波" << "ningbo"
+        << "阿里" << "ali"
+        << "南京" << "nanjing"
+        << "宁蒗" << "ninglang"
+        << "南宁" << "nanning"
+        << "南阳" << "nanyang"
+        << "南通" << "nantong"
+        << "鄂尔多斯" << "eerduosi"
+        << "普洱" << "puer"
+        << "攀枝花" << "panzhihua"
+        << "昌都" << "changdu"
+        << "青岛" << "qingdao"
+        << "祁连" << "qilian"
+        << "且末" << "qiemo"
+        << "庆阳" << "qingyang"
+        << "奇台" << "qitai"
+        << "黔江" << "qianjiang"
+        << "泉州" << "quanzhou"
+        << "衢州" << "quzhou"
+        << "齐齐哈尔" << "qiqihaer"
+        << "琼海" << "qionghai"
+        << "上海" << "shanghai"
+        << "石河子" << "shihezi"
+        << "沈阳" << "shenyang"
+        << "石家庄" << "shijiazhuang"
+        << "上饶" << "shangrao"
+        << "三亚" << "sanya"
+        << "朔州" << "shuozhou"
+        << "深圳" << "shenzhen"
+        << "日喀则" << "rikaze"
+        << "山南" << "shannan"
+        << "塔城" << "tacheng"
+        << "腾冲" << "tengchong"
+        << "铜仁" << "tongren"
+        << "通辽" << "tongliao"
+        << "天水" << "tianshui"
+        << "吐鲁番" << "tulufan"
+        << "通化" << "tonghua"
+        << "天津" << "tianjin"
+        << "唐山" << "tangshan"
+        << "图木舒克" << "tumushuke"
+        << "太原" << "taiyuan"
+        << "塔什库尔干" << "tashikuergan"
+        << "台州" << "taizhou"
+        << "乌兰浩特" << "wulanhaote"
+        << "武隆" << "wulong"
+        << "潍坊" << "weifang"
+        << "威海" << "weihai"
+        << "武汉" << "wuhan"
+        << "文山" << "wenshan"
+        << "温州" << "wenzhou"
+        << "巫山" << "wushan"
+        << "乌海" << "wuhai"
+        << "无锡" << "wuxi"
+        << "梧州" << "wuzhou"
+        << "万州" << "wanzhou"
+        << "湘西" << "xiangxi"
+        << "忻州" << "xinzhou"
+        << "信阳" << "xinyang"
+        << "襄阳" << "xiangyang"
+        << "西昌" << "xichang"
+        << "锡林浩特" << "xilinhaote"
+        << "西安" << "xian"
+        << "厦门" << "xiamen"
+        << "西宁" << "xining"
+        << "邢台" << "xingtai"
+        << "徐州" << "xuzhou"
+        << "西双版纳" << "xishuangbanna"
+        << "新源" << "xinyuan"
+        << "兴义" << "xingyi"
+        << "榆林" << "yulin"
+        << "延安" << "yanan"
+        << "宜宾" << "yibin"
+        << "运城" << "yuncheng"
+        << "宜春" << "yichun"
+        << "宜昌" << "yichang"
+        << "伊宁" << "yining"
+        << "义乌" << "yiwu"
+        << "玉林" << "yulin"
+        << "延吉" << "yanji"
+        << "烟台" << "yantai"
+        << "盐城" << "yancheng"
+        << "扬州" << "yangzhou"
+        << "玉树" << "yushu"
+        << "银川" << "yinchuan"
+        << "伊春" << "yichun"
+        << "永州" << "yongzhou"
+        << "郑州" << "zhengzhou"
+        << "张家界" << "zhangjiajie"
+        << "舟山" << "zhoushan"
+        << "张掖" << "zhangye"
+        << "昭通" << "zhaotong"
+        << "昭苏" << "zhaosu"
+        << "珠海" << "zhuhai"
+        << "湛江" << "zhanjiang"
+        << "中卫" << "zhongwei"
+        << "张家口" << "zhangjiakou"
+        << "遵义" << "zunyi"
+        << "扎兰屯" << "zhalantun"
+        << "莎车" << "shache"
+        << "白城" << "baicheng"
+        << "霍林郭勒" << "huolinguole"
+        << "建三江" << "jiansanjiang"
+        << "陇南" << "longnan"
+        << "茅台" << "maotai"
+        << "芒市" << "mangshi"
+        << "十堰" << "shiyan"
+        << "松原" << "songyuan"
+        << "韶关" << "shaoguan"
+        << "三明" << "sanming"
+        << "邵阳" << "shaoyang"
+        << "于田" << "yutian"
+        << "岳阳" << "yueyang"
+        << "日照" << "rizhao"
+        << "花土沟" << "huatugou"
+        << "乌兰察布" << "wulanchabu"
+        << "澜沧" << "lancang"
+        << "五大连池" << "wudalianchi"
+        << "秦皇岛" << "qinhuangdao"
+        << "若羌" << "ruoqiang"
+        << "沧源" << "cangyuan"
+        << "红原" << "hongyuan"
+        << "营口" << "yingkou";
 
     // 设置补全器
     setupCompleter();
@@ -622,6 +785,11 @@ void flightstatus::on_searchButton_clicked()
                 updatedpAirports(qap1);
                 updatedsAirports(qap2);
                 for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
                     QString company = ui->flight_company_cbx->currentText();
                     QString departureAirport = ui->dp_airpot_cbx->currentText();
                     QString destinationAirport = ui->ds_airpot_cbx->currentText();
@@ -698,6 +866,11 @@ void flightstatus::on_btn_lowPrice_clicked()
                     flights.push_back(obj);
                 }
                 for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
                     QString company = ui->flight_company_cbx->currentText();
                     QString departureAirport = ui->dp_airpot_cbx->currentText();
                     QString destinationAirport = ui->ds_airpot_cbx->currentText();
@@ -775,6 +948,11 @@ void flightstatus::on_btn_takeoff_early_clicked()
                     flights.push_back(obj);
                 }
                 for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
                     QString company = ui->flight_company_cbx->currentText();
                     QString departureAirport = ui->dp_airpot_cbx->currentText();
                     QString destinationAirport = ui->ds_airpot_cbx->currentText();
@@ -852,6 +1030,11 @@ void flightstatus::on_btn_period_short_clicked()
                     flights.push_back(obj);
                 }
                 for (const QJsonValue &flightValue : flights) {
+                    QString date = ui->dateEdit->text();
+                    qint64 timestamp = flightValue["departureTime"].toVariant().toLongLong();
+                    QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timestamp);
+                    QString dateStr = dateTime.toString("yyyy-MM-dd");
+                    if(date.mid(0,10) != dateStr) continue;
                     QString company = ui->flight_company_cbx->currentText();
                     QString departureAirport = ui->dp_airpot_cbx->currentText();
                     QString destinationAirport = ui->ds_airpot_cbx->currentText();

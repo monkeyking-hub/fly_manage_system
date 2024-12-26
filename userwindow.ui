@@ -79,63 +79,6 @@ QPushButton:disabled {
      <string>退出登录</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="logOffButton">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>570</y>
-      <width>181</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Segoe UI</family>
-      <pointsize>-1</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">/* 按钮默认样式 */
-QPushButton {
-    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
-    color: #2c3e50; /* 深灰蓝色文字 */
-    border: 1px solid rgba(44, 62, 80, 0.5); /* 半透明深蓝灰色边框 */
-    border-radius: 8px; /* 圆角按钮 */
-    padding: 8px 16px; /* 按钮内边距 */
-    font-size: 18px; /* 字体大小 */
-    font-family: &quot;Segoe UI&quot;, Arial, sans-serif; /* 字体样式 */
-    font-weight: bold; /* 加粗字体 */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影 */
-}
-
-/* 鼠标悬停效果 */
-QPushButton:hover {
-    background-color: rgba(255, 255, 255, 0.9); /* 更亮的白色背景 */
-    color: #34495e; /* 深一点的文字颜色 */
-    border: 1px solid rgba(44, 62, 80, 0.8); /* 更明显的边框 */
-}
-
-/* 按下效果 */
-QPushButton:pressed {
-    background-color: rgba(230, 230, 230, 0.9); /* 按下时灰白背景 */
-    box-shadow: none; /* 按下时移除阴影 */
-    color: #2c3e50; /* 保持文字颜色 */
-}
-
-/* 禁用按钮 */
-QPushButton:disabled {
-    background-color: rgba(200, 200, 200, 0.7); /* 禁用按钮灰色背景 */
-    color: rgba(120, 120, 120, 0.8); /* 灰色文字 */
-    border: 1px solid rgba(120, 120, 120, 0.5); /* 灰色边框 */
-    box-shadow: none; /* 无阴影 */
-}
-</string>
-    </property>
-    <property name="text">
-     <string>注销</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="personInfoBox">
     <property name="geometry">
      <rect>
