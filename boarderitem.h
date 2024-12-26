@@ -14,6 +14,7 @@ class boarderItem : public QWidget
 public:
     explicit boarderItem(QWidget *parent = nullptr);
     ~boarderItem();
+    static int num;
     QSize sizeHint() const {
         return QSize(641, 245);  // 根据需要调整宽度和高度
     }

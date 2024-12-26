@@ -46,6 +46,8 @@ void pay_window::on_pushButton_clicked()
 
 void pay_window:: loadFliInfo()
 {
+    ui->listWidget->clear();
+    boarderItem::num=1;
     on_pushButton_clicked();
     flightInfo fli= InterfaceManager::instance()->Info;
     ui->lbl_compName->setText(fli.airlineCompany);
