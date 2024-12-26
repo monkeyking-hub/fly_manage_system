@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1187</width>
+    <width>1247</width>
     <height>670</height>
    </rect>
   </property>
@@ -33,10 +33,10 @@ QStackedWidget, QGroupBox {
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>720</x>
-     <y>40</y>
-     <width>421</width>
-     <height>491</height>
+     <x>840</x>
+     <y>0</y>
+     <width>411</width>
+     <height>691</height>
     </rect>
    </property>
    <property name="font">
@@ -50,7 +50,7 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_date">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>20</x>
       <y>30</y>
       <width>71</width>
       <height>21</height>
@@ -63,8 +63,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_depar">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>30</y>
+      <x>140</x>
+      <y>70</y>
       <width>51</width>
       <height>21</height>
      </rect>
@@ -76,8 +76,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_des">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>30</y>
+      <x>310</x>
+      <y>70</y>
       <width>51</width>
       <height>21</height>
      </rect>
@@ -89,8 +89,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_compName">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>70</y>
+      <x>10</x>
+      <y>150</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -102,8 +102,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_flightNo">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>70</y>
+      <x>140</x>
+      <y>120</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -115,8 +115,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_flightCate">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>70</y>
+      <x>220</x>
+      <y>120</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -128,8 +128,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_seatCate">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>70</y>
+      <x>320</x>
+      <y>120</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -141,8 +141,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_deparTime">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>90</y>
+      <x>30</x>
+      <y>160</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -159,8 +159,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_arrivalTime">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>90</y>
+      <x>300</x>
+      <y>160</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -178,7 +178,7 @@ QStackedWidget, QGroupBox {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>140</y>
+      <y>230</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -195,8 +195,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="lbl_arrivalAirport">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>140</y>
+      <x>300</x>
+      <y>240</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -215,8 +215,8 @@ QStackedWidget, QGroupBox {
      <rect>
       <x>20</x>
       <y>50</y>
-      <width>51</width>
-      <height>41</height>
+      <width>91</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
@@ -226,8 +226,8 @@ QStackedWidget, QGroupBox {
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>110</y>
+      <x>120</x>
+      <y>170</y>
       <width>171</width>
       <height>21</height>
      </rect>
@@ -242,8 +242,8 @@ QStackedWidget, QGroupBox {
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>30</y>
+      <x>220</x>
+      <y>70</y>
       <width>31</width>
       <height>20</height>
      </rect>
@@ -284,11 +284,17 @@ QStackedWidget, QGroupBox {
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>510</y>
-     <width>661</width>
-     <height>141</height>
+     <x>60</x>
+     <y>490</y>
+     <width>781</width>
+     <height>181</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QStackedWidget, QStackedWidget &gt; * {
+    background-color: transparent;
+}
+</string>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -297,8 +303,8 @@ QStackedWidget, QGroupBox {
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>10</y>
+       <x>160</x>
+       <y>0</y>
        <width>301</width>
        <height>31</height>
       </rect>
@@ -414,11 +420,17 @@ QPushButton:hover {
   <widget class="QStackedWidget" name="stackedWidget_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
-     <width>671</width>
-     <height>461</height>
+     <x>0</x>
+     <y>30</y>
+     <width>841</width>
+     <height>471</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QStackedWidget, QStackedWidget &gt; * {
+    background-color: transparent;
+}
+</string>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -427,10 +439,10 @@ QPushButton:hover {
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>0</y>
+       <x>30</x>
+       <y>30</y>
        <width>91</width>
-       <height>31</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -446,12 +458,14 @@ QPushButton:hover {
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>50</y>
-       <width>641</width>
-       <height>411</height>
+       <y>20</y>
+       <width>721</width>
+       <height>441</height>
       </rect>
      </property>
     </widget>
+    <zorder>listWidget</zorder>
+    <zorder>label</zorder>
    </widget>
    <widget class="QWidget" name="page_4">
     <widget class="QLabel" name="label_3">
@@ -553,19 +567,6 @@ background-color:lightgray;
      </property>
      <property name="text">
       <string/>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="radioButton">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>420</y>
-       <width>151</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>我不需要额外保障</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btn_1">
@@ -678,10 +679,10 @@ background-color:lightgray;
   <widget class="QPushButton" name="pushButton_4">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>600</y>
-     <width>81</width>
-     <height>41</height>
+     <x>0</x>
+     <y>0</y>
+     <width>121</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -693,6 +694,20 @@ background-color:lightgray;
     <string>返回</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>-1</x>
+     <y>-1</y>
+     <width>1601</width>
+     <height>1001</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>label_5</zorder>
   <zorder>groupBox</zorder>
   <zorder>stackedWidget_2</zorder>
   <zorder>stackedWidget</zorder>

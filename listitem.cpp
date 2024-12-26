@@ -64,6 +64,7 @@ void listItem::setFlightDetails(const flightInfo &flight)
     ui->lbl_arrTime->setText(arrivalDateTime.toString("hh:mm"));
 
     if(flight.chosenSeat=="经济舱")    ui->lbl_price->setText("¥" + QString::number(static_cast<int>(flight.economyClassPrice)));
+    else if(flight.chosenSeat=="商务舱") ui->lbl_price->setText("¥" + QString::number(static_cast<int>(flight.businessClassPrice)));
     else if(flight.chosenSeat=="头等舱")   ui->lbl_price->setText("¥" + QString::number(static_cast<int>(flight.firstClassPrice)));
     // 设置其余标签的文本
     ui->lbl_compName->setText(flight.airlineCompany);

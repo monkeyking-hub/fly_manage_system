@@ -12,6 +12,11 @@ adminUserManagerWindow::adminUserManagerWindow(QWidget *parent)
     , ui(new Ui::adminUserManagerWindow)
 {
     ui->setupUi(this);
+    QPixmap pixmap("://Aplace2.jpg");
+    QPixmap scaledPixmap = pixmap.scaled(ui->label->size(),
+                                         Qt::KeepAspectRatio,
+                                         Qt::SmoothTransformation);
+    ui->label_3->setPixmap(scaledPixmap);
     ui->personInfoBox->setVisible(false);
 }
 

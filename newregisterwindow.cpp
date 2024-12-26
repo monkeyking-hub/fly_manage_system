@@ -280,14 +280,14 @@ void newRegisterWindow::onRegisterButtonClicked() //点击注册按钮触发事�
         return;
     }
 
-    if (!email.contains("@") || !email.contains(".com")) {
-        QMessageBox::critical(nullptr,
-                              "注册失败",
-                              "邮箱格式不正确！",
-                              QMessageBox::Ok,
-                              QMessageBox::Ok);
-        return;
-    }
+    // if (!email.contains("@") || !email.contains(".com")) {
+    //     QMessageBox::critical(nullptr,
+    //                           "注册失败",
+    //                           "邮箱格式不正确！",
+    //                           QMessageBox::Ok,
+    //                           QMessageBox::Ok);
+    //     return;
+    // }
 
     //检查验证码是否正确
     if (emailCodeInput != emailCode) {

@@ -150,12 +150,16 @@ MFindOrderWindow::MFindOrderWindow(QWidget *parent)
                                 "} ");
     layout->addWidget(searchButton, 0, Qt::AlignHCenter);  // 将按钮放在中心
 
-    // 设置结果显示区域样式
-    resultWidget->setLayout(resultLayout);
+    // 首先设置对象名
+    resultWidget->setObjectName("resultWidget");
+
+    // 然后使用对象名限定样式
     resultWidget->setStyleSheet(
-        "border-radius: 15px; "
-        "border: 4px solid #3498db; "
-        "padding: 0px; "
+        "QWidget#resultWidget {"
+        "    border-radius: 15px; "
+        "    border: 4px solid #3498db; "
+        "    padding: 0px; "
+        "}"
         );
 
     // 滑动区域

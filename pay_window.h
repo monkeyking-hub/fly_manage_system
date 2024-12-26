@@ -2,7 +2,14 @@
 #define PAY_WINDOW_H
 
 #include <QWidget>
-
+#include "ui_pay_window.h"
+#include <QListWidgetItem>
+#include <QListWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QMessageBox>
 namespace Ui {
 class pay_window;
 }
@@ -44,6 +51,8 @@ private slots:
     void on_pushButton_4_clicked();
 
 private:
+    void sendEmail(const QString& to, const QString& subject, const QString& body) ;
+
     const QPixmap getPic(const QString &name);
 };
 

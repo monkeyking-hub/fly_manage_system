@@ -187,7 +187,7 @@ void homeWindow::onSearchButtonClicked()
                                 if (price < minPrice)
                                     minPrice = price;
                             }
-                            prices[j] = minPrice / 100;
+                            prices[j] = minPrice;
                             hasFlights = true;
                         }
                     } else {
