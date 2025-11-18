@@ -322,3 +322,18 @@ void Userwindow::on_logOffButton_clicked()
         reply->deleteLater();
     });
 }
+
+void Userwindow::on_pushButton_2_clicked()
+{
+    User currentUser = UserManager::getInstance()->getCurrentUser();
+    updateUserInfo(currentUser);
+    loadUserInfo();
+
+    ui->userNameStackedWidget->setCurrentIndex(0);
+    ui->mailStackedWidget->setCurrentIndex(0);
+    ui->phoneNumberStackedWidget->setCurrentIndex(0);
+    ui->sexStackedWidget->setCurrentIndex(0);
+    ui->oiStackedWidget->setCurrentIndex(0);
+    ui->ProfileStackedWidget->setCurrentIndex(0);
+    ui->ageStackedWidget->setCurrentIndex(0);
+}
