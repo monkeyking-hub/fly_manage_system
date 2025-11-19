@@ -101,21 +101,23 @@ void OrderWidget::mousePressEvent(QMouseEvent *event)
 }
 
 // 鼠标进入事件
-void OrderWidget::enterEvent(QEnterEvent *event)
+void OrderWidget::enterEvent(QEvent *event)
 {
-    m_isHovered = true;
+    if (event->type() == QEvent::Enter) {
+        m_isHovered = true;
 
-    m_orderNumberLabel->setStyleSheet("font-size: 24px; color: blue; font-weight: bold;");
+        m_orderNumberLabel->setStyleSheet("font-size: 24px; color: blue; font-weight: bold;");
 
-    this->setStyleSheet(
-        "#OrderWidget {"
-        "   background-color: rgba(173, 216, 230, 200);"
-        "   border: 2px solid #cccccc; "
-        "   border-radius: 8px;"
-        "   margin: 10px;"
-        "   padding: 8px;"
-        "}"
-        );
+        this->setStyleSheet(
+            "#OrderWidget {"
+            "   background-color: rgba(173, 216, 230, 200);"
+            "   border: 2px solid #cccccc; "
+            "   border-radius: 8px;"
+            "   margin: 10px;"
+            "   padding: 8px;"
+            "}"
+            );
+    }
 
     QWidget::enterEvent(event);
 }

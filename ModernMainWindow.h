@@ -11,11 +11,18 @@ public:
     explicit ModernMainWindow(QWidget *parent = nullptr);
     ~ModernMainWindow();
 
-    QStackedWidget* getStackedWidget();
+private slots:
+    void switchToPage(const QString &pageName);
+    void onThemeChanged();
 
 private:
     void setupUI();
+    void connectSignals();
+    void applyTheme();
+    void setupCentralWidget();
+
     QStackedWidget *stackedWidget;
+    QWidget *centralWidget;
 };
 
 #endif // MODERNMAINWINDOW_H

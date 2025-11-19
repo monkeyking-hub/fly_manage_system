@@ -1,4 +1,4 @@
-#include "IconDelegate.h"
+#include "icondelegate.h"
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QStyleOptionViewItem>

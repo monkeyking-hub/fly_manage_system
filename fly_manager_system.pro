@@ -47,7 +47,12 @@ SOURCES += \
     usermanager.cpp \
     userwindow.cpp \
     xitawindow.cpp \
-    yipuxilong.cpp
+    yipuxilong.cpp \
+    ModernLoginWindow.cpp \
+    ModernDashboardWindow.cpp \
+    ModernMainWindow.cpp \
+    ModernFlightSearchWindow.cpp \
+    ModernBookingWizard.cpp
 
 HEADERS += \
     adminaddflightwindow.h \
@@ -85,7 +90,12 @@ HEADERS += \
     usermanager.h \
     userwindow.h \
     xitawindow.h \
-    yipuxilong.h
+    yipuxilong.h \
+    ModernLoginWindow.h \
+    ModernDashboardWindow.h \
+    ModernMainWindow.h \
+    ModernFlightSearchWindow.h \
+    ModernBookingWizard.h
 
 FORMS += \
     adminaddflightwindow.ui \
@@ -122,10 +132,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     API.md \
+    API_MODERN_REDESIGN.md \
     README.md \
     REQUIRE.md  \
     TechnologyStack.md \
-    meeting1.md
+    meeting1.md \
+    MODERN_FRONTEND_QUICKSTART.md \
+    MODERN_REDESIGN_SUMMARY.md \
+    modern_theme.qss
 
 RESOURCES += \
     fontstyle.qrc \

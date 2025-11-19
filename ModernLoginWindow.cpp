@@ -13,375 +13,529 @@
 #include <QDebug>
 #include <QApplication>
 #include <QScreen>
+#include <QFont>
+#include <QFontDatabase>
 
 ModernLoginWindow::ModernLoginWindow(QWidget *parent)
     : QMainWindow(parent), networkManager(new QNetworkAccessManager(this)) {
     setupUI();
     connectSignals();
+    applyTheme();
+    setupAnimations();
 }
 
 ModernLoginWindow::~ModernLoginWindow() {
 }
 
 void ModernLoginWindow::setupUI() {
-    setWindowTitle("Sky Wings - Modern Airline Booking");
+    setWindowTitle("Sky Wings - 现代化航班预订系统");
+    setFixedSize(1200, 700);
     
-    // 设置窗口大小和居中
-    resize(1200, 700);
+    // 居中窗口
     QRect screen = QApplication::primaryScreen()->geometry();
     move((screen.width() - width()) / 2, (screen.height() - height()) / 2);
     
-    setStyleSheet("QMainWindow { background-color: #F9FAFB; }");
-
-    // 创建主要中央部件
-    QWidget *centralWidget = new QWidget(this);
+    // 创建中央部件
+    centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
-
-    // 创建主布局 - 两列布局
+    
+    // 主布局 - 两列设计
     QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
-
+    
     // ==================== 左侧品牌面板 ====================
-    QFrame *leftPanel = new QFrame();
-    leftPanel->setObjectName("leftPanel");
+    leftPanel = new QFrame();
+    leftPanel->setFixedWidth(480);
     leftPanel->setStyleSheet(
-        "QFrame#leftPanel {"
+        "QFrame {"
         "   background: qlineargradient(x1:0, y1:0, x2:1, y2:1,"
-        "       stop:0 #0052CC, stop:1 #1E88E5);"
-        "   border-radius: 12px;"
+        "       stop:0 #1E40AF, stop:0.5 #3B82F6, stop:1 #0EA5E9);"
+        "   border-top-left-radius: 12px;"
+        "   border-bottom-left-radius: 12px;"
         "}"
     );
+    
     QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
     leftLayout->setContentsMargins(60, 80, 60, 80);
     leftLayout->setSpacing(30);
-    leftLayout->setAlignment(Qt::AlignCenter | Qt::AlignTop);
-
-    // 品牌标题
+    leftLayout->setAlignment(Qt::AlignCenter);
+    
+    // 品牌图标 - 使用Unicode字符代替图片
+    brandIcon = new QLabel("✈");
+    brandIcon->setStyleSheet(
+        "QLabel {"
+        "   color: white;"
+        "   font-size: 72px;"
+        "   font-weight: 300;"
+        "   margin-bottom: 20px;"
+        "}"
+    );
+    brandIcon->setAlignment(Qt::AlignCenter);
+    leftLayout->addWidget(brandIcon, 0, Qt::AlignCenter);
+    
+    // 品牌名称
     brandLabel = new QLabel("Sky Wings");
     brandLabel->setStyleSheet(
         "QLabel {"
         "   color: white;"
-        "   font-size: 48px;"
+        "   font-size: 42px;"
         "   font-weight: 700;"
-        "   letter-spacing: 2px;"
-        "}"
-    );
-    leftLayout->addWidget(brandLabel, 0, Qt::AlignHCenter);
-
-    // 品牌描述
-    QLabel *brandDesc = new QLabel(
-        "Your gateway to the world's skies\n\n"
-        "Experience seamless flight booking with\n"
-        "real-time availability, competitive pricing,\n"
-        "and 24/7 customer support."
-    );
-    brandDesc->setStyleSheet(
-        "QLabel {"
-        "   color: rgba(255, 255, 255, 0.9);"
-        "   font-size: 16px;"
-        "   line-height: 1.6;"
-        "   padding: 20px;"
-        "}"
-    );
-    brandDesc->setAlignment(Qt::AlignCenter | Qt::AlignTop);
-    leftLayout->addWidget(brandDesc, 1, Qt::AlignTop);
-
-    // 特性列表
-    QLabel *features = new QLabel(
-        "✓ Real-time flight search\n"
-        "✓ Best price guarantee\n"
-        "✓ Flexible cancellation\n"
-        "✓ 24/7 support"
-    );
-    features->setStyleSheet(
-        "QLabel {"
-        "   color: rgba(255, 255, 255, 0.85);"
-        "   font-size: 14px;"
-        "   line-height: 2.0;"
-        "   padding: 20px;"
-        "}"
-    );
-    leftLayout->addWidget(features, 0, Qt::AlignBottom | Qt::AlignLeft);
-
-    // ==================== 右侧登录面板 ====================
-    QFrame *rightPanel = new QFrame();
-    rightPanel->setStyleSheet("QFrame { background-color: white; }");
-    QVBoxLayout *rightLayout = new QVBoxLayout(rightPanel);
-    rightLayout->setContentsMargins(60, 60, 60, 60);
-    rightLayout->setSpacing(25);
-
-    // 欢迎文本
-    welcomeLabel = new QLabel("Welcome Back");
-    welcomeLabel->setStyleSheet(
-        "QLabel {"
-        "   color: #111827;"
-        "   font-size: 32px;"
-        "   font-weight: 700;"
-        "}"
-    );
-    rightLayout->addWidget(welcomeLabel);
-
-    QLabel *subtext = new QLabel("Sign in to your account to continue");
-    subtext->setStyleSheet(
-        "QLabel {"
-        "   color: #6B7280;"
-        "   font-size: 14px;"
+        "   letter-spacing: 3px;"
         "   margin-bottom: 20px;"
         "}"
     );
-    rightLayout->addWidget(subtext);
-
-    // 错误标签
-    errorLabel = new QLabel();
-    errorLabel->setStyleSheet(
+    brandLabel->setAlignment(Qt::AlignCenter);
+    leftLayout->addWidget(brandLabel, 0, Qt::AlignCenter);
+    
+    // 品牌描述
+    brandDescription = new QLabel(
+        "您的空中门户，连接世界的每一片蓝天\n\n"
+        "体验无缝的航班预订服务\n"
+        "实时可用性查询，最具竞争力的价格\n"
+        "全天候客户支持"
+    );
+    brandDescription->setStyleSheet(
         "QLabel {"
-        "   color: #EF4444;"
-        "   background-color: #FEE2E2;"
-        "   border-radius: 6px;"
-        "   padding: 12px;"
-        "   font-size: 12px;"
+        "   color: rgba(255, 255, 255, 0.9);"
+        "   font-size: 16px;"
+        "   line-height: 1.8;"
+        "   text-align: center;"
+        "   margin-bottom: 40px;"
         "}"
     );
-    errorLabel->setVisible(false);
-    errorLabel->setWordWrap(true);
-    rightLayout->addWidget(errorLabel);
-
-    // 邮箱输入
-    QLabel *emailLabel = new QLabel("Email Address");
-    emailLabel->setStyleSheet("QLabel { color: #374151; font-weight: 600; font-size: 13px; }");
-    rightLayout->addWidget(emailLabel);
-
+    brandDescription->setAlignment(Qt::AlignCenter);
+    brandDescription->setWordWrap(true);
+    leftLayout->addWidget(brandDescription, 0, Qt::AlignCenter);
+    
+    // 特性列表
+    featuresLabel = new QLabel(
+        "✨ 实时航班搜索\n"
+        "🏆 最佳价格保证\n"
+        "🔄 灵活退改政策\n"
+        "🎧 24/7 客服支持"
+    );
+    featuresLabel->setStyleSheet(
+        "QLabel {"
+        "   color: rgba(255, 255, 255, 0.85);"
+        "   font-size: 15px;"
+        "   line-height: 2.0;"
+        "   text-align: center;"
+        "}"
+    );
+    featuresLabel->setAlignment(Qt::AlignCenter);
+    leftLayout->addWidget(featuresLabel, 1, Qt::AlignCenter);
+    
+    // ==================== 右侧登录面板 ====================
+    rightPanel = new QFrame();
+    rightPanel->setStyleSheet(
+        "QFrame {"
+        "   background-color: #FFFFFF;"
+        "   border-top-right-radius: 12px;"
+        "   border-bottom-right-radius: 12px;"
+        "}"
+    );
+    
+    QVBoxLayout *rightLayout = new QVBoxLayout(rightPanel);
+    rightLayout->setContentsMargins(80, 80, 80, 80);
+    rightLayout->setSpacing(25);
+    
+    // 欢迎标题
+    welcomeLabel = new QLabel("欢迎回来");
+    welcomeLabel->setStyleSheet(
+        "QLabel {"
+        "   color: #1E293B;"
+        "   font-size: 32px;"
+        "   font-weight: 700;"
+        "   margin-bottom: 8px;"
+        "}"
+    );
+    rightLayout->addWidget(welcomeLabel);
+    
+    // 副标题
+    subtitleLabel = new QLabel("登录您的账户，继续您的旅程");
+    subtitleLabel->setStyleSheet(
+        "QLabel {"
+        "   color: #64748B;"
+        "   font-size: 16px;"
+        "   font-weight: 400;"
+        "   margin-bottom: 40px;"
+        "}"
+    );
+    rightLayout->addWidget(subtitleLabel);
+    
+    // 邮箱输入框
     emailInput = new QLineEdit();
-    emailInput->setPlaceholderText("you@example.com");
+    emailInput->setPlaceholderText("请输入邮箱地址");
     emailInput->setStyleSheet(
         "QLineEdit {"
-        "   background-color: white;"
-        "   color: #111827;"
-        "   border: 2px solid #E5E7EB;"
-        "   border-radius: 8px;"
-        "   padding: 12px 15px;"
-        "   font-size: 14px;"
+        "   background-color: #F8FAFC;"
+        "   border: 2px solid #E2E8F0;"
+        "   border-radius: 10px;"
+        "   padding: 16px 20px;"
+        "   font-size: 15px;"
+        "   color: #1E293B;"
+        "   margin-bottom: 5px;"
         "}"
         "QLineEdit:focus {"
-        "   border: 2px solid #0052CC;"
-        "   background-color: #F0F4FF;"
+        "   border-color: #3B82F6;"
+        "   background-color: #FFFFFF;"
+        "}"
+        "QLineEdit:hover {"
+        "   border-color: #CBD5E1;"
         "}"
     );
-    emailInput->setFixedHeight(45);
     rightLayout->addWidget(emailInput);
-
-    // 密码输入
-    QLabel *passwordLabel = new QLabel("Password");
-    passwordLabel->setStyleSheet("QLabel { color: #374151; font-weight: 600; font-size: 13px; }");
-    rightLayout->addWidget(passwordLabel);
-
+    
+    // 密码输入框
     passwordInput = new QLineEdit();
-    passwordInput->setPlaceholderText("Enter your password");
+    passwordInput->setPlaceholderText("请输入密码");
     passwordInput->setEchoMode(QLineEdit::Password);
     passwordInput->setStyleSheet(
         "QLineEdit {"
-        "   background-color: white;"
-        "   color: #111827;"
-        "   border: 2px solid #E5E7EB;"
-        "   border-radius: 8px;"
-        "   padding: 12px 15px;"
-        "   font-size: 14px;"
+        "   background-color: #F8FAFC;"
+        "   border: 2px solid #E2E8F0;"
+        "   border-radius: 10px;"
+        "   padding: 16px 20px;"
+        "   font-size: 15px;"
+        "   color: #1E293B;"
+        "   margin-bottom: 20px;"
         "}"
         "QLineEdit:focus {"
-        "   border: 2px solid #0052CC;"
-        "   background-color: #F0F4FF;"
+        "   border-color: #3B82F6;"
+        "   background-color: #FFFFFF;"
+        "}"
+        "QLineEdit:hover {"
+        "   border-color: #CBD5E1;"
         "}"
     );
-    passwordInput->setFixedHeight(45);
     rightLayout->addWidget(passwordInput);
-
-    // 记住密码复选框
-    rememberCheckBox = new QCheckBox("Remember me");
-    rememberCheckBox->setStyleSheet(
+    
+    // 记住我选项
+    QHBoxLayout *rememberLayout = new QHBoxLayout();
+    rememberLayout->setContentsMargins(0, 0, 0, 0);
+    
+    rememberMeCheckBox = new QCheckBox("记住我");
+    rememberMeCheckBox->setStyleSheet(
         "QCheckBox {"
-        "   color: #6B7280;"
-        "   font-size: 13px;"
+        "   color: #64748B;"
+        "   font-size: 14px;"
+        "   font-weight: 500;"
         "}"
         "QCheckBox::indicator {"
         "   width: 18px;"
         "   height: 18px;"
-        "}"
-        "QCheckBox::indicator:unchecked {"
-        "   background-color: white;"
-        "   border: 2px solid #E5E7EB;"
         "   border-radius: 4px;"
+        "   border: 2px solid #CBD5E1;"
+        "   background-color: #FFFFFF;"
         "}"
         "QCheckBox::indicator:checked {"
-        "   background-color: #0052CC;"
-        "   border: 2px solid #0052CC;"
-        "   border-radius: 4px;"
-        "   image: url(:/icons/check.svg);"
+        "   background-color: #3B82F6;"
+        "   border-color: #3B82F6;"
+        "   image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEwIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgNEwzLjUgNi41TDkgMSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=);"
         "}"
     );
-    rightLayout->addWidget(rememberCheckBox);
-
+    rememberLayout->addWidget(rememberMeCheckBox);
+    rememberLayout->addStretch();
+    
+    forgotPasswordButton = new QPushButton("忘记密码？");
+    forgotPasswordButton->setStyleSheet(
+        "QPushButton {"
+        "   background: transparent;"
+        "   color: #3B82F6;"
+        "   border: none;"
+        "   font-size: 14px;"
+        "   font-weight: 500;"
+        "   text-decoration: underline;"
+        "}"
+        "QPushButton:hover {"
+        "   color: #1E40AF;"
+        "}"
+    );
+    rememberLayout->addWidget(forgotPasswordButton);
+    
+    rightLayout->addLayout(rememberLayout);
+    
+    // 错误/成功消息标签
+    errorLabel = new QLabel();
+    errorLabel->setStyleSheet(
+        "QLabel {"
+        "   color: #EF4444;"
+        "   font-size: 14px;"
+        "   padding: 8px 12px;"
+        "   background-color: #FEE2E2;"
+        "   border-radius: 6px;"
+        "   margin: 10px 0;"
+        "}"
+    );
+    errorLabel->hide();
+    rightLayout->addWidget(errorLabel);
+    
+    successLabel = new QLabel();
+    successLabel->setStyleSheet(
+        "QLabel {"
+        "   color: #10B981;"
+        "   font-size: 14px;"
+        "   padding: 8px 12px;"
+        "   background-color: #D1FAE5;"
+        "   border-radius: 6px;"
+        "   margin: 10px 0;"
+        "}"
+    );
+    successLabel->hide();
+    rightLayout->addWidget(successLabel);
+    
     // 登录按钮
-    loginButton = new QPushButton("Sign In");
+    loginButton = new QPushButton("登 录");
     loginButton->setStyleSheet(
         "QPushButton {"
-        "   background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
-        "       stop:0 #0052CC, stop:1 #1E88E5);"
+        "   background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+        "       stop:0 #3B82F6, stop:1 #1E40AF);"
         "   color: white;"
         "   border: none;"
-        "   border-radius: 8px;"
-        "   padding: 14px 24px;"
-        "   font-weight: 700;"
-        "   font-size: 15px;"
-        "   letter-spacing: 0.5px;"
+        "   border-radius: 10px;"
+        "   padding: 16px 0;"
+        "   font-size: 16px;"
+        "   font-weight: 600;"
+        "   letter-spacing: 1px;"
+        "   margin: 20px 0;"
         "}"
         "QPushButton:hover {"
-        "   background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
-        "       stop:0 #0048B8, stop:1 #1976D2);"
+        "   background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+        "       stop:0 #60A5FA, stop:1 #2563EB);"
         "}"
         "QPushButton:pressed {"
-        "   background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
-        "       stop:0 #003FA3, stop:1 #155DB3);"
+        "   background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+        "       stop:0 #2563EB, stop:1 #1D4ED8);"
         "}"
     );
-    loginButton->setFixedHeight(50);
-    loginButton->setCursor(Qt::PointingHandCursor);
     rightLayout->addWidget(loginButton);
-
-    // 分隔符
-    QFrame *divider = new QFrame();
-    divider->setStyleSheet("QFrame { background-color: #E5E7EB; }");
-    divider->setFixedHeight(1);
-    rightLayout->addWidget(divider);
-
-    // 注册链接
-    QHBoxLayout *registerLayout = new QHBoxLayout();
-    QLabel *noAccountLabel = new QLabel("Don't have an account?");
-    noAccountLabel->setStyleSheet("QLabel { color: #6B7280; font-size: 13px; }");
-    registerLayout->addWidget(noAccountLabel);
-    registerLayout->addSpacing(5);
-
-    registerButton = new QPushButton("Create one");
-    registerButton->setFlat(true);
+    
+    // 分隔线和注册链接
+    QHBoxLayout *dividerLayout = new QHBoxLayout();
+    dividerLayout->setContentsMargins(0, 20, 0, 0);
+    
+    QFrame *leftLine = new QFrame();
+    leftLine->setFrameShape(QFrame::HLine);
+    leftLine->setStyleSheet(
+        "QFrame {"
+        "   background-color: #E2E8F0;"
+        "   height: 1px;"
+        "}"
+    );
+    dividerLayout->addWidget(leftLine);
+    
+    dividerLabel = new QLabel("还没有账户？");
+    dividerLabel->setStyleSheet(
+        "QLabel {"
+        "   color: #64748B;"
+        "   font-size: 14px;"
+        "   margin: 0 10px;"
+        "}"
+    );
+    dividerLayout->addWidget(dividerLabel);
+    
+    QFrame *rightLine = new QFrame();
+    rightLine->setFrameShape(QFrame::HLine);
+    rightLine->setStyleSheet(
+        "QFrame {"
+        "   background-color: #E2E8F0;"
+        "   height: 1px;"
+        "}"
+    );
+    dividerLayout->addWidget(rightLine);
+    
+    rightLayout->addLayout(dividerLayout);
+    
+    // 注册按钮
+    registerButton = new QPushButton("立即注册");
     registerButton->setStyleSheet(
         "QPushButton {"
-        "   color: #0052CC;"
-        "   border: none;"
         "   background: transparent;"
+        "   color: #3B82F6;"
+        "   border: 2px solid #3B82F6;"
+        "   border-radius: 10px;"
+        "   padding: 14px 0;"
+        "   font-size: 15px;"
         "   font-weight: 600;"
-        "   font-size: 13px;"
-        "   padding: 0px;"
+        "   margin-top: 20px;"
         "}"
         "QPushButton:hover {"
-        "   color: #0048B8;"
+        "   background-color: #EFF6FF;"
+        "   color: #1E40AF;"
         "}"
     );
-    registerButton->setCursor(Qt::PointingHandCursor);
-    registerLayout->addWidget(registerButton);
-    registerLayout->addStretch();
-
-    rightLayout->addLayout(registerLayout);
+    rightLayout->addWidget(registerButton);
+    
     rightLayout->addStretch();
-
-    // 添加左右面板到主布局
-    mainLayout->addWidget(leftPanel, 1);
-    mainLayout->addWidget(rightPanel, 1);
+    
+    // 添加面板到主布局
+    mainLayout->addWidget(leftPanel);
+    mainLayout->addWidget(rightPanel);
 }
 
 void ModernLoginWindow::connectSignals() {
     connect(loginButton, &QPushButton::clicked, this, &ModernLoginWindow::onLoginClicked);
     connect(registerButton, &QPushButton::clicked, this, &ModernLoginWindow::onRegisterClicked);
-    connect(rememberCheckBox, &QCheckBox::toggled, this, &ModernLoginWindow::onCheckBoxToggled);
+    connect(forgotPasswordButton, &QPushButton::clicked, this, &ModernLoginWindow::onForgotPasswordClicked);
+    connect(rememberMeCheckBox, &QCheckBox::toggled, this, &ModernLoginWindow::onRememberMeToggled);
+    connect(emailInput, &QLineEdit::textChanged, this, &ModernLoginWindow::onInputChanged);
+    connect(passwordInput, &QLineEdit::textChanged, this, &ModernLoginWindow::onInputChanged);
+}
+
+void ModernLoginWindow::applyTheme() {
+    // 应用现代化主题
+    QFile styleFile(":/modern_theme.qss");
+    if (styleFile.open(QFile::ReadOnly)) {
+        setStyleSheet(styleFile.readAll());
+    }
+}
+
+void ModernLoginWindow::setupAnimations() {
+    // 设置淡入动画
+    opacityEffect = new QGraphicsOpacityEffect(this);
+    centralWidget->setGraphicsEffect(opacityEffect);
+    
+    fadeInAnimation = new QPropertyAnimation(opacityEffect, "opacity", this);
+    fadeInAnimation->setDuration(800);
+    fadeInAnimation->setStartValue(0.0);
+    fadeInAnimation->setEndValue(1.0);
+    fadeInAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    fadeInAnimation->start();
 }
 
 void ModernLoginWindow::onLoginClicked() {
     QString email = emailInput->text().trimmed();
     QString password = passwordInput->text();
-
-    // 验证输入
-    if (email.isEmpty() || password.isEmpty()) {
-        showErrorMessage("Please fill in all fields");
+    
+    // 基本验证
+    if (email.isEmpty()) {
+        showErrorMessage("请输入邮箱地址");
         return;
     }
-
-    if (!email.contains("@")) {
-        showErrorMessage("Please enter a valid email address");
+    
+    if (password.isEmpty()) {
+        showErrorMessage("请输入密码");
         return;
     }
-
-    // 禁用登录按钮并显示加载状态
-    loginButton->setEnabled(false);
-    loginButton->setText("Signing in...");
-    errorLabel->setVisible(false);
-
+    
+    if (!email.contains("@") || !email.contains(".")) {
+        showErrorMessage("请输入有效的邮箱地址");
+        return;
+    }
+    
+    // 动画效果
+    animateButton(loginButton);
+    
+    // 发送登录请求
     sendLoginRequest(email, password);
 }
 
 void ModernLoginWindow::onRegisterClicked() {
-    qDebug() << "Register button clicked - Navigate to registration page";
-    // 将在InterfaceManager中进行页面切换
+    // 切换到注册页面
+    animateButton(registerButton);
+    
+    // 这里应该切换到注册窗口
+    // InterfaceManager::instance()->switchToPage("modern_registerWindow");
 }
 
-void ModernLoginWindow::onCheckBoxToggled(bool checked) {
-    qDebug() << "Remember me:" << checked;
-}
-
-void ModernLoginWindow::sendLoginRequest(const QString &email, const QString &password) {
-    QUrl url("http://localhost:8080/api/users/login");
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    QJsonObject jsonData;
-    jsonData["email"] = email;
-    jsonData["password"] = password;
-
-    QJsonDocument doc(jsonData);
-    QNetworkReply *reply = networkManager->post(request, doc.toJson());
-
-    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-            this, [this, reply](QNetworkReply::NetworkError error) {
-        Q_UNUSED(error);
-        loginButton->setEnabled(true);
-        loginButton->setText("Sign In");
-        showErrorMessage("Network error: " + reply->errorString());
-    });
-
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        loginButton->setEnabled(true);
-        loginButton->setText("Sign In");
-
-        if (reply->error() == QNetworkReply::NoError) {
-            QByteArray responseData = reply->readAll();
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-            QJsonObject responseObject = jsonResponse.object();
-
-            if (responseObject["code"].toInt() == 200) {
-                onLoginSuccess(responseObject["data"].toObject());
-            } else {
-                onLoginFailed(responseObject["message"].toString());
-            }
-        } else {
-            onLoginFailed("Request failed: " + reply->errorString());
-        }
-        reply->deleteLater();
-    });
+void ModernLoginWindow::onForgotPasswordClicked() {
+    // 处理忘记密码
+    animateButton(forgotPasswordButton);
+    
+    QMessageBox::information(this, "重置密码", 
+        "密码重置链接已发送到您的邮箱地址。\n"
+        "请检查您的邮箱并按照说明操作。");
 }
 
 void ModernLoginWindow::onLoginSuccess(const QJsonObject &userData) {
-    showSuccessMessage("Login successful! Redirecting...");
-    qDebug() << "User logged in:" << userData;
-    // 这里可以保存用户数据到UserManager单例
+    showSuccessMessage("登录成功！正在跳转...");
+    
+    // 保存用户数据
+    // UserSession::instance()->setUser(userData);
+    
+    // 延迟跳转
+    QTimer::singleShot(1500, [this]() {
+        // InterfaceManager::instance()->switchToPage("modern_dashboard");
+        close();
+    });
 }
 
 void ModernLoginWindow::onLoginFailed(const QString &error) {
     showErrorMessage(error);
 }
 
+void ModernLoginWindow::onRememberMeToggled(bool checked) {
+    Q_UNUSED(checked);
+    // 保存记住我状态
+}
+
+void ModernLoginWindow::onInputChanged() {
+    // 清除错误消息
+    errorLabel->hide();
+    successLabel->hide();
+}
+
+void ModernLoginWindow::sendLoginRequest(const QString &email, const QString &password) {
+    QJsonObject requestData;
+    requestData["email"] = email;
+    requestData["password"] = password;
+    requestData["rememberMe"] = rememberMeCheckBox->isChecked();
+    
+    QJsonDocument doc(requestData);
+    QByteArray data = doc.toJson();
+    
+    QUrl url("http://localhost:8080/api/users/login");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    
+    QNetworkReply *reply = networkManager->post(request, data);
+    
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonDocument response = QJsonDocument::fromJson(reply->readAll());
+            QJsonObject obj = response.object();
+            
+            if (obj["code"].toInt() == 200) {
+                onLoginSuccess(obj["data"].toObject());
+            } else {
+                onLoginFailed(obj["message"].toString());
+            }
+        } else {
+            onLoginFailed("网络连接失败，请检查网络设置");
+        }
+        reply->deleteLater();
+    });
+}
+
 void ModernLoginWindow::showErrorMessage(const QString &message) {
-    errorLabel->setText("✕ " + message);
-    errorLabel->setVisible(true);
+    errorLabel->setText(message);
+    errorLabel->show();
+    successLabel->hide();
 }
 
 void ModernLoginWindow::showSuccessMessage(const QString &message) {
-    QMessageBox::information(this, "Success", message);
+    successLabel->setText(message);
+    successLabel->show();
+    errorLabel->hide();
+}
+
+void ModernLoginWindow::animateButton(QPushButton *button) {
+    QPropertyAnimation *animation = new QPropertyAnimation(button, "geometry", this);
+    QRect originalGeometry = button->geometry();
+    animation->setDuration(150);
+    animation->setStartValue(originalGeometry);
+    animation->setEndValue(originalGeometry.adjusted(-2, -2, 2, 2));
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+    
+    connect(animation, &QPropertyAnimation::finished, [button, originalGeometry]() {
+        QPropertyAnimation *animation2 = new QPropertyAnimation(button, "geometry");
+        animation2->setDuration(150);
+        animation2->setStartValue(button->geometry());
+        animation2->setEndValue(originalGeometry);
+        animation2->setEasingCurve(QEasingCurve::OutBounce);
+        animation2->start(QPropertyAnimation::DeleteWhenStopped);
+    });
+    
+    animation->start(QPropertyAnimation::DeleteWhenStopped);
 }
