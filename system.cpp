@@ -20,6 +20,11 @@
 #include "xitawindow.h"
 #include "yipuxilong.h"
 #include "pay_window.h"
+#include "ModernLoginWindow.h"
+#include "ModernDashboardWindow.h"
+#include "ModernFlightSearchWindow.h"
+#include "ModernBookingWizard.h"
+#include "ModernMainWindow.h"
 
 
 System::System()
@@ -40,6 +45,10 @@ void System::start()
     flightstatus *flightstatusWindow = new flightstatus(); //航班动态界面
     orderwindow *orderPage = new orderwindow();            //订单界面
 
+    // 现代化前端窗口
+    ModernMainWindow *modernMainWindow = new ModernMainWindow();
+    ModernLoginWindow *modernLogin = new ModernLoginWindow();
+    ModernDashboardWindow *modernDashboard = new ModernDashboardWindow();
 
     newLoginWindow *newLogin = new newLoginWindow();       //新用户登录界面
     loginHandler *loginHand = new loginHandler(); //loginHand用于用户登录界面的登录按钮信号与槽连接
@@ -123,6 +132,11 @@ void System::start()
     InterfaceManager::instance()->registerPage("clientchatWindow", clientchat); //用户和客服对线界面
     InterfaceManager::instance()->registerPage("managerchatWindow", managerchat); //客服对线用户界面
 
+    // 现代化前端窗口注册
+    InterfaceManager::instance()->registerPage("modern_mainWindow", modernMainWindow);
+    InterfaceManager::instance()->registerPage("modern_loginWindow", modernLogin);
+    InterfaceManager::instance()->registerPage("modern_dashboard", modernDashboard);
+
     //注册gama界面
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Gama", gamawindow);
     //注册西塔
@@ -130,7 +144,8 @@ void System::start()
     //注册伊普西隆
     InterfaceManager::instance()->registerPage("/MainWindow/Beta/Yipuxilong", yipuxilong);
 
-    InterfaceManager::instance()->switchToPage("lxt_newLoginWindow");
+    // 启用现代化登录窗口
+    InterfaceManager::instance()->switchToPage("modern_loginWindow");
 
     //InterfaceManager::instance()->switchToPage("lxt_mainInterface");
     // InterfaceManager::instance()->switchToPage("lxt_adminMainInterface");

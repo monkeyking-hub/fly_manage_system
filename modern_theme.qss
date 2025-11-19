@@ -1,0 +1,389 @@
+/* ============================================================================
+   Modern Airline Booking System - Qt StyleSheet Theme
+   ============================================================================ */
+
+/* Global Styles */
+QWidget {
+    background-color: #F9FAFB;
+    color: #111827;
+}
+
+QMainWindow {
+    background-color: #F9FAFB;
+}
+
+/* ============================================================================
+   Buttons
+   ============================================================================ */
+
+QPushButton {
+    background-color: #0052CC;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #0048B8;
+}
+
+QPushButton:pressed {
+    background-color: #003FA3;
+}
+
+QPushButton:disabled {
+    background-color: #D1D5DB;
+    color: #9CA3AF;
+}
+
+/* Secondary Button */
+QPushButton#secondaryButton {
+    background-color: white;
+    color: #0052CC;
+    border: 2px solid #0052CC;
+}
+
+QPushButton#secondaryButton:hover {
+    background-color: #F0F4FF;
+}
+
+/* Danger Button */
+QPushButton#dangerButton {
+    background-color: #EF4444;
+}
+
+QPushButton#dangerButton:hover {
+    background-color: #DC2626;
+}
+
+/* Success Button */
+QPushButton#successButton {
+    background-color: #10B981;
+}
+
+QPushButton#successButton:hover {
+    background-color: #059669;
+}
+
+/* ============================================================================
+   Input Fields
+   ============================================================================ */
+
+QLineEdit {
+    background-color: white;
+    color: #111827;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #0052CC;
+}
+
+QLineEdit::placeholder {
+    color: #9CA3AF;
+}
+
+QTextEdit {
+    background-color: white;
+    color: #111827;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+QTextEdit:focus {
+    border: 2px solid #0052CC;
+}
+
+QComboBox {
+    background-color: white;
+    color: #111827;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+QComboBox:focus {
+    border: 2px solid #0052CC;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 30px;
+}
+
+QDateEdit {
+    background-color: white;
+    color: #111827;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+QDateEdit:focus {
+    border: 2px solid #0052CC;
+}
+
+/* ============================================================================
+   Labels & Text
+   ============================================================================ */
+
+QLabel {
+    color: #111827;
+    font-size: 14px;
+}
+
+QLabel#titleLabel {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0052CC;
+}
+
+QLabel#subtitleLabel {
+    font-size: 20px;
+    font-weight: 600;
+    color: #374151;
+}
+
+QLabel#headingLabel {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+QLabel#sectionLabel {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+QLabel#captionLabel {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+/* ============================================================================
+   Scroll Bars
+   ============================================================================ */
+
+QScrollBar:vertical {
+    background-color: #F9FAFB;
+    width: 12px;
+    border: none;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #D1D5DB;
+    border-radius: 6px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #9CA3AF;
+}
+
+QScrollBar:horizontal {
+    background-color: #F9FAFB;
+    height: 12px;
+    border: none;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #D1D5DB;
+    border-radius: 6px;
+    min-width: 20px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #9CA3AF;
+}
+
+/* ============================================================================
+   Tab Widgets
+   ============================================================================ */
+
+QTabWidget::pane {
+    border: 1px solid #E5E7EB;
+}
+
+QTabBar::tab {
+    background-color: #F3F4F6;
+    color: #6B7280;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 2px;
+    font-weight: 500;
+}
+
+QTabBar::tab:selected {
+    background-color: white;
+    color: #0052CC;
+    border-bottom: 3px solid #0052CC;
+}
+
+/* ============================================================================
+   Table Widgets
+   ============================================================================ */
+
+QTableWidget {
+    background-color: white;
+    alternate-background-color: #F9FAFB;
+    gridline-color: #E5E7EB;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+}
+
+QTableWidget::item {
+    padding: 10px;
+    border: none;
+}
+
+QTableWidget::item:selected {
+    background-color: #EFF6FF;
+    color: #0052CC;
+}
+
+QHeaderView::section {
+    background-color: #F3F4F6;
+    color: #374151;
+    padding: 10px;
+    border: none;
+    border-right: 1px solid #E5E7EB;
+    font-weight: 600;
+}
+
+/* ============================================================================
+   List Widgets
+   ============================================================================ */
+
+QListWidget {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+}
+
+QListWidget::item {
+    padding: 10px;
+    border: none;
+}
+
+QListWidget::item:selected {
+    background-color: #EFF6FF;
+    color: #0052CC;
+}
+
+/* ============================================================================
+   Group Box
+   ============================================================================ */
+
+QGroupBox {
+    color: #374151;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-weight: 600;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0px 3px 0px 3px;
+}
+
+/* ============================================================================
+   Menu
+   ============================================================================ */
+
+QMenuBar {
+    background-color: white;
+    color: #111827;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+QMenuBar::item:selected {
+    background-color: #EFF6FF;
+}
+
+QMenu {
+    background-color: white;
+    color: #111827;
+    border: 1px solid #E5E7EB;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: #EFF6FF;
+    color: #0052CC;
+}
+
+/* ============================================================================
+   Progress Bar
+   ============================================================================ */
+
+QProgressBar {
+    background-color: #E5E7EB;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    color: #111827;
+}
+
+QProgressBar::chunk {
+    background-color: #0052CC;
+    border-radius: 4px;
+}
+
+/* ============================================================================
+   Spin Box
+   ============================================================================ */
+
+QSpinBox {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+QSpinBox:focus {
+    border: 2px solid #0052CC;
+}
+
+QSpinBox::up-button, QSpinBox::down-button {
+    background-color: #F3F4F6;
+    border: none;
+    width: 20px;
+}
+
+/* ============================================================================
+   Utility Classes
+   ============================================================================ */
+
+QFrame#card {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+}
+
+QFrame#headerFrame {
+    background-color: #0052CC;
+    color: white;
+}
+
+QFrame#sidebarFrame {
+    background-color: white;
+    border-right: 1px solid #E5E7EB;
+}
+
+QFrame#containerFrame {
+    background-color: #F9FAFB;
+}
