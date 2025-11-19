@@ -1,4 +1,4 @@
-#include "adminAddFlightWindow.h"
+#include "adminaddflightwindow.h"
 #include <QCalendarWidget>
 #include <QDebug>
 #include <QJsonDocument>
@@ -7,7 +7,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include "ui_adminAddFlightWindow.h"
+#include "ui_adminaddflightwindow.h"
 adminAddFlightWindow::adminAddFlightWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::adminAddFlightWindow)
