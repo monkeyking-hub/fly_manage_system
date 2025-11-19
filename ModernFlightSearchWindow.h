@@ -2,63 +2,101 @@
 #define MODERNFLIGHTSEARCHWINDOW_H
 
 #include <QMainWindow>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
-#include <QComboBox>
-#include <QDateEdit>
-#include <QSlider>
-#include <QCheckBox>
-#include <QScrollArea>
-#include <QFrame>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QJsonArray>
+#include <QPropertyAnimation>
+#include <QProgressBar>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QSlider>
+#include <QCheckBox>
 
 class ModernFlightSearchWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ModernFlightSearchWindow(const QString &departure, const QString &destination,
-                                     const QDate &departDate, QWidget *parent = nullptr);
+    explicit ModernFlightSearchWindow(QWidget *parent = nullptr);
     ~ModernFlightSearchWindow();
 
 private slots:
-    void onFilterChanged();
-    void onSortChanged(int index);
-    void onFlightSelected(int flightId);
-    void loadSearchResults();
-    void onSearchCompleted(const QJsonArray &flights);
+    void onSearchClicked();
+    void onResetClicked();
+    void onBackClicked();
+    void onFlightSelected(const QString &flightId);
+    void onSearchResultsLoaded();
+    void onFiltersChanged();
 
 private:
     void setupUI();
-    void setupFilterPanel();
-    void createFlightResultCard(const QJsonObject &flight);
-    void createSortControls();
+    void connectSignals();
+    void setupSearchForm();
+    void setupResultsArea();
+    void setupFilters();
+    void applyTheme();
+    void sendSearchRequest();
+    void createResultCard(const QString &flightNumber, const QString &airline,
+                         const QString &from, const QString &to, const QString &departure,
+                         const QString &arrival, const QString &price, const QString &duration);
+    void animateResult(QWidget *card);
     void applyFilters();
 
-    // 搜索参数
-    QString m_departure;
-    QString m_destination;
-    QDate m_departDate;
-    QJsonArray m_allFlights;
-
     // UI Components
-    QFrame *filterPanel;
-    QScrollArea *resultsScroll;
-    QFrame *resultsContainer;
+    QWidget *centralWidget;
+    QFrame *navigationBar;
+    QFrame *mainContent;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
     
-    // 过滤器
+    // Navigation
+    QLabel *titleLabel;
+    QPushButton *backButton;
+    QPushButton *homeButton;
+    
+    // Search Form
+    QFrame *searchFormFrame;
+    QComboBox *tripTypeCombo;
+    QLineEdit *fromInput;
+    QLineEdit *toInput;
+    QDateEdit *departureDate;
+    QDateEdit *returnDate;
+    QSpinBox *passengersSpin;
+    QComboBox *classCombo;
+    QPushButton *searchButton;
+    QPushButton *resetButton;
+    
+    // Filters
+    QFrame *filtersFrame;
+    QCheckBox *directFlightCheck;
+    QCheckBox *refundableCheck;
     QSlider *priceSlider;
     QLabel *priceLabel;
-    QCheckBox *directOnly;
-    QCheckBox *oneStopOnly;
-    QComboBox *sortCombo;
-    QCheckBox *airlineFilter[10];
-    QSlider *departTimeSlider;
-    QSlider *arriveTimeSlider;
+    QComboBox *airlineCombo;
+    QComboBox *timeRangeCombo;
+    
+    // Results
+    QFrame *resultsFrame;
+    QLabel *resultsTitle;
+    QLabel *resultsCount;
+    QComboBox *sortByCombo;
+    QWidget *resultsWidget;
+    QProgressBar *loadingProgress;
+    QLabel *loadingLabel;
 
     QNetworkAccessManager *networkManager;
+    QPropertyAnimation *slideAnimation;
+    
+    // Search parameters
+    QString currentFrom;
+    QString currentTo;
+    QString currentDeparture;
+    QString currentReturn;
+    int currentPassengers;
+    QString currentClass;
+    bool isDirectFlight;
+    bool isRefundable;
+    int maxPrice;
+    QString selectedAirline;
+    QString selectedTimeRange;
 };
 
 #endif // MODERNFLIGHTSEARCHWINDOW_H

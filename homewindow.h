@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QEvent>
+#include <QEnterEvent>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -163,13 +164,15 @@ public:
     void setLabelsToHighlight(const QVector<QLabel *> &labels) { labelsToHighlight = labels; }
 
 protected:
-    void enterEvent(QEnterEvent *event) override
+    void enterEvent(QEvent *event) override
     {
-        for (QLabel *label : labelsToHighlight) {
-            if (label) { // 确保指针有效
-                label->setProperty("hover", true);
-                label->style()->unpolish(label);
-                label->style()->polish(label);
+        if (event->type() == QEvent::Enter) {
+            for (QLabel *label : labelsToHighlight) {
+                if (label) { // 确保指针有效
+                    label->setProperty("hover", true);
+                    label->style()->unpolish(label);
+                    label->style()->polish(label);
+                }
             }
         }
         QFrame::enterEvent(event); // 调用基类方法

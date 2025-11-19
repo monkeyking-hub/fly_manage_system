@@ -8,6 +8,8 @@
 #include <QCheckBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QPropertyAnimation>
+#include <QGraphicsOpacityEffect>
 
 class ModernLoginWindow : public QMainWindow {
     Q_OBJECT
@@ -19,26 +21,51 @@ public:
 private slots:
     void onLoginClicked();
     void onRegisterClicked();
+    void onForgotPasswordClicked();
     void onLoginSuccess(const QJsonObject &userData);
     void onLoginFailed(const QString &error);
-    void onCheckBoxToggled(bool checked);
+    void onRememberMeToggled(bool checked);
+    void onInputChanged();
 
 private:
     void setupUI();
     void connectSignals();
+    void applyTheme();
     void sendLoginRequest(const QString &email, const QString &password);
     void showErrorMessage(const QString &message);
     void showSuccessMessage(const QString &message);
+    void animateButton(QPushButton *button);
+    void setupAnimations();
 
     // UI Components
+    QWidget *centralWidget;
+    QFrame *leftPanel;
+    QFrame *rightPanel;
+    
+    // Left Panel Components
+    QLabel *brandLabel;
+    QLabel *brandIcon;
+    QLabel *brandDescription;
+    QLabel *featuresLabel;
+    
+    // Right Panel Components
+    QLabel *welcomeLabel;
+    QLabel *subtitleLabel;
     QLineEdit *emailInput;
     QLineEdit *passwordInput;
-    QCheckBox *rememberCheckBox;
+    QCheckBox *rememberMeCheckBox;
     QPushButton *loginButton;
     QPushButton *registerButton;
+    QPushButton *forgotPasswordButton;
     QLabel *errorLabel;
-    QLabel *brandLabel;
-    QLabel *welcomeLabel;
+    QLabel *successLabel;
+    
+    // Navigation
+    QLabel *dividerLabel;
+    
+    // Effects and Animations
+    QGraphicsOpacityEffect *opacityEffect;
+    QPropertyAnimation *fadeInAnimation;
 
     QNetworkAccessManager *networkManager;
 };

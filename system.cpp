@@ -33,6 +33,11 @@ System::System()
 
 void System::start()
 {
+    // 创建现代化前端窗口
+    ModernMainWindow *modernMainWindow = new ModernMainWindow();
+    ModernLoginWindow *modernLogin = new ModernLoginWindow();
+    ModernDashboardWindow *modernDashboard = new ModernDashboardWindow();
+
     // 创建子界面,并且注册进调度器
     GamaWindow *gamawindow = new GamaWindow();
     XitaWindow *xitawindow = new XitaWindow();
@@ -44,11 +49,6 @@ void System::start()
     newHomeWindow *newHomePage = new newHomeWindow();      //新首页界面
     flightstatus *flightstatusWindow = new flightstatus(); //航班动态界面
     orderwindow *orderPage = new orderwindow();            //订单界面
-
-    // 现代化前端窗口
-    ModernMainWindow *modernMainWindow = new ModernMainWindow();
-    ModernLoginWindow *modernLogin = new ModernLoginWindow();
-    ModernDashboardWindow *modernDashboard = new ModernDashboardWindow();
 
     newLoginWindow *newLogin = new newLoginWindow();       //新用户登录界面
     loginHandler *loginHand = new loginHandler(); //loginHand用于用户登录界面的登录按钮信号与槽连接

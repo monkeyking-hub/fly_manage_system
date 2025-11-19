@@ -1,4 +1,4 @@
-#include "InterfaceManager.h"
+#include "interfacemanager.h"
 #include <QDebug>
 #include <QStackedWidget>
 

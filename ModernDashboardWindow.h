@@ -2,16 +2,9 @@
 #define MODERNDASHBOARDWINDOW_H
 
 #include <QMainWindow>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
-#include <QComboBox>
-#include <QDateEdit>
-#include <QSpinBox>
-#include <QScrollArea>
-#include <QFrame>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QPropertyAnimation>
 
 class ModernDashboardWindow : public QMainWindow {
     Q_OBJECT
@@ -21,28 +14,78 @@ public:
     ~ModernDashboardWindow();
 
 private slots:
-    void onSearchClicked();
-    void onFlightCardClicked(int flightId);
-    void loadFeaturedFlights();
-    void onFeaturedFlightsLoaded(const QJsonArray &flights);
+    void onSearchFlightsClicked();
+    void onMyBookingsClicked();
+    void onProfileClicked();
+    void onLogoutClicked();
+    void onFeaturedFlightsLoaded();
+    void onRecentSearchesLoaded();
 
 private:
     void setupUI();
     void connectSignals();
-    void createFlightCard(const QJsonObject &flight);
-    void createQuickAccessCard(const QString &title, const QString &icon, const QString &description);
+    void setupNavigationBar();
+    void setupSidebar();
+    void setupMainContent();
+    void setupFeaturedFlights();
+    void setupRecentSearches();
+    void setupQuickActions();
+    void loadFeaturedFlights();
+    void loadRecentSearches();
+    void applyTheme();
+    void createFlightCard(const QString &flightNumber, const QString &from, 
+                        const QString &to, const QString &price, const QString &time);
+    void animateCard(QWidget *card);
 
     // UI Components
-    QLineEdit *departureInput;
-    QLineEdit *destinationInput;
-    QDateEdit *departureDateEdit;
-    QDateEdit *returnDateEdit;
-    QSpinBox *passengersSpinBox;
-    QPushButton *searchButton;
-    QScrollArea *featuredFlightsScroll;
-    QFrame *featuredFlightsContainer;
+    QWidget *centralWidget;
+    QFrame *navigationBar;
+    QFrame *sidebar;
+    QFrame *mainContent;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
     
+    // Navigation Bar
+    QLabel *logoLabel;
+    QPushButton *searchButton;
+    QPushButton *bookingsButton;
+    QPushButton *profileButton;
+    QPushButton *logoutButton;
+    
+    // Sidebar
+    QLabel *userAvatar;
+    QLabel *userName;
+    QLabel *userEmail;
+    QPushButton *dashboardBtn;
+    QPushButton *flightsBtn;
+    QPushButton *bookingsBtn;
+    QPushButton *settingsBtn;
+    QPushButton *helpBtn;
+    
+    // Main Content
+    QLabel *welcomeLabel;
+    QLabel *subtitleLabel;
+    QFrame *searchSection;
+    QLineEdit *searchFromInput;
+    QLineEdit *searchToInput;
+    QDateEdit *departureDate;
+    QPushButton *searchFlightsBtn;
+    
+    QFrame *featuredSection;
+    QLabel *featuredTitle;
+    QWidget *featuredFlightsWidget;
+    
+    QFrame *recentSection;
+    QLabel *recentTitle;
+    QWidget *recentSearchesWidget;
+    
+    QFrame *quickActionsSection;
+    QPushButton *quickSearchBtn;
+    QPushButton *quickBookingBtn;
+    QPushButton *quickSupportBtn;
+
     QNetworkAccessManager *networkManager;
+    QPropertyAnimation *slideAnimation;
 };
 
 #endif // MODERNDASHBOARDWINDOW_H

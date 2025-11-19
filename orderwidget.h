@@ -28,7 +28,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
     // 鼠标进入和离开事件处理
-    void enterEvent(QEnterEvent *event) override;
+    void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
 private:
